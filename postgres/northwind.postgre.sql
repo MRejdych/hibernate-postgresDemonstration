@@ -1,9 +1,3 @@
---
--- PostgreSQL Northwind Database v1.0 from Ramiro Estigarribia Canese  
--- you may contact him at email   ramiro.estigarribia@rieder.com.py 
---
-
-
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
