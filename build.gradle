@@ -19,13 +19,13 @@ apply plugin: "org.springframework.boot"
 compileJava {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-    mainClassName       = "backend.AppEntry"
+    mainClassName = "app.AppEntry"
 }
 
 jar {
     baseName = "hibernatePostgresBackend"
-    version  = "0.0.1-SNAPSHOT"
-    manifest { attributes "Main-Class": "backend.AppEntry" }
+    version = "0.0.1-SNAPSHOT"
+    manifest { attributes "Main-Class": "app.AppEntry" }
 }
 
 

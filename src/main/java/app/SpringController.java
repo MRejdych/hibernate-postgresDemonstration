@@ -1,14 +1,13 @@
 package app;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class SpringController {
 
     @RequestMapping("/")
-    public String showIndexPage(){
+    public String showIndexPage() {
         return "index";
     }
 }

@@ -8,10 +8,11 @@ public final class DatabaseConnection {
 
     private static EntityManagerFactory entityManagerFactory = null;
 
-    private DatabaseConnection(){}
+    private DatabaseConnection() {
+    }
 
-    public static EntityManagerFactory getEntityManagerFactory(){
-        if(entityManagerFactory == null){
+    public static EntityManagerFactory getEntityManagerFactory() {
+        if (entityManagerFactory == null) {
             entityManagerFactory = Persistence.createEntityManagerFactory("entityManager");
         }
         return entityManagerFactory;

@@ -9,7 +9,6 @@
     <!-- Spring MVC Configs -->
 
 
-
     <!-- Step 1: Configure Spring MVC Dispatcher Servlet -->
     <servlet>
         <servlet-name>dispatcher</servlet-name>

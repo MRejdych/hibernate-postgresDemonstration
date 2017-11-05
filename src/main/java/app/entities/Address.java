@@ -7,13 +7,13 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
-public class Address implements Serializable{
+public class Address implements Serializable {
 
     protected Address() {
     }
 
     public Address(String street, String city, String postalCode, String country) {
-        if(street != null && city != null && postalCode != null && country != null) {
+        if (street != null && city != null && postalCode != null && country != null) {
             this.street = street;
             this.city = city;
             this.postalCode = postalCode;
@@ -43,7 +43,7 @@ public class Address implements Serializable{
     }
 
     public void setStreet(String street) {
-        if(street != null && !street.isEmpty()) this.street = street;
+        if (street != null && !street.isEmpty()) this.street = street;
     }
 
     public String getCity() {
@@ -51,7 +51,7 @@ public class Address implements Serializable{
     }
 
     public void setCity(String city) {
-        if(city != null && !city.isEmpty()) this.city = city;
+        if (city != null && !city.isEmpty()) this.city = city;
     }
 
     public String getPostalCode() {
@@ -59,7 +59,7 @@ public class Address implements Serializable{
     }
 
     public void setPostalCode(String postalCode) {
-        if(postalCode != null && !postalCode.isEmpty()) this.postalCode = postalCode;
+        if (postalCode != null && !postalCode.isEmpty()) this.postalCode = postalCode;
     }
 
     public String getCountry() {
@@ -67,6 +67,39 @@ public class Address implements Serializable{
     }
 
     public void setCountry(String country) {
-        if(country != null && !country.isEmpty()) this.country = country;
+        if (country != null && !country.isEmpty()) this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Address address = (Address) o;
+
+        if (!getStreet().equals(address.getStreet())) return false;
+        if (!getCity().equals(address.getCity())) return false;
+        if (!getPostalCode().equals(address.getPostalCode())) return false;
+        return getCountry().equals(address.getCountry());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getStreet().hashCode();
+        result = 31 * result + getCity().hashCode();
+        result = 31 * result + getPostalCode().hashCode();
+        result = 31 * result + getCountry().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Address{");
+        sb.append("street='").append(street).append('\'');
+        sb.append(", city='").append(city).append('\'');
+        sb.append(", postalCode='").append(postalCode).append('\'');
+        sb.append(", country='").append(country).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @Entity
-@Table(name="employees")
+@Table(name = "employees")
 public class Employee implements Serializable {
 
     protected Employee() {
@@ -15,7 +15,7 @@ public class Employee implements Serializable {
 
     public Employee(String lastName, String firstName, String title, String titleOfCourtesy, LocalDate birthDate,
                     LocalDate hireDate, Address address, String phone, String extension, String notes, short reportsTo) {
-        if(lastName == null || firstName == null) throw new IllegalArgumentException();
+        if (lastName == null || firstName == null) throw new IllegalArgumentException();
         this.lastName = lastName;
         this.firstName = firstName;
         this.title = title;
@@ -31,7 +31,7 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name="employee_id", nullable = false)
+    @Column(name = "employee_id", nullable = false)
     protected Long employeeId;
 
     @NotNull
@@ -92,8 +92,6 @@ public class Employee implements Serializable {
     protected Collection<Order> ordersByEmployeeId;
 
 
-
-
     public Long getEmployeeId() {
         return employeeId;
     }
@@ -103,7 +101,7 @@ public class Employee implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        if(lastName != null && !lastName.isEmpty()) this.lastName = lastName;
+        if (lastName != null && !lastName.isEmpty()) this.lastName = lastName;
     }
 
     public String getFirstName() {
@@ -111,7 +109,7 @@ public class Employee implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        if(firstName != null && !firstName.isEmpty()) this.firstName = firstName;
+        if (firstName != null && !firstName.isEmpty()) this.firstName = firstName;
     }
 
     public String getTitle() {
@@ -224,5 +222,89 @@ public class Employee implements Serializable {
 
     public void setSubordinatesByReporterId(Collection<Employee> subordinatesByReporterId) {
         this.subordinatesByReporterId = subordinatesByReporterId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (getReportsTo() != employee.getReportsTo()) return false;
+        if (getEmployeeId() != null ? !getEmployeeId().equals(employee.getEmployeeId()) : employee.getEmployeeId() != null)
+            return false;
+        if (getLastName() != null ? !getLastName().equals(employee.getLastName()) : employee.getLastName() != null)
+            return false;
+        if (getFirstName() != null ? !getFirstName().equals(employee.getFirstName()) : employee.getFirstName() != null)
+            return false;
+        if (getTitle() != null ? !getTitle().equals(employee.getTitle()) : employee.getTitle() != null) return false;
+        if (getTitleOfCourtesy() != null ? !getTitleOfCourtesy().equals(employee.getTitleOfCourtesy()) : employee.getTitleOfCourtesy() != null)
+            return false;
+        if (getBirthDate() != null ? !getBirthDate().equals(employee.getBirthDate()) : employee.getBirthDate() != null)
+            return false;
+        if (getHireDate() != null ? !getHireDate().equals(employee.getHireDate()) : employee.getHireDate() != null)
+            return false;
+        if (getAddress() != null ? !getAddress().equals(employee.getAddress()) : employee.getAddress() != null)
+            return false;
+        if (getRegion() != null ? !getRegion().equals(employee.getRegion()) : employee.getRegion() != null)
+            return false;
+        if (getPhone() != null ? !getPhone().equals(employee.getPhone()) : employee.getPhone() != null) return false;
+        if (getExtension() != null ? !getExtension().equals(employee.getExtension()) : employee.getExtension() != null)
+            return false;
+        if (getNotes() != null ? !getNotes().equals(employee.getNotes()) : employee.getNotes() != null) return false;
+        if (getReporterByReporterId() != null ? !getReporterByReporterId().equals(employee.getReporterByReporterId()) : employee.getReporterByReporterId() != null)
+            return false;
+        if (getSubordinatesByReporterId() != null ? !getSubordinatesByReporterId().equals(employee.getSubordinatesByReporterId()) : employee.getSubordinatesByReporterId() != null)
+            return false;
+        if (getEmployeeTerritoriesByTerritoryId() != null ? !getEmployeeTerritoriesByTerritoryId().equals(employee.getEmployeeTerritoriesByTerritoryId()) : employee.getEmployeeTerritoriesByTerritoryId() != null)
+            return false;
+        return getOrdersByEmployeeId() != null ? getOrdersByEmployeeId().equals(employee.getOrdersByEmployeeId()) : employee.getOrdersByEmployeeId() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getEmployeeId() != null ? getEmployeeId().hashCode() : 0;
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
+        result = 31 * result + (getTitleOfCourtesy() != null ? getTitleOfCourtesy().hashCode() : 0);
+        result = 31 * result + (getBirthDate() != null ? getBirthDate().hashCode() : 0);
+        result = 31 * result + (getHireDate() != null ? getHireDate().hashCode() : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (getExtension() != null ? getExtension().hashCode() : 0);
+        result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
+        result = 31 * result + (int) getReportsTo();
+        result = 31 * result + (getReporterByReporterId() != null ? getReporterByReporterId().hashCode() : 0);
+        result = 31 * result + (getSubordinatesByReporterId() != null ? getSubordinatesByReporterId().hashCode() : 0);
+        result = 31 * result + (getEmployeeTerritoriesByTerritoryId() != null ? getEmployeeTerritoriesByTerritoryId().hashCode() : 0);
+        result = 31 * result + (getOrdersByEmployeeId() != null ? getOrdersByEmployeeId().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Employee{");
+        sb.append("employeeId=").append(employeeId);
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", titleOfCourtesy='").append(titleOfCourtesy).append('\'');
+        sb.append(", birthDate=").append(birthDate);
+        sb.append(", hireDate=").append(hireDate);
+        sb.append(", address=").append(address);
+        sb.append(", region='").append(region).append('\'');
+        sb.append(", phone='").append(phone).append('\'');
+        sb.append(", extension='").append(extension).append('\'');
+        sb.append(", notes='").append(notes).append('\'');
+        sb.append(", reportsTo=").append(reportsTo);
+        sb.append(", reporterByReporterId=").append(reporterByReporterId);
+        sb.append(", subordinatesByReporterId=").append(subordinatesByReporterId);
+        sb.append(", employeeTerritoriesByTerritoryId=").append(employeeTerritoriesByTerritoryId);
+        sb.append(", ordersByEmployeeId=").append(ordersByEmployeeId);
+        sb.append('}');
+        return sb.toString();
     }
 }

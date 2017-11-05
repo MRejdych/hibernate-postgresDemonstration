@@ -14,7 +14,7 @@ public class Supplier implements Serializable {
 
     public Supplier(String companyName, String contactName, String contactTitle, Address address, String phone,
                     String fax, String homePage) {
-        if(companyName == null) throw new IllegalArgumentException();
+        if (companyName == null) throw new IllegalArgumentException();
         this.companyName = companyName;
         this.contactName = contactName;
         this.contactTitle = contactTitle;
@@ -73,7 +73,7 @@ public class Supplier implements Serializable {
     }
 
     public void setCompanyName(String companyName) {
-        if(companyName != null && !companyName.isEmpty()) this.companyName = companyName;
+        if (companyName != null && !companyName.isEmpty()) this.companyName = companyName;
     }
 
     public String getContactName() {
@@ -138,5 +138,63 @@ public class Supplier implements Serializable {
 
     public void setProductsBySupplierId(Collection<Product> productsBySupplierId) {
         this.productsBySupplierId = productsBySupplierId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Supplier supplier = (Supplier) o;
+
+        if (getSupplierId() != null ? !getSupplierId().equals(supplier.getSupplierId()) : supplier.getSupplierId() != null)
+            return false;
+        if (getCompanyName() != null ? !getCompanyName().equals(supplier.getCompanyName()) : supplier.getCompanyName() != null)
+            return false;
+        if (getContactName() != null ? !getContactName().equals(supplier.getContactName()) : supplier.getContactName() != null)
+            return false;
+        if (getContactTitle() != null ? !getContactTitle().equals(supplier.getContactTitle()) : supplier.getContactTitle() != null)
+            return false;
+        if (getAddress() != null ? !getAddress().equals(supplier.getAddress()) : supplier.getAddress() != null)
+            return false;
+        if (getRegion() != null ? !getRegion().equals(supplier.getRegion()) : supplier.getRegion() != null)
+            return false;
+        if (getPhone() != null ? !getPhone().equals(supplier.getPhone()) : supplier.getPhone() != null) return false;
+        if (getFax() != null ? !getFax().equals(supplier.getFax()) : supplier.getFax() != null) return false;
+        if (getHomePage() != null ? !getHomePage().equals(supplier.getHomePage()) : supplier.getHomePage() != null)
+            return false;
+        return getProductsBySupplierId() != null ? getProductsBySupplierId().equals(supplier.getProductsBySupplierId()) : supplier.getProductsBySupplierId() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getSupplierId() != null ? getSupplierId().hashCode() : 0;
+        result = 31 * result + (getCompanyName() != null ? getCompanyName().hashCode() : 0);
+        result = 31 * result + (getContactName() != null ? getContactName().hashCode() : 0);
+        result = 31 * result + (getContactTitle() != null ? getContactTitle().hashCode() : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (getFax() != null ? getFax().hashCode() : 0);
+        result = 31 * result + (getHomePage() != null ? getHomePage().hashCode() : 0);
+        result = 31 * result + (getProductsBySupplierId() != null ? getProductsBySupplierId().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Supplier{");
+        sb.append("supplierId=").append(supplierId);
+        sb.append(", companyName='").append(companyName).append('\'');
+        sb.append(", contactName='").append(contactName).append('\'');
+        sb.append(", contactTitle='").append(contactTitle).append('\'');
+        sb.append(", address=").append(address);
+        sb.append(", region='").append(region).append('\'');
+        sb.append(", phone='").append(phone).append('\'');
+        sb.append(", fax='").append(fax).append('\'');
+        sb.append(", homePage='").append(homePage).append('\'');
+        sb.append(", productsBySupplierId=").append(productsBySupplierId);
+        sb.append('}');
+        return sb.toString();
     }
 }

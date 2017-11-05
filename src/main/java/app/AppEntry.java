@@ -3,8 +3,6 @@ package app;
 
 import app.entities.Region;
 import app.utils.DatabaseConnection;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,13 +18,12 @@ public class AppEntry {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = DatabaseConnection.getEntityManagerFactory();
-        System.out.println("TEEEEEEST " + emf);
         EntityManager em = emf.createEntityManager();
         EntityTransaction tr = em.getTransaction();
 
         tr.begin();
 
-        em.persist(new Region("bla bla"));
+        em.persist(new Region("Test data"));
 
         tr.commit();
 

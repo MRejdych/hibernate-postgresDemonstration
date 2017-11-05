@@ -7,7 +7,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "orders")
-public class Order  implements Serializable {
+public class Order implements Serializable {
 
     protected Order() {
     }
@@ -195,5 +195,81 @@ public class Order  implements Serializable {
 
     public void setEmployeeByEmployeeId(Employee employeeByEmployeeId) {
         this.employeeByEmployeeId = employeeByEmployeeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (getOrderId() != null ? !getOrderId().equals(order.getOrderId()) : order.getOrderId() != null) return false;
+        if (getCustomerId() != null ? !getCustomerId().equals(order.getCustomerId()) : order.getCustomerId() != null)
+            return false;
+        if (getEmployeeId() != null ? !getEmployeeId().equals(order.getEmployeeId()) : order.getEmployeeId() != null)
+            return false;
+        if (getOrderDate() != null ? !getOrderDate().equals(order.getOrderDate()) : order.getOrderDate() != null)
+            return false;
+        if (getRequiredDate() != null ? !getRequiredDate().equals(order.getRequiredDate()) : order.getRequiredDate() != null)
+            return false;
+        if (getShippedDate() != null ? !getShippedDate().equals(order.getShippedDate()) : order.getShippedDate() != null)
+            return false;
+        if (getShipVia() != null ? !getShipVia().equals(order.getShipVia()) : order.getShipVia() != null) return false;
+        if (getFreight() != null ? !getFreight().equals(order.getFreight()) : order.getFreight() != null) return false;
+        if (getShipName() != null ? !getShipName().equals(order.getShipName()) : order.getShipName() != null)
+            return false;
+        if (getAddress() != null ? !getAddress().equals(order.getAddress()) : order.getAddress() != null) return false;
+        if (getShipRegion() != null ? !getShipRegion().equals(order.getShipRegion()) : order.getShipRegion() != null)
+            return false;
+        if (getOrderDetailsByOrderId() != null ? !getOrderDetailsByOrderId().equals(order.getOrderDetailsByOrderId()) : order.getOrderDetailsByOrderId() != null)
+            return false;
+        if (getEmployeeByEmployeeId() != null ? !getEmployeeByEmployeeId().equals(order.getEmployeeByEmployeeId()) : order.getEmployeeByEmployeeId() != null)
+            return false;
+        if (getCustomerByCustomerId() != null ? !getCustomerByCustomerId().equals(order.getCustomerByCustomerId()) : order.getCustomerByCustomerId() != null)
+            return false;
+        return getShipperByShipVia() != null ? getShipperByShipVia().equals(order.getShipperByShipVia()) : order.getShipperByShipVia() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getOrderId() != null ? getOrderId().hashCode() : 0;
+        result = 31 * result + (getCustomerId() != null ? getCustomerId().hashCode() : 0);
+        result = 31 * result + (getEmployeeId() != null ? getEmployeeId().hashCode() : 0);
+        result = 31 * result + (getOrderDate() != null ? getOrderDate().hashCode() : 0);
+        result = 31 * result + (getRequiredDate() != null ? getRequiredDate().hashCode() : 0);
+        result = 31 * result + (getShippedDate() != null ? getShippedDate().hashCode() : 0);
+        result = 31 * result + (getShipVia() != null ? getShipVia().hashCode() : 0);
+        result = 31 * result + (getFreight() != null ? getFreight().hashCode() : 0);
+        result = 31 * result + (getShipName() != null ? getShipName().hashCode() : 0);
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + (getShipRegion() != null ? getShipRegion().hashCode() : 0);
+        result = 31 * result + (getOrderDetailsByOrderId() != null ? getOrderDetailsByOrderId().hashCode() : 0);
+        result = 31 * result + (getEmployeeByEmployeeId() != null ? getEmployeeByEmployeeId().hashCode() : 0);
+        result = 31 * result + (getCustomerByCustomerId() != null ? getCustomerByCustomerId().hashCode() : 0);
+        result = 31 * result + (getShipperByShipVia() != null ? getShipperByShipVia().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Order{");
+        sb.append("orderId=").append(orderId);
+        sb.append(", customerId=").append(customerId);
+        sb.append(", employeeId=").append(employeeId);
+        sb.append(", orderDate=").append(orderDate);
+        sb.append(", requiredDate=").append(requiredDate);
+        sb.append(", shippedDate=").append(shippedDate);
+        sb.append(", shipVia=").append(shipVia);
+        sb.append(", freight=").append(freight);
+        sb.append(", shipName='").append(shipName).append('\'');
+        sb.append(", address=").append(address);
+        sb.append(", shipRegion='").append(shipRegion).append('\'');
+        sb.append(", orderDetailsByOrderId=").append(orderDetailsByOrderId);
+        sb.append(", employeeByEmployeeId=").append(employeeByEmployeeId);
+        sb.append(", customerByCustomerId=").append(customerByCustomerId);
+        sb.append(", shipperByShipVia=").append(shipperByShipVia);
+        sb.append('}');
+        return sb.toString();
     }
 }
