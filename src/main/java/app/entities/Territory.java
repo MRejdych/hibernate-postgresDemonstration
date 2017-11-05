@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "territories")
 public class Territory implements Serializable {
@@ -18,9 +20,8 @@ public class Territory implements Serializable {
     }
 
     @Id
-    @GeneratedValue
-    @Column(name = "territory_id", nullable = false)
-    protected Long territoryId;
+    @Column(name = "territory_id", nullable = false, length = 20)
+    protected String territoryId;
 
     @Column(name = "territory_description", nullable = false)
     protected String territoryDescription;
@@ -28,15 +29,19 @@ public class Territory implements Serializable {
     @Column(name = "region_id", nullable = false)
     protected Long regionId;
 
-    @OneToMany(mappedBy = "territoryByTerritoryId")
+    @OneToMany(mappedBy = "territoryByTerritoryId", fetch = LAZY)
     protected Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId;
 
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false, insertable = false, updatable = false)
     protected Region regionByRegionId;
 
-    public Long getTerritoryId() {
+    public String getTerritoryId() {
         return territoryId;
+    }
+
+    public void setTerritoryId(String territoryId) {
+        this.territoryId = territoryId;
     }
 
     public String getTerritoryDescription() {

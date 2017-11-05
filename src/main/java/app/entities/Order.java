@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
@@ -64,7 +66,7 @@ public class Order implements Serializable {
     @Column(name = "ship_region", length = 15)
     protected String shipRegion;
 
-    @OneToMany(mappedBy = "orderByOrderId")
+    @OneToMany(mappedBy = "orderByOrderId", fetch = LAZY)
     protected Collection<OrderDetails> orderDetailsByOrderId;
 
     @ManyToOne

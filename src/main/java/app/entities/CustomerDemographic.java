@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "customer_demographics")
 public class CustomerDemographic implements Serializable {
@@ -23,7 +25,7 @@ public class CustomerDemographic implements Serializable {
     @Column(name = "customer_description")
     protected String customerDesc;
 
-    @OneToMany(mappedBy = "customerDemographicByCustomerTypeId")
+    @OneToMany(mappedBy = "customerDemographicByCustomerTypeId", fetch = LAZY)
     protected Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerTypeId;
 
 

@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "categories")
 public class Category implements Serializable {
@@ -29,7 +31,7 @@ public class Category implements Serializable {
 
     protected String description;
 
-    @OneToMany(mappedBy = "categoryByCategoryId")
+    @OneToMany(mappedBy = "categoryByCategoryId", fetch = LAZY)
     protected Collection<Product> productsByCategoryId;
 
 

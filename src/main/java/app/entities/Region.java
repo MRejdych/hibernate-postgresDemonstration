@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "regions")
 public class Region implements Serializable {
@@ -23,7 +25,7 @@ public class Region implements Serializable {
     @Column(name = "region_description", nullable = false)
     protected String regionDescription;
 
-    @OneToMany(mappedBy = "regionByRegionId")
+    @OneToMany(mappedBy = "regionByRegionId", fetch = LAZY)
     protected Collection<Territory> territoryByRegionId;
 
 

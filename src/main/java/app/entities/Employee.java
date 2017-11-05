@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "employees")
 public class Employee implements Serializable {
@@ -82,13 +84,13 @@ public class Employee implements Serializable {
     @JoinColumn(name = "employee_id", referencedColumnName = "reports_to", insertable = false, updatable = false)
     protected Employee reporterByReporterId;
 
-    @OneToMany(mappedBy = "reporterByReporterId")
+    @OneToMany(mappedBy = "reporterByReporterId", fetch = LAZY)
     protected Collection<Employee> subordinatesByReporterId;
 
-    @OneToMany(mappedBy = "employeeByEmployeeId")
+    @OneToMany(mappedBy = "employeeByEmployeeId", fetch = LAZY)
     protected Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId;
 
-    @OneToMany(mappedBy = "employeeByEmployeeId")
+    @OneToMany(mappedBy = "employeeByEmployeeId", fetch = LAZY)
     protected Collection<Order> ordersByEmployeeId;
 
 

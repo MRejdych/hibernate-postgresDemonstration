@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "customers")
 public class Customer implements Serializable {
@@ -55,10 +57,10 @@ public class Customer implements Serializable {
     @Column(length = 24)
     protected String fax;
 
-    @OneToMany(mappedBy = "customerByCustomerId")
+    @OneToMany(mappedBy = "customerByCustomerId", fetch = LAZY)
     protected Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerId;
 
-    @OneToMany(mappedBy = "customerByCustomerId")
+    @OneToMany(mappedBy = "customerByCustomerId", fetch = LAZY)
     protected Collection<Order> ordersByCustomerId;
 
 
