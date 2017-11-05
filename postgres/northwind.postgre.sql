@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS shippers;
 DROP TABLE IF EXISTS suppliers;
 DROP TABLE IF EXISTS territories;
 DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS region;
+DROP TABLE IF EXISTS regions;
 DROP TABLE IF EXISTS employees;
 
 --
@@ -176,7 +176,7 @@ CREATE TABLE products (
 -- Name: region; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE region (
+CREATE TABLE regions (
   region_id          SMALLINT NOT NULL,
   region_description BPCHAR   NOT NULL
 );
