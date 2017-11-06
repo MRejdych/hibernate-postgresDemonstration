@@ -357,7 +357,7 @@ INSERT INTO customers VALUES
        'OR', '97827', 'USA', '(503) 555-6874', '(503) 555-2376');
 INSERT INTO customers VALUES
   (37, 'Hungry Owl All-Night Grocers', 'Patricia McKenna', 'Sales Associate', '8 Johnstown Road', 'Cork', 'Co. Cork',
-       NULL, 'Ireland', '2967 542', '2967 3333');
+       'OR', 'Ireland', '2967 542', '2967 3333');
 INSERT INTO customers VALUES
   (38, 'Island Trading', 'Helen Bennett', 'Marketing Manager', 'Garden House Crowther Way', 'Cowes', 'Isle of Wight',
        'PO31 7PJ', 'UK', '(198) 555-8888', NULL);
@@ -5332,10 +5332,10 @@ INSERT INTO products VALUES (77, 'Original Frankfurter grüne Soße', 12, 2, '12
 -- Data for Name: region; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO region VALUES (1, 'Eastern');
-INSERT INTO region VALUES (2, 'Western');
-INSERT INTO region VALUES (3, 'Northern');
-INSERT INTO region VALUES (4, 'Southern');
+INSERT INTO regions VALUES (1, 'Eastern');
+INSERT INTO regions VALUES (2, 'Western');
+INSERT INTO regions VALUES (3, 'Northern');
+INSERT INTO regions VALUES (4, 'Southern');
 
 --
 -- Data for Name: shippers; Type: TABLE DATA; Schema: public; Owner: -
@@ -5568,7 +5568,7 @@ ALTER TABLE ONLY products
 -- Name: pk_region; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY region
+ALTER TABLE ONLY regions
   ADD CONSTRAINT pk_region PRIMARY KEY (region_id);
 
 --
@@ -5646,7 +5646,7 @@ ALTER TABLE ONLY products
 --
 
 ALTER TABLE ONLY territories
-  ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES region;
+  ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES regions;
 
 --
 -- Name: fk_employeeterritories_territories; Type: Constraint; Schema: -; Owner: -

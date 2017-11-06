@@ -1,0 +1,93 @@
+body {
+    background-color: #0a3135;
+    color: blanchedalmond;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+#bar {
+    width: 100%;
+    height: 10%;
+    display: inline-block;
+    margin-top: 1%;
+    margin-bottom: 3%;
+}
+
+.button {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 5px -1px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+    box-shadow: 0 0 5px -1px rgba(0, 0, 0, 0.6);
+}
+
+#main_page_button {
+    display: inline-block;
+    float: right;
+    background-color: #062123;
+    width: 20%;
+    margin-right: 5%;
+}
+
+#main_page_button:hover {
+    background-color: #072729;
+}
+
+#customers_button {
+    display: inline-block;
+    background-color: chocolate;
+}
+
+#customers_button:hover {
+    background-color: #c5631c;
+}
+
+#products_button {
+    display: inline-block;
+    background-color: blueviolet;
+}
+
+#products_button:hover {
+    background-color: #7524c0;
+}
+
+#queries_time {
+    display: inline-block;
+    margin-left: 5%;
+    width: 65%;
+}
+
+a {
+    color: blanchedalmond;
+    text-decoration: none;
+}
+
+#customers_table {
+    width: 90%;
+    display: block;
+    overflow-y: scroll;
+    max-height: 700px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-spacing: 0;
+    background-color: #bfbfbf;
+    color: black;
+    border: 3px solid dimgray;
+}
+
+#customers_table th, #customers_table td {
+    border: 1px solid dimgray;
+    text-align: center;
+}
+
+#customers_table td {
+    height: 50px;
+}

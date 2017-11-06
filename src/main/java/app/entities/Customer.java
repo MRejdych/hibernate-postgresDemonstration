@@ -190,9 +190,7 @@ public class Customer implements Serializable {
         sb.append(", region='").append(region).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", fax='").append(fax).append('\'');
-        sb.append(", customerCustomerDemographicsByCustomerId=").append(customerCustomerDemographicsByCustomerId);
-        sb.append(", ordersByCustomerId=").append(ordersByCustomerId);
-        sb.append('}');
+        sb.append('}').append("\n");
         return sb.toString();
     }
 }

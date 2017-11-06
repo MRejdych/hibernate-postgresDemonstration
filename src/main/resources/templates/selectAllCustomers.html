@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+    <div id="bar">
+        <div id="queries_time">
+            <p th:text="'Czas potrzebny do wykonania zapytania wygenerowanego przez Hibernate: ' + ${JPQLqueryTime} + ' ms.'"/>
+            <p th:text="'Czas potrzebny do wykonania natywnego zapytania SQL: ' + ${nativeQueryTime} + ' ms.'"/>
+        </div>
+
+        <a href="/">
+            <div class="button" id="main_page_button">
+                <p>Powrót do strony głównej</p>
+            </div>
+        </a>
+
+    </div>
+
+    <table id="customers_table">
+        <thead>
+        <tr>
+            <th>ID:</th>
+            <th>Company Name:</th>
+            <th>Contact Name:</th>
+            <th>Contact Title:</th>
+            <th>Address:</th>
+            <th>City:</th>
+            <th>Postal code:</th>
+            <th>Country:</th>
+            <th>Region:</th>
+            <th>Phone:</th>
+            <th>Fax:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="customer : ${customers}">
+            <tr>
+                <td th:text="${customer.customerId}"></td>
+                <td th:text="${customer.companyName}"></td>
+                <td th:text="${customer.contactName}"></td>
+                <td th:text="${customer.contactTitle}"></td>
+                <td th:text="${customer.address.street}"></td>
+                <td th:text="${customer.address.city}"></td>
+                <td th:text="${customer.address.postalCode}"></td>
+                <td th:text="${customer.address.country}"></td>
+                <td th:text="${customer.region}"></td>
+                <td th:text="${customer.phone}"></td>
+                <td th:text="${customer.fax}"></td>
+            </tr>
+            <tr></tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
