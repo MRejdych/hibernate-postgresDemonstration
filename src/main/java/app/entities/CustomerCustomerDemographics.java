@@ -10,7 +10,7 @@ public class CustomerCustomerDemographics implements Serializable {
     protected CustomerCustomerDemographics() {
     }
 
-    public CustomerCustomerDemographics(Long customerId, Long customerTypeId) {
+    public CustomerCustomerDemographics(Short customerId, Short customerTypeId) {
         if (customerId == null || customerTypeId == null) throw new IllegalArgumentException();
         this.customerId = customerId;
         this.customerTypeId = customerTypeId;
@@ -18,11 +18,11 @@ public class CustomerCustomerDemographics implements Serializable {
 
     @Id
     @Column(name = "customer_id", nullable = false)
-    protected Long customerId;
+    protected Short customerId;
 
     @Id
     @Column(name = "customer_type_id", nullable = false)
-    protected Long customerTypeId;
+    protected Short customerTypeId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false, insertable = false, updatable = false)
@@ -33,19 +33,19 @@ public class CustomerCustomerDemographics implements Serializable {
     protected CustomerDemographic customerDemographicByCustomerTypeId;
 
 
-    public Long getCustomerId() {
+    public Short getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(Short customerId) {
         if (customerId != null) this.customerId = customerId;
     }
 
-    public Long getCus1tomerTypeId() {
+    public Short getCus1tomerTypeId() {
         return customerTypeId;
     }
 
-    public void setCustomerTypeId(Long cutomerTypeId) {
+    public void setCustomerTypeId(Short cutomerTypeId) {
         if (cutomerTypeId != null) this.customerTypeId = cutomerTypeId;
     }
 

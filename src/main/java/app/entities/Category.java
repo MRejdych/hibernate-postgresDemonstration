@@ -31,9 +31,6 @@ public class Category implements Serializable {
 
     protected String description;
 
-    @OneToMany(mappedBy = "categoryByCategoryId", fetch = LAZY)
-    protected Collection<Product> productsByCategoryId;
-
 
     public short getCategoryId() {
         return categoryId;
@@ -55,14 +52,6 @@ public class Category implements Serializable {
         this.description = description;
     }
 
-    public Collection<Product> getProductsByCategoryId() {
-        return productsByCategoryId;
-    }
-
-    public void setProductsByCategoryId(Collection<Product> productsByCategoryId) {
-        this.productsByCategoryId = productsByCategoryId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,20 +60,19 @@ public class Category implements Serializable {
         Category category = (Category) o;
 
         if (getCategoryId() != category.getCategoryId()) return false;
-        if (!getCategoryName().equals(category.getCategoryName())) return false;
-        if (getDescription() != null ? !getDescription().equals(category.getDescription()) : category.getDescription() != null)
+        if (getCategoryName() != null ? !getCategoryName().equals(category.getCategoryName()) : category.getCategoryName() != null)
             return false;
-        return getProductsByCategoryId() != null ? getProductsByCategoryId().equals(category.getProductsByCategoryId()) : category.getProductsByCategoryId() == null;
+        return getDescription() != null ? getDescription().equals(category.getDescription()) : category.getDescription() == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) getCategoryId();
-        result = 31 * result + getCategoryName().hashCode();
+        result = 31 * result + (getCategoryName() != null ? getCategoryName().hashCode() : 0);
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (getProductsByCategoryId() != null ? getProductsByCategoryId().hashCode() : 0);
         return result;
     }
+
 
     @Override
     public String toString() {
@@ -92,7 +80,6 @@ public class Category implements Serializable {
         sb.append("categoryId=").append(categoryId);
         sb.append(", categoryName='").append(categoryName).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", productsByCategoryId=").append(productsByCategoryId);
         sb.append('}');
         return sb.toString();
     }

@@ -1,6 +1,7 @@
 package app.queries;
 
 import app.entities.Product;
+import app.utils.DatabaseUtils;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -8,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsManipulator extends EntitiesManipulator {
+
+    public ProductsManipulator(DatabaseUtils dbutils) {
+        super(dbutils);
+    }
 
     public List<Product> selectAllProducts() {
         prepareConnectionToDB();
@@ -22,7 +27,7 @@ public class ProductsManipulator extends EntitiesManipulator {
         nativeSqlQueryTime = executeQuery(nativeQuery::getResultList);
 
 
-        cleanAndCloseConnectionToDB();
+        closeConnectionToDB();
         return products;
     }
 }

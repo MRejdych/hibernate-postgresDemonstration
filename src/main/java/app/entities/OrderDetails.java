@@ -11,7 +11,7 @@ public class OrderDetails implements Serializable {
     protected OrderDetails() {
     }
 
-    public OrderDetails(Long orderId, Long productId, Float unitPrice, Long quantity, Float discount) {
+    public OrderDetails(Short orderId, Short productId, Float unitPrice, Short quantity, Float discount) {
         if (orderId == null || productId == null || unitPrice == null || quantity == null
                 || discount == null) throw new IllegalArgumentException();
         this.orderId = orderId;
@@ -23,11 +23,11 @@ public class OrderDetails implements Serializable {
 
     @Id
     @Column(name = "order_id", nullable = false)
-    protected Long orderId;
+    protected Short orderId;
 
     @Id
     @Column(name = "product_id", nullable = false)
-    protected Long productId;
+    protected Short productId;
 
     @NotNull
     @Column(name = "unit_price", nullable = false)
@@ -35,7 +35,7 @@ public class OrderDetails implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    protected Long quantity;
+    protected Short quantity;
 
     @NotNull
     @Column(nullable = false)
@@ -50,19 +50,19 @@ public class OrderDetails implements Serializable {
     protected Product productByProductId;
 
 
-    public Long getOrderId() {
+    public Short getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(Short orderId) {
         if (orderId != null) this.orderId = orderId;
     }
 
-    public Long getProductId() {
+    public Short getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(Short productId) {
         if (productId != null) this.productId = productId;
     }
 
@@ -74,11 +74,11 @@ public class OrderDetails implements Serializable {
         if (unitPrice != null) this.unitPrice = unitPrice;
     }
 
-    public Long getQuantity() {
+    public Short getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void setQuantity(Short quantity) {
         if (quantity != null) this.quantity = quantity;
     }
 

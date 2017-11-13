@@ -4,22 +4,29 @@ package app.utils;
 import org.hibernate.Session;
 import org.hibernate.stat.QueryStatistics;
 import org.hibernate.stat.Statistics;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
-public final class DatabaseConnection {
-
+public final class DatabaseUtils {
     private EntityManagerFactory emf;
     private EntityManager em;
     private EntityTransaction tr;
     private boolean connOpened;
-    private QueryStatistics statistics;
 
 
-    public DatabaseConnection() {
+    public DatabaseUtils() {
         connOpened = false;
     }
 
@@ -32,7 +39,6 @@ public final class DatabaseConnection {
 
     public void openConnection() {
         if (!connOpened) {
-            wipeStatistics();
             emf = Persistence.createEntityManagerFactory("entityManager");
             em = emf.createEntityManager();
             tr = em.getTransaction();
@@ -44,7 +50,6 @@ public final class DatabaseConnection {
     public void closeConnection() {
         if (connOpened) {
             tr.commit();
-            saveStatistics();
             em.close();
             emf.close();
             tr = null;
@@ -53,26 +58,39 @@ public final class DatabaseConnection {
             connOpened = false;
         }
     }
-
-    private void saveStatistics(){
-        if(em != null) {
-            Statistics allStatistics = em.unwrap(Session.class).getSessionFactory().getStatistics();
-            String[] executedQueries = allStatistics.getQueries();
-            statistics = allStatistics.getQueryStatistics(executedQueries[0]);
-        }
+    public void clearStatistics(){
+        getStatistics().clear();
+    }
+    public void clearCache(){
+        em.clear();
     }
 
-    private void wipeStatistics(){
-        statistics = null;
-    }
-
-    public QueryStatistics getStatistics() {
-        return statistics;
+    public Statistics getStatistics(){
+        if(em != null && em.isOpen()) {
+            return em.unwrap(Session.class).getSessionFactory().getStatistics();
+        } else return null;
     }
 
     public EntityManager getEntityManager() {
         if (connOpened && em.isOpen()) return em;
         else return null;
+    }
 
+    public void resetDatabaseToInitialState() throws IOException {
+        boolean connWasOpened = true;
+        if(!connOpened) {
+            connWasOpened = false;
+            openConnection();
+        }
+
+        Scanner scan = new Scanner(Paths.get("./postgres/northwind.postgre.sql"));
+        scan.useDelimiter(Pattern.compile(";"));
+        while(scan.hasNext()){
+            String query = scan.next().trim();
+            em.createNativeQuery(query)
+                    .executeUpdate();
+        }
+
+        if(!connWasOpened) closeConnection();
     }
 }

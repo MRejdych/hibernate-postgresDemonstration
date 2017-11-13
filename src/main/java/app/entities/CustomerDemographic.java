@@ -25,9 +25,6 @@ public class CustomerDemographic implements Serializable {
     @Column(name = "customer_description")
     protected String customerDesc;
 
-    @OneToMany(mappedBy = "customerDemographicByCustomerTypeId", fetch = LAZY)
-    protected Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerTypeId;
-
 
     public short getCustomerTypeId() {
         return customerTypeId;
@@ -41,14 +38,6 @@ public class CustomerDemographic implements Serializable {
         this.customerDesc = customerDesc;
     }
 
-    public Collection<CustomerCustomerDemographics> getCustomerCustomerDemographicsByCustomerTypeId() {
-        return customerCustomerDemographicsByCustomerTypeId;
-    }
-
-    public void setCustomerCustomerDemographicsByCustomerTypeId(Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerTypeId) {
-        this.customerCustomerDemographicsByCustomerTypeId = customerCustomerDemographicsByCustomerTypeId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,16 +46,13 @@ public class CustomerDemographic implements Serializable {
         CustomerDemographic that = (CustomerDemographic) o;
 
         if (getCustomerTypeId() != that.getCustomerTypeId()) return false;
-        if (getCustomerDesc() != null ? !getCustomerDesc().equals(that.getCustomerDesc()) : that.getCustomerDesc() != null)
-            return false;
-        return getCustomerCustomerDemographicsByCustomerTypeId() != null ? getCustomerCustomerDemographicsByCustomerTypeId().equals(that.getCustomerCustomerDemographicsByCustomerTypeId()) : that.getCustomerCustomerDemographicsByCustomerTypeId() == null;
+        return getCustomerDesc() != null ? getCustomerDesc().equals(that.getCustomerDesc()) : that.getCustomerDesc() == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) getCustomerTypeId();
         result = 31 * result + (getCustomerDesc() != null ? getCustomerDesc().hashCode() : 0);
-        result = 31 * result + (getCustomerCustomerDemographicsByCustomerTypeId() != null ? getCustomerCustomerDemographicsByCustomerTypeId().hashCode() : 0);
         return result;
     }
 
@@ -75,7 +61,6 @@ public class CustomerDemographic implements Serializable {
         final StringBuffer sb = new StringBuffer("CustomerDemographic{");
         sb.append("customerTypeId=").append(customerTypeId);
         sb.append(", customerDesc='").append(customerDesc).append('\'');
-        sb.append(", customerCustomerDemographicsByCustomerTypeId=").append(customerCustomerDemographicsByCustomerTypeId);
         sb.append('}');
         return sb.toString();
     }

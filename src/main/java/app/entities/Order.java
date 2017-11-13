@@ -14,8 +14,8 @@ public class Order implements Serializable {
     protected Order() {
     }
 
-    public Order(Long customerId, Long employeeId, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate,
-                 Long shipVia, Float freight, Address address) {
+    public Order(Short customerId, Short employeeId, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate,
+                 Short shipVia, Float freight, Address address) {
         this.customerId = customerId;
         this.employeeId = employeeId;
         this.orderDate = orderDate;
@@ -29,13 +29,13 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "order_id", nullable = false)
-    protected Long orderId;
+    protected Short orderId;
 
     @Column(name = "customer_id")
-    protected Long customerId;
+    protected Short customerId;
 
     @Column(name = "employee_id")
-    protected Long employeeId;
+    protected Short employeeId;
 
     @Column(name = "order_date")
     protected LocalDate orderDate;
@@ -47,7 +47,7 @@ public class Order implements Serializable {
     protected LocalDate shippedDate;
 
     @Column(name = "ship_via")
-    protected Long shipVia;
+    protected Short shipVia;
 
     protected Float freight;
 
@@ -66,9 +66,6 @@ public class Order implements Serializable {
     @Column(name = "ship_region", length = 15)
     protected String shipRegion;
 
-    @OneToMany(mappedBy = "orderByOrderId", fetch = LAZY)
-    protected Collection<OrderDetails> orderDetailsByOrderId;
-
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id", insertable = false, updatable = false)
     protected Employee employeeByEmployeeId;
@@ -82,24 +79,24 @@ public class Order implements Serializable {
     protected Shipper shipperByShipVia;
 
 
-    public Long getOrderId() {
+    public Short getOrderId() {
         return orderId;
     }
 
 
-    public Long getCustomerId() {
+    public Short getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(Short customerId) {
         this.customerId = customerId;
     }
 
-    public Long getEmployeeId() {
+    public Short getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Long employeeId) {
+    public void setEmployeeId(Short employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -127,11 +124,11 @@ public class Order implements Serializable {
         this.shippedDate = shippedDate;
     }
 
-    public Long getShipVia() {
+    public Short getShipVia() {
         return shipVia;
     }
 
-    public void setShipVia(Long shipVia) {
+    public void setShipVia(Short shipVia) {
         this.shipVia = shipVia;
     }
 
@@ -165,14 +162,6 @@ public class Order implements Serializable {
 
     public void setShipRegion(String shipRegion) {
         this.shipRegion = shipRegion;
-    }
-
-    public Collection<OrderDetails> getOrderDetailsByOrderId() {
-        return orderDetailsByOrderId;
-    }
-
-    public void setOrderDetailsByOrderId(Collection<OrderDetails> orderDetailsByOrderId) {
-        this.orderDetailsByOrderId = orderDetailsByOrderId;
     }
 
     public Customer getCustomerByCustomerId() {
@@ -224,8 +213,6 @@ public class Order implements Serializable {
         if (getAddress() != null ? !getAddress().equals(order.getAddress()) : order.getAddress() != null) return false;
         if (getShipRegion() != null ? !getShipRegion().equals(order.getShipRegion()) : order.getShipRegion() != null)
             return false;
-        if (getOrderDetailsByOrderId() != null ? !getOrderDetailsByOrderId().equals(order.getOrderDetailsByOrderId()) : order.getOrderDetailsByOrderId() != null)
-            return false;
         if (getEmployeeByEmployeeId() != null ? !getEmployeeByEmployeeId().equals(order.getEmployeeByEmployeeId()) : order.getEmployeeByEmployeeId() != null)
             return false;
         if (getCustomerByCustomerId() != null ? !getCustomerByCustomerId().equals(order.getCustomerByCustomerId()) : order.getCustomerByCustomerId() != null)
@@ -246,7 +233,6 @@ public class Order implements Serializable {
         result = 31 * result + (getShipName() != null ? getShipName().hashCode() : 0);
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getShipRegion() != null ? getShipRegion().hashCode() : 0);
-        result = 31 * result + (getOrderDetailsByOrderId() != null ? getOrderDetailsByOrderId().hashCode() : 0);
         result = 31 * result + (getEmployeeByEmployeeId() != null ? getEmployeeByEmployeeId().hashCode() : 0);
         result = 31 * result + (getCustomerByCustomerId() != null ? getCustomerByCustomerId().hashCode() : 0);
         result = 31 * result + (getShipperByShipVia() != null ? getShipperByShipVia().hashCode() : 0);
@@ -267,10 +253,6 @@ public class Order implements Serializable {
         sb.append(", shipName='").append(shipName).append('\'');
         sb.append(", address=").append(address);
         sb.append(", shipRegion='").append(shipRegion).append('\'');
-        sb.append(", orderDetailsByOrderId=").append(orderDetailsByOrderId);
-        sb.append(", employeeByEmployeeId=").append(employeeByEmployeeId);
-        sb.append(", customerByCustomerId=").append(customerByCustomerId);
-        sb.append(", shipperByShipVia=").append(shipperByShipVia);
         sb.append('}');
         return sb.toString();
     }

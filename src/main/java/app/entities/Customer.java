@@ -12,16 +12,18 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "customers")
 public class Customer implements Serializable {
 
-    protected Customer() {
-    }
+    protected Customer() {}
 
-    public Customer(String companyName, String contactName, String contactTitle, Address address, String phone) {
+    public Customer(String companyName, String contactName, String contactTitle, Address address, String phone,
+                    String region, String fax) {
         if (companyName == null) throw new IllegalArgumentException();
         this.companyName = companyName;
         this.contactName = contactName;
         this.contactTitle = contactTitle;
         this.address = address;
         this.phone = phone;
+        this.region = region;
+        this.fax = fax;
     }
 
     @Id
@@ -56,12 +58,6 @@ public class Customer implements Serializable {
 
     @Column(length = 24)
     protected String fax;
-
-    @OneToMany(mappedBy = "customerByCustomerId", fetch = LAZY)
-    protected Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerId;
-
-    @OneToMany(mappedBy = "customerByCustomerId", fetch = LAZY)
-    protected Collection<Order> ordersByCustomerId;
 
 
     public short getCustomerId() {
@@ -124,22 +120,6 @@ public class Customer implements Serializable {
         this.fax = fax;
     }
 
-    public Collection<CustomerCustomerDemographics> getCustomerCustomerDemographicsByCustomerId() {
-        return customerCustomerDemographicsByCustomerId;
-    }
-
-    public void setCustomerCustomerDemographicsByCustomerId(Collection<CustomerCustomerDemographics> customerCustomerDemographicsByCustomerId) {
-        this.customerCustomerDemographicsByCustomerId = customerCustomerDemographicsByCustomerId;
-    }
-
-    public Collection<Order> getOrdersByCustomerId() {
-        return ordersByCustomerId;
-    }
-
-    public void setOrdersByCustomerId(Collection<Order> ordersByCustomerId) {
-        this.ordersByCustomerId = ordersByCustomerId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,7 +128,8 @@ public class Customer implements Serializable {
         Customer customer = (Customer) o;
 
         if (getCustomerId() != customer.getCustomerId()) return false;
-        if (!getCompanyName().equals(customer.getCompanyName())) return false;
+        if (getCompanyName() != null ? !getCompanyName().equals(customer.getCompanyName()) : customer.getCompanyName() != null)
+            return false;
         if (getContactName() != null ? !getContactName().equals(customer.getContactName()) : customer.getContactName() != null)
             return false;
         if (getContactTitle() != null ? !getContactTitle().equals(customer.getContactTitle()) : customer.getContactTitle() != null)
@@ -158,24 +139,19 @@ public class Customer implements Serializable {
         if (getRegion() != null ? !getRegion().equals(customer.getRegion()) : customer.getRegion() != null)
             return false;
         if (getPhone() != null ? !getPhone().equals(customer.getPhone()) : customer.getPhone() != null) return false;
-        if (getFax() != null ? !getFax().equals(customer.getFax()) : customer.getFax() != null) return false;
-        if (getCustomerCustomerDemographicsByCustomerId() != null ? !getCustomerCustomerDemographicsByCustomerId().equals(customer.getCustomerCustomerDemographicsByCustomerId()) : customer.getCustomerCustomerDemographicsByCustomerId() != null)
-            return false;
-        return getOrdersByCustomerId() != null ? getOrdersByCustomerId().equals(customer.getOrdersByCustomerId()) : customer.getOrdersByCustomerId() == null;
+        return getFax() != null ? getFax().equals(customer.getFax()) : customer.getFax() == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) getCustomerId();
-        result = 31 * result + getCompanyName().hashCode();
+        result = 31 * result + (getCompanyName() != null ? getCompanyName().hashCode() : 0);
         result = 31 * result + (getContactName() != null ? getContactName().hashCode() : 0);
         result = 31 * result + (getContactTitle() != null ? getContactTitle().hashCode() : 0);
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
         result = 31 * result + (getFax() != null ? getFax().hashCode() : 0);
-        result = 31 * result + (getCustomerCustomerDemographicsByCustomerId() != null ? getCustomerCustomerDemographicsByCustomerId().hashCode() : 0);
-        result = 31 * result + (getOrdersByCustomerId() != null ? getOrdersByCustomerId().hashCode() : 0);
         return result;
     }
 

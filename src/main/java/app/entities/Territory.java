@@ -13,7 +13,7 @@ public class Territory implements Serializable {
     protected Territory() {
     }
 
-    public Territory(String territoryDescription, Long regionId) {
+    public Territory(String territoryDescription, Short regionId) {
         if (territoryDescription == null || regionId == null) throw new IllegalArgumentException();
         this.territoryDescription = territoryDescription;
         this.regionId = regionId;
@@ -23,14 +23,11 @@ public class Territory implements Serializable {
     @Column(name = "territory_id", nullable = false, length = 20)
     protected String territoryId;
 
-    @Column(name = "territory_description", nullable = false)
+    @Column(name = "territory_description", nullable = false, length = 40)
     protected String territoryDescription;
 
     @Column(name = "region_id", nullable = false)
-    protected Long regionId;
-
-    @OneToMany(mappedBy = "territoryByTerritoryId", fetch = LAZY)
-    protected Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId;
+    protected Short regionId;
 
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false, insertable = false, updatable = false)
@@ -53,20 +50,12 @@ public class Territory implements Serializable {
             this.territoryDescription = territoryDescription;
     }
 
-    public Long getRegionId() {
+    public Short getRegionId() {
         return regionId;
     }
 
-    public void setRegionId(Long regionId) {
+    public void setRegionId(Short regionId) {
         if (regionId != null) this.regionId = regionId;
-    }
-
-    public Collection<EmployeeTerritory> getEmployeeTerritoriesByTerritoryId() {
-        return employeeTerritoriesByTerritoryId;
-    }
-
-    public void setEmployeeTerritoriesByTerritoryId(Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId) {
-        this.employeeTerritoriesByTerritoryId = employeeTerritoriesByTerritoryId;
     }
 
     public Region getRegionByRegionId() {
@@ -90,8 +79,6 @@ public class Territory implements Serializable {
             return false;
         if (getRegionId() != null ? !getRegionId().equals(territory.getRegionId()) : territory.getRegionId() != null)
             return false;
-        if (getEmployeeTerritoriesByTerritoryId() != null ? !getEmployeeTerritoriesByTerritoryId().equals(territory.getEmployeeTerritoriesByTerritoryId()) : territory.getEmployeeTerritoriesByTerritoryId() != null)
-            return false;
         return getRegionByRegionId() != null ? getRegionByRegionId().equals(territory.getRegionByRegionId()) : territory.getRegionByRegionId() == null;
     }
 
@@ -100,7 +87,6 @@ public class Territory implements Serializable {
         int result = getTerritoryId() != null ? getTerritoryId().hashCode() : 0;
         result = 31 * result + (getTerritoryDescription() != null ? getTerritoryDescription().hashCode() : 0);
         result = 31 * result + (getRegionId() != null ? getRegionId().hashCode() : 0);
-        result = 31 * result + (getEmployeeTerritoriesByTerritoryId() != null ? getEmployeeTerritoriesByTerritoryId().hashCode() : 0);
         result = 31 * result + (getRegionByRegionId() != null ? getRegionByRegionId().hashCode() : 0);
         return result;
     }
@@ -111,8 +97,6 @@ public class Territory implements Serializable {
         sb.append("territoryId=").append(territoryId);
         sb.append(", territoryDescription='").append(territoryDescription).append('\'');
         sb.append(", regionId=").append(regionId);
-        sb.append(", employeeTerritoriesByTerritoryId=").append(employeeTerritoriesByTerritoryId);
-        sb.append(", regionByRegionId=").append(regionByRegionId);
         sb.append('}');
         return sb.toString();
     }

@@ -1,23 +1,23 @@
 package app.queries;
 
-import app.utils.DatabaseConnection;
-import app.utils.Timer;
+import app.utils.DatabaseUtils;
+import org.hibernate.stat.Statistics;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class EntitiesManipulator {
     protected long JPQLqueryTime;
     protected long nativeSqlQueryTime;
-    protected Timer timer;
-    protected DatabaseConnection dbconn;
+    protected DatabaseUtils dbutils;
     protected EntityManager em;
+    boolean initialized;
 
-    public EntitiesManipulator() {
-        timer = new Timer();
-        dbconn = new DatabaseConnection();
-        em = null;
+    public EntitiesManipulator(DatabaseUtils dbutils) {
+        this.dbutils = dbutils;
+        this.initialized = false;
     }
 
     public long getJPQLqueryTime() {
@@ -30,28 +30,68 @@ public abstract class EntitiesManipulator {
     }
 
     protected long executeQuery(Runnable query) {
-        timer.startTimer();
         query.run();
-        return timer.stopTimerAndGetQueryTimeInMiliseconds();
+        return measureQueryExecutionTime();
     }
 
+
+    protected <T> long executeQuery(Callable<T> query, EntityKeeper<T> ek) {
+        try {
+            ek.storeEntity(query.call());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return measureQueryExecutionTime();
+    }
+
+
     protected <T> long executeQuery(Callable<List<T>> query, List<T> result) {
-        timer.startTimer();
         try {
             result.addAll(query.call());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return timer.stopTimerAndGetQueryTimeInMiliseconds();
+        return measureQueryExecutionTime();
     }
 
     protected void prepareConnectionToDB() {
-        dbconn.openConnection();
-        em = dbconn.getEntityManager();
+        cleanStateOfManipulator();
+        dbutils.openConnection();
+        em = dbutils.getEntityManager();
     }
 
-    protected void cleanAndCloseConnectionToDB() {
-        dbconn.closeConnection();
+    protected void closeConnectionToDB() {
+        dbutils.closeConnection();
         em = null;
+        initialized = true;
+    }
+
+    private void cleanStateOfManipulator(){
+        if(initialized){
+            JPQLqueryTime = 0L;
+            nativeSqlQueryTime = 0L;
+            initialized = false;
+        }
+    }
+
+    private long measureQueryExecutionTime(){
+        Statistics stats = dbutils.getStatistics();
+        long queryExecutionTime = stats.getQueryExecutionMaxTime();
+        dbutils.clearStatistics();
+        dbutils.clearCache();
+        return queryExecutionTime;
+    }
+
+
+    protected class EntityKeeper <T> {
+        T entity;
+
+        public void storeEntity(T it){
+            entity = it;
+        }
+
+        public T getEntity(){
+            return entity;
+        }
     }
 }

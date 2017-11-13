@@ -3,19 +3,15 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
 
-    protected Product() {
-    }
+    //protected Product() { }
 
-    public Product(String productName, Long supplierId, Long categoryId, String quantityPerUnit, Float unitPrice,
-                   int unitsInStock, int unitsOnOrder, int reorderLevel, int discontinued) {
+    public Product(String productName, Short supplierId, Short categoryId, String quantityPerUnit, Float unitPrice,
+                   Short unitsInStock, Short unitsOnOrder, Short reorderLevel, int discontinued) {
         if (productName == null) throw new IllegalArgumentException();
         this.productName = productName;
         this.supplierId = supplierId;
@@ -31,17 +27,17 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "product_id", nullable = false)
-    protected Long productId;
+    protected Short productId;
 
     @NotNull
     @Column(name = "product_name", nullable = false, length = 40)
     protected String productName;
 
     @Column(name = "supplier_id")
-    protected Long supplierId;
+    protected Short supplierId;
 
     @Column(name = "category_id")
-    protected Long categoryId;
+    protected Short categoryId;
 
     @Column(name = "quantity_per_unit", length = 20)
     protected String quantityPerUnit;
@@ -50,20 +46,17 @@ public class Product implements Serializable {
     protected Float unitPrice;
 
     @Column(name = "units_in_stock")
-    protected int unitsInStock;
+    protected Short unitsInStock;
 
     @Column(name = "units_on_order")
-    protected int unitsOnOrder;
+    protected Short unitsOnOrder;
 
     @Column(name = "reorder_level")
-    protected int reorderLevel;
+    protected Short reorderLevel;
 
     @NotNull
     @Column(nullable = false)
     protected int discontinued;
-
-    @OneToMany(mappedBy = "productByProductId", fetch = LAZY)
-    protected Collection<OrderDetails> orderDetailsByProductId;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id", insertable = false, updatable = false)
@@ -74,7 +67,7 @@ public class Product implements Serializable {
     protected Category categoryByCategoryId;
 
 
-    public Long getProductId() {
+    public Short getProductId() {
         return productId;
     }
 
@@ -86,19 +79,19 @@ public class Product implements Serializable {
         if (productName != null && !productName.isEmpty()) this.productName = productName;
     }
 
-    public Long getSupplierId() {
+    public Short getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Long supplierId) {
+    public void setSupplierId(Short supplierId) {
         this.supplierId = supplierId;
     }
 
-    public Long getCategoryId() {
+    public Short getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
+    public void setCategoryId(Short categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -118,27 +111,27 @@ public class Product implements Serializable {
         this.unitPrice = unitPrice;
     }
 
-    public int getUnitsInStock() {
+    public Short getUnitsInStock() {
         return unitsInStock;
     }
 
-    public void setUnitsInStock(int unitsInStock) {
+    public void setUnitsInStock(Short unitsInStock) {
         this.unitsInStock = unitsInStock;
     }
 
-    public int getUnitsOnOrder() {
+    public Short getUnitsOnOrder() {
         return unitsOnOrder;
     }
 
-    public void setUnitsOnOrder(int unitsOnOrder) {
+    public void setUnitsOnOrder(Short unitsOnOrder) {
         this.unitsOnOrder = unitsOnOrder;
     }
 
-    public int getReorderLevel() {
+    public Short getReorderLevel() {
         return reorderLevel;
     }
 
-    public void setReorderLevel(int reorderLevel) {
+    public void setReorderLevel(Short reorderLevel) {
         this.reorderLevel = reorderLevel;
     }
 
@@ -148,14 +141,6 @@ public class Product implements Serializable {
 
     public void setDiscontinued(int discontinued) {
         this.discontinued = discontinued;
-    }
-
-    public Collection<OrderDetails> getOrderDetailsByProductId() {
-        return orderDetailsByProductId;
-    }
-
-    public void setOrderDetailsByProductId(Collection<OrderDetails> orderDetailsByProductId) {
-        this.orderDetailsByProductId = orderDetailsByProductId;
     }
 
     public Supplier getSupplierBySupplierId() {
@@ -198,8 +183,6 @@ public class Product implements Serializable {
             return false;
         if (getUnitPrice() != null ? !getUnitPrice().equals(product.getUnitPrice()) : product.getUnitPrice() != null)
             return false;
-        if (getOrderDetailsByProductId() != null ? !getOrderDetailsByProductId().equals(product.getOrderDetailsByProductId()) : product.getOrderDetailsByProductId() != null)
-            return false;
         if (getSupplierBySupplierId() != null ? !getSupplierBySupplierId().equals(product.getSupplierBySupplierId()) : product.getSupplierBySupplierId() != null)
             return false;
         return getCategoryByCategoryId() != null ? getCategoryByCategoryId().equals(product.getCategoryByCategoryId()) : product.getCategoryByCategoryId() == null;
@@ -217,7 +200,6 @@ public class Product implements Serializable {
         result = 31 * result + getUnitsOnOrder();
         result = 31 * result + getReorderLevel();
         result = 31 * result + getDiscontinued();
-        result = 31 * result + (getOrderDetailsByProductId() != null ? getOrderDetailsByProductId().hashCode() : 0);
         result = 31 * result + (getSupplierBySupplierId() != null ? getSupplierBySupplierId().hashCode() : 0);
         result = 31 * result + (getCategoryByCategoryId() != null ? getCategoryByCategoryId().hashCode() : 0);
         return result;
@@ -236,9 +218,6 @@ public class Product implements Serializable {
         sb.append(", unitsOnOrder=").append(unitsOnOrder);
         sb.append(", reorderLevel=").append(reorderLevel);
         sb.append(", discontinued=").append(discontinued);
-        sb.append(", orderDetailsByProductId=").append(orderDetailsByProductId);
-        sb.append(", supplierBySupplierId=").append(supplierBySupplierId);
-        sb.append(", categoryByCategoryId=").append(categoryByCategoryId);
         sb.append('}');
         return sb.toString();
     }

@@ -24,7 +24,7 @@ public class Shipper implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "shipper_id", nullable = false)
-    protected Long shipperId;
+    protected Short shipperId;
 
     @NotNull
     @Column(name = "company_name", nullable = false, length = 40)
@@ -33,11 +33,8 @@ public class Shipper implements Serializable {
     @Column(length = 24)
     protected String phone;
 
-    @OneToMany(mappedBy = "shipperByShipVia", fetch = LAZY)
-    protected Collection<Order> ordersByShipperId;
 
-
-    public Long getShipperId() {
+    public Short getShipperId() {
         return shipperId;
     }
 
@@ -57,14 +54,6 @@ public class Shipper implements Serializable {
         this.phone = phone;
     }
 
-    public Collection<Order> getOrdersByShipperId() {
-        return ordersByShipperId;
-    }
-
-    public void setOrdersByShipperId(Collection<Order> ordersByShipperId) {
-        this.ordersByShipperId = ordersByShipperId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,8 +65,7 @@ public class Shipper implements Serializable {
             return false;
         if (getCompanyName() != null ? !getCompanyName().equals(shipper.getCompanyName()) : shipper.getCompanyName() != null)
             return false;
-        if (getPhone() != null ? !getPhone().equals(shipper.getPhone()) : shipper.getPhone() != null) return false;
-        return getOrdersByShipperId() != null ? getOrdersByShipperId().equals(shipper.getOrdersByShipperId()) : shipper.getOrdersByShipperId() == null;
+        return getPhone() != null ? getPhone().equals(shipper.getPhone()) : shipper.getPhone() == null;
     }
 
     @Override
@@ -85,7 +73,6 @@ public class Shipper implements Serializable {
         int result = getShipperId() != null ? getShipperId().hashCode() : 0;
         result = 31 * result + (getCompanyName() != null ? getCompanyName().hashCode() : 0);
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
-        result = 31 * result + (getOrdersByShipperId() != null ? getOrdersByShipperId().hashCode() : 0);
         return result;
     }
 
@@ -95,7 +82,6 @@ public class Shipper implements Serializable {
         sb.append("shipperId=").append(shipperId);
         sb.append(", companyName='").append(companyName).append('\'');
         sb.append(", phone='").append(phone).append('\'');
-        sb.append(", ordersByShipperId=").append(ordersByShipperId);
         sb.append('}');
         return sb.toString();
     }

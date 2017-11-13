@@ -34,7 +34,7 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "employee_id", nullable = false)
-    protected Long employeeId;
+    protected Short employeeId;
 
     @NotNull
     @Column(name = "last_name", nullable = false, length = 20)
@@ -84,17 +84,8 @@ public class Employee implements Serializable {
     @JoinColumn(name = "employee_id", referencedColumnName = "reports_to", insertable = false, updatable = false)
     protected Employee reporterByReporterId;
 
-    @OneToMany(mappedBy = "reporterByReporterId", fetch = LAZY)
-    protected Collection<Employee> subordinatesByReporterId;
 
-    @OneToMany(mappedBy = "employeeByEmployeeId", fetch = LAZY)
-    protected Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId;
-
-    @OneToMany(mappedBy = "employeeByEmployeeId", fetch = LAZY)
-    protected Collection<Order> ordersByEmployeeId;
-
-
-    public Long getEmployeeId() {
+    public Short getEmployeeId() {
         return employeeId;
     }
 
@@ -194,36 +185,12 @@ public class Employee implements Serializable {
         this.reportsTo = reportsTo;
     }
 
-    public Collection<EmployeeTerritory> getEmployeeTerritoriesByTerritoryId() {
-        return employeeTerritoriesByTerritoryId;
-    }
-
-    public void setEmployeeTerritoriesByTerritoryId(Collection<EmployeeTerritory> employeeTerritoriesByTerritoryId) {
-        this.employeeTerritoriesByTerritoryId = employeeTerritoriesByTerritoryId;
-    }
-
-    public Collection<Order> getOrdersByEmployeeId() {
-        return ordersByEmployeeId;
-    }
-
-    public void setOrdersByEmployeeId(Collection<Order> ordersByEmployeeId) {
-        this.ordersByEmployeeId = ordersByEmployeeId;
-    }
-
     public Employee getReporterByReporterId() {
         return reporterByReporterId;
     }
 
     public void setReporterByReporterId(Employee reporterByReporterId) {
         this.reporterByReporterId = reporterByReporterId;
-    }
-
-    public Collection<Employee> getSubordinatesByReporterId() {
-        return subordinatesByReporterId;
-    }
-
-    public void setSubordinatesByReporterId(Collection<Employee> subordinatesByReporterId) {
-        this.subordinatesByReporterId = subordinatesByReporterId;
     }
 
     @Override
@@ -255,13 +222,7 @@ public class Employee implements Serializable {
         if (getExtension() != null ? !getExtension().equals(employee.getExtension()) : employee.getExtension() != null)
             return false;
         if (getNotes() != null ? !getNotes().equals(employee.getNotes()) : employee.getNotes() != null) return false;
-        if (getReporterByReporterId() != null ? !getReporterByReporterId().equals(employee.getReporterByReporterId()) : employee.getReporterByReporterId() != null)
-            return false;
-        if (getSubordinatesByReporterId() != null ? !getSubordinatesByReporterId().equals(employee.getSubordinatesByReporterId()) : employee.getSubordinatesByReporterId() != null)
-            return false;
-        if (getEmployeeTerritoriesByTerritoryId() != null ? !getEmployeeTerritoriesByTerritoryId().equals(employee.getEmployeeTerritoriesByTerritoryId()) : employee.getEmployeeTerritoriesByTerritoryId() != null)
-            return false;
-        return getOrdersByEmployeeId() != null ? getOrdersByEmployeeId().equals(employee.getOrdersByEmployeeId()) : employee.getOrdersByEmployeeId() == null;
+        return getReporterByReporterId() != null ? getReporterByReporterId().equals(employee.getReporterByReporterId()) : employee.getReporterByReporterId() == null;
     }
 
     @Override
@@ -280,9 +241,6 @@ public class Employee implements Serializable {
         result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
         result = 31 * result + (int) getReportsTo();
         result = 31 * result + (getReporterByReporterId() != null ? getReporterByReporterId().hashCode() : 0);
-        result = 31 * result + (getSubordinatesByReporterId() != null ? getSubordinatesByReporterId().hashCode() : 0);
-        result = 31 * result + (getEmployeeTerritoriesByTerritoryId() != null ? getEmployeeTerritoriesByTerritoryId().hashCode() : 0);
-        result = 31 * result + (getOrdersByEmployeeId() != null ? getOrdersByEmployeeId().hashCode() : 0);
         return result;
     }
 
@@ -303,9 +261,6 @@ public class Employee implements Serializable {
         sb.append(", notes='").append(notes).append('\'');
         sb.append(", reportsTo=").append(reportsTo);
         sb.append(", reporterByReporterId=").append(reporterByReporterId);
-        sb.append(", subordinatesByReporterId=").append(subordinatesByReporterId);
-        sb.append(", employeeTerritoriesByTerritoryId=").append(employeeTerritoriesByTerritoryId);
-        sb.append(", ordersByEmployeeId=").append(ordersByEmployeeId);
         sb.append('}');
         return sb.toString();
     }

@@ -29,7 +29,7 @@ public class Supplier implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "supplier_id", nullable = false)
-    protected Long supplierId;
+    protected Short supplierId;
 
     @NotNull
     @Column(name = "company_name", nullable = false, length = 40)
@@ -59,14 +59,11 @@ public class Supplier implements Serializable {
     @Column(length = 24)
     protected String fax;
 
-    @Column(name = "home_page")
+    @Column(name = "homepage")
     protected String homePage;
 
-    @OneToMany(mappedBy = "supplierBySupplierId", fetch = LAZY)
-    protected Collection<Product> productsBySupplierId;
 
-
-    public Long getSupplierId() {
+    public Short getSupplierId() {
         return supplierId;
     }
 
@@ -134,14 +131,6 @@ public class Supplier implements Serializable {
         this.homePage = homePage;
     }
 
-    public Collection<Product> getProductsBySupplierId() {
-        return productsBySupplierId;
-    }
-
-    public void setProductsBySupplierId(Collection<Product> productsBySupplierId) {
-        this.productsBySupplierId = productsBySupplierId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -163,9 +152,7 @@ public class Supplier implements Serializable {
             return false;
         if (getPhone() != null ? !getPhone().equals(supplier.getPhone()) : supplier.getPhone() != null) return false;
         if (getFax() != null ? !getFax().equals(supplier.getFax()) : supplier.getFax() != null) return false;
-        if (getHomePage() != null ? !getHomePage().equals(supplier.getHomePage()) : supplier.getHomePage() != null)
-            return false;
-        return getProductsBySupplierId() != null ? getProductsBySupplierId().equals(supplier.getProductsBySupplierId()) : supplier.getProductsBySupplierId() == null;
+        return getHomePage() != null ? getHomePage().equals(supplier.getHomePage()) : supplier.getHomePage() == null;
     }
 
     @Override
@@ -179,7 +166,6 @@ public class Supplier implements Serializable {
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
         result = 31 * result + (getFax() != null ? getFax().hashCode() : 0);
         result = 31 * result + (getHomePage() != null ? getHomePage().hashCode() : 0);
-        result = 31 * result + (getProductsBySupplierId() != null ? getProductsBySupplierId().hashCode() : 0);
         return result;
     }
 
@@ -195,7 +181,6 @@ public class Supplier implements Serializable {
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", fax='").append(fax).append('\'');
         sb.append(", homePage='").append(homePage).append('\'');
-        sb.append(", productsBySupplierId=").append(productsBySupplierId);
         sb.append('}');
         return sb.toString();
     }
