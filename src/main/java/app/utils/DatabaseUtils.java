@@ -2,19 +2,13 @@ package app.utils;
 
 
 import org.hibernate.Session;
-import org.hibernate.stat.QueryStatistics;
 import org.hibernate.stat.Statistics;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;

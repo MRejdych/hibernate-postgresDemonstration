@@ -4,9 +4,8 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
 
-import static javax.persistence.FetchType.LAZY;
+import static app.constants.CustomersDbFields.*;
 
 @Entity
 @Table(name = "customers")
@@ -28,35 +27,35 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "customer_id", nullable = false)
+    @Column(name = CUSTOMER_ID, nullable = false)
     protected short customerId;
 
     @NotNull
-    @Column(name = "company_name", nullable = false, length = 40)
+    @Column(name = COMPANY_NAME, nullable = false, length = 40)
     protected String companyName;
 
-    @Column(name = "contact_name", length = 30)
+    @Column(name = CONTACT_NAME, length = 30)
     protected String contactName;
 
-    @Column(name = "contact_title", length = 30)
+    @Column(name = CONTACT_TITLE, length = 30)
     protected String contactTitle;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "address", length = 60)),
-            @AttributeOverride(name = "city", column = @Column(name = "city", length = 15)),
-            @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", length = 15)),
-            @AttributeOverride(name = "country", column = @Column(name = "country", length = 15)),
+            @AttributeOverride(name = "address", column = @Column(name = ADDRESS, length = 60)),
+            @AttributeOverride(name = "city", column = @Column(name = CITY, length = 15)),
+            @AttributeOverride(name = "postalCode", column = @Column(name = POSTAL_CODE, length = 15)),
+            @AttributeOverride(name = "country", column = @Column(name = COUNTRY, length = 15)),
     })
     protected Address address;
 
-    @Column(length = 15)
+    @Column(name = REGION, length = 15)
     protected String region;
 
-    @Column(length = 24)
+    @Column(name = PHONE, length = 24)
     protected String phone;
 
-    @Column(length = 24)
+    @Column(name = FAX, length = 24)
     protected String fax;
 
 

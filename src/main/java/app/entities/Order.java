@@ -3,9 +3,6 @@ package app.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collection;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
@@ -56,7 +53,7 @@ public class Order implements Serializable {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "ship_address", length = 60)),
+            @AttributeOverride(name = "address", column = @Column(name = "ship_address", length = 60)),
             @AttributeOverride(name = "city", column = @Column(name = "ship_city", length = 15)),
             @AttributeOverride(name = "postalCode", column = @Column(name = "ship_postal_code", length = 10)),
             @AttributeOverride(name = "country", column = @Column(name = "ship_country", length = 15)),

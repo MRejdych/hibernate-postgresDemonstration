@@ -3,7 +3,6 @@ package app.entities;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
@@ -12,38 +11,34 @@ public class Address implements Serializable {
     protected Address() {
     }
 
-    public Address(String street, String city, String postalCode, String country) {
-        if (street != null && city != null && postalCode != null && country != null) {
-            this.street = street;
+    public Address(String address, String city, String postalCode, String country) {
+        if (address != null && city != null && postalCode != null && country != null) {
+            this.address = address;
             this.city = city;
             this.postalCode = postalCode;
             this.country = country;
         } else throw new IllegalArgumentException("Parameters can not be null");
     }
 
-    @NotNull
     @Length(max = 40)
-    protected String street;
+    protected String address;
 
-    @NotNull
     @Length(max = 15)
     protected String city;
 
-    @NotNull
     @Length(max = 10)
     protected String postalCode;
 
-    @NotNull
     @Length(max = 15)
     protected String country;
 
 
-    public String getStreet() {
-        return street;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStreet(String street) {
-        if (street != null && !street.isEmpty()) this.street = street;
+    public void setAddress(String street) {
+        if (street != null && !street.isEmpty()) this.address = street;
     }
 
     public String getCity() {
@@ -77,7 +72,7 @@ public class Address implements Serializable {
 
         Address address = (Address) o;
 
-        if (!getStreet().equals(address.getStreet())) return false;
+        if (!getAddress().equals(address.getAddress())) return false;
         if (!getCity().equals(address.getCity())) return false;
         if (!getPostalCode().equals(address.getPostalCode())) return false;
         return getCountry().equals(address.getCountry());
@@ -85,7 +80,7 @@ public class Address implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = getStreet().hashCode();
+        int result = getAddress().hashCode();
         result = 31 * result + getCity().hashCode();
         result = 31 * result + getPostalCode().hashCode();
         result = 31 * result + getCountry().hashCode();
@@ -95,7 +90,7 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Address{");
-        sb.append("street='").append(street).append('\'');
+        sb.append("street='").append(address).append('\'');
         sb.append(", city='").append(city).append('\'');
         sb.append(", postalCode='").append(postalCode).append('\'');
         sb.append(", country='").append(country).append('\'');

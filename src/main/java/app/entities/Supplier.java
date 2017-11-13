@@ -3,9 +3,6 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "suppliers")
@@ -43,7 +40,7 @@ public class Supplier implements Serializable {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "address", length = 60)),
+            @AttributeOverride(name = "address", column = @Column(name = "address", length = 60)),
             @AttributeOverride(name = "city", column = @Column(name = "city", length = 15)),
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", length = 10)),
             @AttributeOverride(name = "country", column = @Column(name = "country", length = 15)),

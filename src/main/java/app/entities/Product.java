@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+import static app.constants.ProductsDbFields.*;
+
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
@@ -26,36 +28,36 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "product_id", nullable = false)
+    @Column(name = PRODUCT_ID, nullable = false)
     protected Short productId;
 
     @NotNull
-    @Column(name = "product_name", nullable = false, length = 40)
+    @Column(name = PRODUCT_NAME, nullable = false, length = 40)
     protected String productName;
 
-    @Column(name = "supplier_id")
+    @Column(name = SUPPLIER_ID)
     protected Short supplierId;
 
-    @Column(name = "category_id")
+    @Column(name = CATEGORY_ID)
     protected Short categoryId;
 
-    @Column(name = "quantity_per_unit", length = 20)
+    @Column(name = QUANTITY_PER_UNIT, length = 20)
     protected String quantityPerUnit;
 
-    @Column(name = "unit_price")
+    @Column(name = UNIT_PRICE)
     protected Float unitPrice;
 
-    @Column(name = "units_in_stock")
+    @Column(name = UNITS_IN_STOCK)
     protected Short unitsInStock;
 
-    @Column(name = "units_on_order")
+    @Column(name = UNITS_ON_ORDER)
     protected Short unitsOnOrder;
 
-    @Column(name = "reorder_level")
+    @Column(name = REORDER_LEVEL)
     protected Short reorderLevel;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = DISCONTINUED, nullable = false)
     protected int discontinued;
 
     @ManyToOne

@@ -1,8 +1,6 @@
 package app;
 
-import app.queries.CustomersManipulator;
-import app.queries.EntitiesManipulator;
-import app.queries.ProductsManipulator;
+import app.queries.*;
 import app.utils.CustomerBuilder;
 import app.utils.DatabaseUtils;
 import app.utils.ProductBuilder;
@@ -33,14 +31,14 @@ public class ApplicationConfiguration {
 
     @Bean
     @Scope("prototype")
-    public CustomerBuilder customerBuilder(){
-        return new CustomerBuilder();
+    public EntitiesHelper suppliersHelper(){
+        return new SuppliersHelper(databaseUtils());
     }
 
     @Bean
     @Scope("prototype")
-    public ProductBuilder productBuilder(){
-        return new ProductBuilder();
+    public EntitiesHelper categoriesHelper(){
+        return new CategoriesHelper(databaseUtils());
     }
 
 }
