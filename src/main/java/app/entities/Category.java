@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -33,7 +34,7 @@ public class Category implements Serializable {
     private String description;
 
 
-    @OneToMany(mappedBy = "category", fetch = LAZY)
+    @OneToMany(mappedBy = "category", fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private List<Product> products;
 
     public short getCategoryId() {

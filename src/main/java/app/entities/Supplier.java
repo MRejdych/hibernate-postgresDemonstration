@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
@@ -62,7 +63,7 @@ public class Supplier implements Serializable {
     @Column(name = "homepage")
     private String homePage;
 
-    @OneToMany(mappedBy = "supplier", fetch = LAZY)
+    @OneToMany(mappedBy = "supplier", fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private  List<Product> products;
 
     public Short getSupplierId() {

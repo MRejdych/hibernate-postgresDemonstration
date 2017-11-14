@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 import static app.constants.ProductsDbFields.*;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "products")
@@ -54,11 +55,11 @@ public class Product implements Serializable {
     @Column(name = DISCONTINUED, nullable = false)
     private int discontinued;
 
-    @ManyToOne
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
     @JoinColumn(name = SUPPLIER_ID, referencedColumnName = SUPPLIER_ID)
     protected Supplier supplier;
 
-    @ManyToOne
+    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
     @JoinColumn(name = CATEGORY_ID, referencedColumnName = CATEGORY_ID)
     protected Category category;
 
