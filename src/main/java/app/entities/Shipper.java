@@ -24,14 +24,14 @@ public class Shipper implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "shipper_id", nullable = false)
-    protected Short shipperId;
+    private Short shipperId;
 
     @NotNull
     @Column(name = "company_name", nullable = false, length = 40)
-    protected String companyName;
+    private String companyName;
 
     @Column(length = 24)
-    protected String phone;
+    private String phone;
 
 
     public Short getShipperId() {

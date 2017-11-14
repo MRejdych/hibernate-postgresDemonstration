@@ -2,9 +2,6 @@ package app.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "territories")
@@ -13,25 +10,23 @@ public class Territory implements Serializable {
     protected Territory() {
     }
 
-    public Territory(String territoryDescription, Short regionId) {
-        if (territoryDescription == null || regionId == null) throw new IllegalArgumentException();
+    public Territory(String territoryDescription, Region region) {
+        if (territoryDescription == null || region == null) throw new IllegalArgumentException();
         this.territoryDescription = territoryDescription;
-        this.regionId = regionId;
+        this.region = region;
     }
 
     @Id
     @Column(name = "territory_id", nullable = false, length = 20)
-    protected String territoryId;
+    private String territoryId;
 
     @Column(name = "territory_description", nullable = false, length = 40)
-    protected String territoryDescription;
-
-    @Column(name = "region_id", nullable = false)
-    protected Short regionId;
+    private String territoryDescription;
 
     @ManyToOne
-    @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false, insertable = false, updatable = false)
-    protected Region regionByRegionId;
+    @JoinColumn(name = "region_id", referencedColumnName = "region_id", nullable = false)
+    private Region region;
+
 
     public String getTerritoryId() {
         return territoryId;
@@ -50,20 +45,12 @@ public class Territory implements Serializable {
             this.territoryDescription = territoryDescription;
     }
 
-    public Short getRegionId() {
-        return regionId;
+    public Region getRegion() {
+        return region;
     }
 
-    public void setRegionId(Short regionId) {
-        if (regionId != null) this.regionId = regionId;
-    }
-
-    public Region getRegionByRegionId() {
-        return regionByRegionId;
-    }
-
-    public void setRegionByRegionId(Region regionByRegionId) {
-        this.regionByRegionId = regionByRegionId;
+    public void setRegion(Region regionId) {
+        if (regionId != null) this.region = regionId;
     }
 
     @Override
@@ -77,17 +64,14 @@ public class Territory implements Serializable {
             return false;
         if (getTerritoryDescription() != null ? !getTerritoryDescription().equals(territory.getTerritoryDescription()) : territory.getTerritoryDescription() != null)
             return false;
-        if (getRegionId() != null ? !getRegionId().equals(territory.getRegionId()) : territory.getRegionId() != null)
-            return false;
-        return getRegionByRegionId() != null ? getRegionByRegionId().equals(territory.getRegionByRegionId()) : territory.getRegionByRegionId() == null;
+        return getRegion() != null ? getRegion().equals(territory.getRegion()) : territory.getRegion() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getTerritoryId() != null ? getTerritoryId().hashCode() : 0;
         result = 31 * result + (getTerritoryDescription() != null ? getTerritoryDescription().hashCode() : 0);
-        result = 31 * result + (getRegionId() != null ? getRegionId().hashCode() : 0);
-        result = 31 * result + (getRegionByRegionId() != null ? getRegionByRegionId().hashCode() : 0);
+        result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
         return result;
     }
 
@@ -96,7 +80,7 @@ public class Territory implements Serializable {
         final StringBuffer sb = new StringBuffer("Territory{");
         sb.append("territoryId=").append(territoryId);
         sb.append(", territoryDescription='").append(territoryDescription).append('\'');
-        sb.append(", regionId=").append(regionId);
+        sb.append(", regionId=").append(region);
         sb.append('}');
         return sb.toString();
     }

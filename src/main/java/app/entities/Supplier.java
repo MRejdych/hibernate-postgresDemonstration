@@ -3,6 +3,9 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
+
+import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "suppliers")
@@ -26,17 +29,17 @@ public class Supplier implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "supplier_id", nullable = false)
-    protected Short supplierId;
+    private Short supplierId;
 
     @NotNull
     @Column(name = "company_name", nullable = false, length = 40)
-    protected String companyName;
+    private String companyName;
 
     @Column(name = "contact_name", length = 30)
-    protected String contactName;
+    private String contactName;
 
     @Column(name = "contact_title", length = 30)
-    protected String contactTitle;
+    private String contactTitle;
 
     @Embedded
     @AttributeOverrides({
@@ -45,20 +48,22 @@ public class Supplier implements Serializable {
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", length = 10)),
             @AttributeOverride(name = "country", column = @Column(name = "country", length = 15)),
     })
-    protected Address address;
+    private Address address;
 
     @Column(length = 15)
-    protected String region;
+    private String region;
 
     @Column(length = 24)
-    protected String phone;
+    private String phone;
 
     @Column(length = 24)
-    protected String fax;
+    private String fax;
 
     @Column(name = "homepage")
-    protected String homePage;
+    private String homePage;
 
+    @OneToMany(mappedBy = "supplier", fetch = LAZY)
+    private  List<Product> products;
 
     public Short getSupplierId() {
         return supplierId;
@@ -126,6 +131,14 @@ public class Supplier implements Serializable {
 
     public void setHomePage(String homePage) {
         this.homePage = homePage;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override

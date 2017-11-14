@@ -11,10 +11,10 @@ public class Order implements Serializable {
     protected Order() {
     }
 
-    public Order(Short customerId, Short employeeId, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate,
-                 Short shipVia, Float freight, Address address) {
-        this.customerId = customerId;
-        this.employeeId = employeeId;
+    public Order(Customer customer, Employee employee, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate,
+                 Shipper shipVia, Float freight, Address address) {
+        this.customer = customer;
+        this.employee = employee;
         this.orderDate = orderDate;
         this.requiredDate = requiredDate;
         this.shippedDate = shippedDate;
@@ -26,30 +26,33 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "order_id", nullable = false)
-    protected Short orderId;
+    private Short orderId;
 
-    @Column(name = "customer_id")
-    protected Short customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    private Customer customer;
 
-    @Column(name = "employee_id")
-    protected Short employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    private Employee employee;
 
     @Column(name = "order_date")
-    protected LocalDate orderDate;
+    private LocalDate orderDate;
 
     @Column(name = "required_date")
-    protected LocalDate requiredDate;
+    private LocalDate requiredDate;
 
     @Column(name = "shipped_date")
-    protected LocalDate shippedDate;
+    private LocalDate shippedDate;
 
-    @Column(name = "ship_via")
-    protected Short shipVia;
+    @ManyToOne
+    @JoinColumn(name = "ship_via", referencedColumnName = "shipper_id")
+    private Shipper shipVia;
 
-    protected Float freight;
+    private Float freight;
 
     @Column(name = "ship_name", length = 40)
-    protected String shipName;
+    private String shipName;
 
     @Embedded
     @AttributeOverrides({
@@ -61,19 +64,7 @@ public class Order implements Serializable {
     protected Address address;
 
     @Column(name = "ship_region", length = 15)
-    protected String shipRegion;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id", insertable = false, updatable = false)
-    protected Employee employeeByEmployeeId;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", insertable = false, updatable = false)
-    protected Customer customerByCustomerId;
-
-    @ManyToOne
-    @JoinColumn(name = "ship_via", referencedColumnName = "shipper_id", insertable = false, updatable = false)
-    protected Shipper shipperByShipVia;
+    private String shipRegion;
 
 
     public Short getOrderId() {
@@ -81,20 +72,20 @@ public class Order implements Serializable {
     }
 
 
-    public Short getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Short customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customerId) {
+        this.customer = customerId;
     }
 
-    public Short getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Short employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employeeId) {
+        this.employee = employeeId;
     }
 
     public LocalDate getOrderDate() {
@@ -121,11 +112,11 @@ public class Order implements Serializable {
         this.shippedDate = shippedDate;
     }
 
-    public Short getShipVia() {
+    public Shipper getShipVia() {
         return shipVia;
     }
 
-    public void setShipVia(Short shipVia) {
+    public void setShipVia(Shipper shipVia) {
         this.shipVia = shipVia;
     }
 
@@ -161,30 +152,6 @@ public class Order implements Serializable {
         this.shipRegion = shipRegion;
     }
 
-    public Customer getCustomerByCustomerId() {
-        return customerByCustomerId;
-    }
-
-    public void setCustomerByCustomerId(Customer customerByCustomerId) {
-        this.customerByCustomerId = customerByCustomerId;
-    }
-
-    public Shipper getShipperByShipVia() {
-        return shipperByShipVia;
-    }
-
-    public void setShipperByShipVia(Shipper shipperByShipVia) {
-        this.shipperByShipVia = shipperByShipVia;
-    }
-
-    public Employee getEmployeeByEmployeeId() {
-        return employeeByEmployeeId;
-    }
-
-    public void setEmployeeByEmployeeId(Employee employeeByEmployeeId) {
-        this.employeeByEmployeeId = employeeByEmployeeId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -193,9 +160,9 @@ public class Order implements Serializable {
         Order order = (Order) o;
 
         if (getOrderId() != null ? !getOrderId().equals(order.getOrderId()) : order.getOrderId() != null) return false;
-        if (getCustomerId() != null ? !getCustomerId().equals(order.getCustomerId()) : order.getCustomerId() != null)
+        if (getCustomer() != null ? !getCustomer().equals(order.getCustomer()) : order.getCustomer() != null)
             return false;
-        if (getEmployeeId() != null ? !getEmployeeId().equals(order.getEmployeeId()) : order.getEmployeeId() != null)
+        if (getEmployee() != null ? !getEmployee().equals(order.getEmployee()) : order.getEmployee() != null)
             return false;
         if (getOrderDate() != null ? !getOrderDate().equals(order.getOrderDate()) : order.getOrderDate() != null)
             return false;
@@ -208,20 +175,14 @@ public class Order implements Serializable {
         if (getShipName() != null ? !getShipName().equals(order.getShipName()) : order.getShipName() != null)
             return false;
         if (getAddress() != null ? !getAddress().equals(order.getAddress()) : order.getAddress() != null) return false;
-        if (getShipRegion() != null ? !getShipRegion().equals(order.getShipRegion()) : order.getShipRegion() != null)
-            return false;
-        if (getEmployeeByEmployeeId() != null ? !getEmployeeByEmployeeId().equals(order.getEmployeeByEmployeeId()) : order.getEmployeeByEmployeeId() != null)
-            return false;
-        if (getCustomerByCustomerId() != null ? !getCustomerByCustomerId().equals(order.getCustomerByCustomerId()) : order.getCustomerByCustomerId() != null)
-            return false;
-        return getShipperByShipVia() != null ? getShipperByShipVia().equals(order.getShipperByShipVia()) : order.getShipperByShipVia() == null;
+        return getShipRegion() != null ? getShipRegion().equals(order.getShipRegion()) : order.getShipRegion() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getOrderId() != null ? getOrderId().hashCode() : 0;
-        result = 31 * result + (getCustomerId() != null ? getCustomerId().hashCode() : 0);
-        result = 31 * result + (getEmployeeId() != null ? getEmployeeId().hashCode() : 0);
+        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
+        result = 31 * result + (getEmployee() != null ? getEmployee().hashCode() : 0);
         result = 31 * result + (getOrderDate() != null ? getOrderDate().hashCode() : 0);
         result = 31 * result + (getRequiredDate() != null ? getRequiredDate().hashCode() : 0);
         result = 31 * result + (getShippedDate() != null ? getShippedDate().hashCode() : 0);
@@ -230,9 +191,6 @@ public class Order implements Serializable {
         result = 31 * result + (getShipName() != null ? getShipName().hashCode() : 0);
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getShipRegion() != null ? getShipRegion().hashCode() : 0);
-        result = 31 * result + (getEmployeeByEmployeeId() != null ? getEmployeeByEmployeeId().hashCode() : 0);
-        result = 31 * result + (getCustomerByCustomerId() != null ? getCustomerByCustomerId().hashCode() : 0);
-        result = 31 * result + (getShipperByShipVia() != null ? getShipperByShipVia().hashCode() : 0);
         return result;
     }
 
@@ -240,8 +198,8 @@ public class Order implements Serializable {
     public String toString() {
         final StringBuffer sb = new StringBuffer("Order{");
         sb.append("orderId=").append(orderId);
-        sb.append(", customerId=").append(customerId);
-        sb.append(", employeeId=").append(employeeId);
+        sb.append(", customerId=").append(customer);
+        sb.append(", employeeId=").append(employee);
         sb.append(", orderDate=").append(orderDate);
         sb.append(", requiredDate=").append(requiredDate);
         sb.append(", shippedDate=").append(shippedDate);

@@ -11,59 +11,53 @@ public class OrderDetails implements Serializable {
     protected OrderDetails() {
     }
 
-    public OrderDetails(Short orderId, Short productId, Float unitPrice, Short quantity, Float discount) {
-        if (orderId == null || productId == null || unitPrice == null || quantity == null
+    public OrderDetails(Order order, Product product, Float unitPrice, Short quantity, Float discount) {
+        if (order == null || product == null || unitPrice == null || quantity == null
                 || discount == null) throw new IllegalArgumentException();
-        this.orderId = orderId;
-        this.productId = productId;
+        this.order = order;
+        this.product = product;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.discount = discount;
     }
 
     @Id
-    @Column(name = "order_id", nullable = false)
-    protected Short orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    private Order order;
 
     @Id
-    @Column(name = "product_id", nullable = false)
-    protected Short productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    private Product product;
 
     @NotNull
     @Column(name = "unit_price", nullable = false)
-    protected Float unitPrice;
+    private Float unitPrice;
 
     @NotNull
     @Column(nullable = false)
-    protected Short quantity;
+    private Short quantity;
 
     @NotNull
     @Column(nullable = false)
-    protected Float discount;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false, insertable = false, updatable = false)
-    protected Order orderByOrderId;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false, insertable = false, updatable = false)
-    protected Product productByProductId;
+    private Float discount;
 
 
-    public Short getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(Short orderId) {
-        if (orderId != null) this.orderId = orderId;
+    public void setOrder(Order orderId) {
+        if (orderId != null) this.order = orderId;
     }
 
-    public Short getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Short productId) {
-        if (productId != null) this.productId = productId;
+    public void setProduct(Product productId) {
+        if (productId != null) this.product = productId;
     }
 
     public Float getUnitPrice() {
@@ -90,22 +84,6 @@ public class OrderDetails implements Serializable {
         if (discount != null) this.discount = discount;
     }
 
-    public Order getOrderByOrderId() {
-        return orderByOrderId;
-    }
-
-    public void setOrderByOrderId(Order orderByOrderId) {
-        this.orderByOrderId = orderByOrderId;
-    }
-
-    public Product getProductByProductId() {
-        return productByProductId;
-    }
-
-    public void setProductByProductId(Product productByProductId) {
-        this.productByProductId = productByProductId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,42 +91,33 @@ public class OrderDetails implements Serializable {
 
         OrderDetails that = (OrderDetails) o;
 
-        if (getOrderId() != null ? !getOrderId().equals(that.getOrderId()) : that.getOrderId() != null) return false;
-        if (getProductId() != null ? !getProductId().equals(that.getProductId()) : that.getProductId() != null)
-            return false;
+        if (getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null) return false;
+        if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
         if (getUnitPrice() != null ? !getUnitPrice().equals(that.getUnitPrice()) : that.getUnitPrice() != null)
             return false;
         if (getQuantity() != null ? !getQuantity().equals(that.getQuantity()) : that.getQuantity() != null)
             return false;
-        if (getDiscount() != null ? !getDiscount().equals(that.getDiscount()) : that.getDiscount() != null)
-            return false;
-        if (getOrderByOrderId() != null ? !getOrderByOrderId().equals(that.getOrderByOrderId()) : that.getOrderByOrderId() != null)
-            return false;
-        return getProductByProductId() != null ? getProductByProductId().equals(that.getProductByProductId()) : that.getProductByProductId() == null;
+        return getDiscount() != null ? getDiscount().equals(that.getDiscount()) : that.getDiscount() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getOrderId() != null ? getOrderId().hashCode() : 0;
-        result = 31 * result + (getProductId() != null ? getProductId().hashCode() : 0);
+        int result = getOrder() != null ? getOrder().hashCode() : 0;
+        result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
         result = 31 * result + (getUnitPrice() != null ? getUnitPrice().hashCode() : 0);
         result = 31 * result + (getQuantity() != null ? getQuantity().hashCode() : 0);
         result = 31 * result + (getDiscount() != null ? getDiscount().hashCode() : 0);
-        result = 31 * result + (getOrderByOrderId() != null ? getOrderByOrderId().hashCode() : 0);
-        result = 31 * result + (getProductByProductId() != null ? getProductByProductId().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("OrderDetails{");
-        sb.append("orderId=").append(orderId);
-        sb.append(", productId=").append(productId);
+        sb.append("order=").append(order);
+        sb.append(", product=").append(product);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", quantity=").append(quantity);
         sb.append(", discount=").append(discount);
-        sb.append(", orderByOrderId=").append(orderByOrderId);
-        sb.append(", productByProductId=").append(productByProductId);
         sb.append('}');
         return sb.toString();
     }

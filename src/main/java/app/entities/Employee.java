@@ -13,7 +13,7 @@ public class Employee implements Serializable {
     }
 
     public Employee(String lastName, String firstName, String title, String titleOfCourtesy, LocalDate birthDate,
-                    LocalDate hireDate, Address address, String phone, String extension, String notes, short reportsTo) {
+                    LocalDate hireDate, Address address, String phone, String extension, String notes, Employee reportsTo) {
         if (lastName == null || firstName == null) throw new IllegalArgumentException();
         this.lastName = lastName;
         this.firstName = firstName;
@@ -31,27 +31,27 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "employee_id", nullable = false)
-    protected Short employeeId;
+    private Short employeeId;
 
     @NotNull
     @Column(name = "last_name", nullable = false, length = 20)
-    protected String lastName;
+    private String lastName;
 
     @NotNull
     @Column(name = "first_name", nullable = false, length = 10)
-    protected String firstName;
+    private String firstName;
 
     @Column(length = 30)
-    protected String title;
+    private String title;
 
     @Column(name = "title_of_courtesy", length = 25)
-    protected String titleOfCourtesy;
+    private String titleOfCourtesy;
 
     @Column(name = "birth_date")
-    protected LocalDate birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "hire_date")
-    protected LocalDate hireDate;
+    private LocalDate hireDate;
 
     @Embedded
     @AttributeOverrides({
@@ -60,26 +60,22 @@ public class Employee implements Serializable {
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", length = 10)),
             @AttributeOverride(name = "country", column = @Column(name = "country", length = 15)),
     })
-    protected Address address;
+    private Address address;
 
     @Column(length = 15)
-    protected String region;
+    private String region;
 
     @Column(length = 24)
-    protected String phone;
+    private String phone;
 
     @Column(length = 4)
-    protected String extension;
+    private String extension;
 
-    protected String notes;
-
-    @Column(name = "reports_to")
-    protected short reportsTo;
-
+    private String notes;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "reports_to", insertable = false, updatable = false)
-    protected Employee reporterByReporterId;
+    @JoinColumn(name = "reports_to", referencedColumnName = "employee_id")
+    private Employee reportsTo;
 
 
     public Short getEmployeeId() {
@@ -174,20 +170,12 @@ public class Employee implements Serializable {
         this.notes = notes;
     }
 
-    public short getReportsTo() {
+    public Employee getReportsTo() {
         return reportsTo;
     }
 
-    public void setReportsTo(short reportsTo) {
+    public void setReportsTo(Employee reportsTo) {
         this.reportsTo = reportsTo;
-    }
-
-    public Employee getReporterByReporterId() {
-        return reporterByReporterId;
-    }
-
-    public void setReporterByReporterId(Employee reporterByReporterId) {
-        this.reporterByReporterId = reporterByReporterId;
     }
 
     @Override
@@ -197,7 +185,6 @@ public class Employee implements Serializable {
 
         Employee employee = (Employee) o;
 
-        if (getReportsTo() != employee.getReportsTo()) return false;
         if (getEmployeeId() != null ? !getEmployeeId().equals(employee.getEmployeeId()) : employee.getEmployeeId() != null)
             return false;
         if (getLastName() != null ? !getLastName().equals(employee.getLastName()) : employee.getLastName() != null)
@@ -219,7 +206,7 @@ public class Employee implements Serializable {
         if (getExtension() != null ? !getExtension().equals(employee.getExtension()) : employee.getExtension() != null)
             return false;
         if (getNotes() != null ? !getNotes().equals(employee.getNotes()) : employee.getNotes() != null) return false;
-        return getReporterByReporterId() != null ? getReporterByReporterId().equals(employee.getReporterByReporterId()) : employee.getReporterByReporterId() == null;
+        return getReportsTo() != null ? getReportsTo().equals(employee.getReportsTo()) : employee.getReportsTo() == null;
     }
 
     @Override
@@ -236,8 +223,7 @@ public class Employee implements Serializable {
         result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
         result = 31 * result + (getExtension() != null ? getExtension().hashCode() : 0);
         result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
-        result = 31 * result + (int) getReportsTo();
-        result = 31 * result + (getReporterByReporterId() != null ? getReporterByReporterId().hashCode() : 0);
+        result = 31 * result + (getReportsTo() != null ? getReportsTo().hashCode() : 0);
         return result;
     }
 
@@ -257,7 +243,6 @@ public class Employee implements Serializable {
         sb.append(", extension='").append(extension).append('\'');
         sb.append(", notes='").append(notes).append('\'');
         sb.append(", reportsTo=").append(reportsTo);
-        sb.append(", reporterByReporterId=").append(reporterByReporterId);
         sb.append('}');
         return sb.toString();
     }

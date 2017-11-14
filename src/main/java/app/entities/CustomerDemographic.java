@@ -20,17 +20,17 @@ public class CustomerDemographic implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "customer_type_id", nullable = false)
-    protected short customerTypeId;
+    private short customerTypeId;
 
     @Column(name = "customer_description")
-    protected String customerDesc;
+    private String customerDesc;
 
 
-    public short getCustomerTypeId() {
+    private short getCustomerTypeId() {
         return customerTypeId;
     }
 
-    public String getCustomerDesc() {
+    private String getCustomerDesc() {
         return customerDesc;
     }
 

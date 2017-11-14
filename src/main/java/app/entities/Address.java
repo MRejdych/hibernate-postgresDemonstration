@@ -21,16 +21,16 @@ public class Address implements Serializable {
     }
 
     @Length(max = 40)
-    protected String address;
+    private String address;
 
     @Length(max = 15)
-    protected String city;
+    private String city;
 
     @Length(max = 10)
-    protected String postalCode;
+    private String postalCode;
 
     @Length(max = 15)
-    protected String country;
+    private String country;
 
 
     public String getAddress() {

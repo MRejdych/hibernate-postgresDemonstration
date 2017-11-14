@@ -28,17 +28,17 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = CUSTOMER_ID, nullable = false)
-    protected short customerId;
+    private short customerId;
 
     @NotNull
     @Column(name = COMPANY_NAME, nullable = false, length = 40)
-    protected String companyName;
+    private String companyName;
 
     @Column(name = CONTACT_NAME, length = 30)
-    protected String contactName;
+    private String contactName;
 
     @Column(name = CONTACT_TITLE, length = 30)
-    protected String contactTitle;
+    private String contactTitle;
 
     @Embedded
     @AttributeOverrides({
@@ -47,16 +47,16 @@ public class Customer implements Serializable {
             @AttributeOverride(name = "postalCode", column = @Column(name = POSTAL_CODE, length = 15)),
             @AttributeOverride(name = "country", column = @Column(name = COUNTRY, length = 15)),
     })
-    protected Address address;
+    private Address address;
 
     @Column(name = REGION, length = 15)
-    protected String region;
+    private String region;
 
     @Column(name = PHONE, length = 24)
-    protected String phone;
+    private String phone;
 
     @Column(name = FAX, length = 24)
-    protected String fax;
+    private String fax;
 
 
     public short getCustomerId() {

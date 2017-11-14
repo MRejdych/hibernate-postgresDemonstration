@@ -20,10 +20,10 @@ public class Region implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "region_id", nullable = false)
-    protected Short regionId;
+    private Short regionId;
 
     @Column(name = "region_description", nullable = false, length = 10)
-    protected String regionDescription;
+    private String regionDescription;
 
 
     public Short getRegionId() {

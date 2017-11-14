@@ -1,6 +1,8 @@
 package app.queries;
 
+import app.entities.Category;
 import app.entities.Product;
+import app.entities.Supplier;
 import app.utils.DatabaseUtils;
 import app.utils.ProductBuilder;
 import org.springframework.ui.Model;
@@ -58,8 +60,8 @@ public class ProductsManipulator extends EntitiesManipulator <Product> {
 
         Product product = new ProductBuilder()
                 .withProductName((String) map.get(PRODUCT_NAME))
-                .withCategoryId((Short) map.get(CATEGORY))
-                .withSupplierId((Short) map.get(SUPPLIER))
+                .withCategory((Category) map.get(CATEGORY))
+                .withSupplier((Supplier) map.get(SUPPLIER))
                 .withQuantityPerUnit((String) map.get(QUANTITY_PER_UNIT))
                 .withUnitPrice((Float) map.get(UNIT_PRICE))
                 .withUnitsInStock((Short) map.get(UNITS_IN_STOCK))
@@ -81,8 +83,8 @@ public class ProductsManipulator extends EntitiesManipulator <Product> {
         new AttributesSettingHelper(model.asMap())
 
                 .ifMapContainsKey(PRODUCT_NAME).thenSetValueOf(product::setProductName)
-                .ifMapContainsKey(SUPPLIER).thenSetValueOf(product::setSupplierBySupplierId)
-                .ifMapContainsKey(CATEGORY).thenSetValueOf(product::setCategoryByCategoryId)
+                .ifMapContainsKey(SUPPLIER).thenSetValueOf(product::setSupplier)
+                .ifMapContainsKey(CATEGORY).thenSetValueOf(product::setCategory)
                 .ifMapContainsKey(QUANTITY_PER_UNIT).thenSetValueOf(product::setQuantityPerUnit)
                 .ifMapContainsKey(UNIT_PRICE).thenSetValueOf(product::setUnitPrice)
                 .ifMapContainsKey(UNITS_IN_STOCK).thenSetValueOf(product::setUnitsInStock)

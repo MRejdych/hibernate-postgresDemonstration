@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -23,14 +24,17 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "category_id", nullable = false)
-    protected short categoryId;
+    private short categoryId;
 
     @NotNull
     @Column(name = "category_name", nullable = false, length = 15)
-    protected String categoryName;
+    private String categoryName;
 
-    protected String description;
+    private String description;
 
+
+    @OneToMany(mappedBy = "category", fetch = LAZY)
+    private List<Product> products;
 
     public short getCategoryId() {
         return categoryId;
@@ -50,6 +54,14 @@ public class Category implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override

@@ -10,59 +10,36 @@ public class CustomerCustomerDemographics implements Serializable {
     protected CustomerCustomerDemographics() {
     }
 
-    public CustomerCustomerDemographics(Short customerId, Short customerTypeId) {
-        if (customerId == null || customerTypeId == null) throw new IllegalArgumentException();
-        this.customerId = customerId;
-        this.customerTypeId = customerTypeId;
+    public CustomerCustomerDemographics(Customer customer, CustomerDemographic customerDemographic) {
+        if (customer == null || customerDemographic == null) throw new IllegalArgumentException();
+        this.customer = customer;
+        this.customerDemographic = customerDemographic;
     }
 
     @Id
-    @Column(name = "customer_id", nullable = false)
-    protected Short customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
+    private Customer customer;
 
     @Id
-    @Column(name = "customer_type_id", nullable = false)
-    protected Short customerTypeId;
-
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false, insertable = false, updatable = false)
-    protected Customer customerByCustomerId;
+    @JoinColumn(name = "customer_type_id", referencedColumnName = "customer_type_id", nullable = false)
+    private CustomerDemographic customerDemographic;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_type_id", referencedColumnName = "customer_type_id", nullable = false, insertable = false, updatable = false)
-    protected CustomerDemographic customerDemographicByCustomerTypeId;
-
-
-    public Short getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Short customerId) {
-        if (customerId != null) this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public Short getCus1tomerTypeId() {
-        return customerTypeId;
+    public CustomerDemographic getCustomerDemographic() {
+        return customerDemographic;
     }
 
-    public void setCustomerTypeId(Short cutomerTypeId) {
-        if (cutomerTypeId != null) this.customerTypeId = cutomerTypeId;
-    }
-
-    public Customer getCustomerByCustomerId() {
-        return customerByCustomerId;
-    }
-
-    public void setCustomerByCustomerId(Customer customerByCustomerId) {
-        this.customerByCustomerId = customerByCustomerId;
-    }
-
-    public CustomerDemographic getCustomerDemographicByCustomerTypeId() {
-        return customerDemographicByCustomerTypeId;
-    }
-
-    public void setCustomerDemographicByCustomerTypeId(CustomerDemographic customerDemographicByCustomerTypeId) {
-        this.customerDemographicByCustomerTypeId = customerDemographicByCustomerTypeId;
+    public void setCustomerDemographic(CustomerDemographic customerDemographic) {
+        this.customerDemographic = customerDemographic;
     }
 
     @Override
@@ -72,31 +49,22 @@ public class CustomerCustomerDemographics implements Serializable {
 
         CustomerCustomerDemographics that = (CustomerCustomerDemographics) o;
 
-        if (getCustomerId() != null ? !getCustomerId().equals(that.getCustomerId()) : that.getCustomerId() != null)
-            return false;
-        if (customerTypeId != null ? !customerTypeId.equals(that.customerTypeId) : that.customerTypeId != null)
-            return false;
-        if (getCustomerByCustomerId() != null ? !getCustomerByCustomerId().equals(that.getCustomerByCustomerId()) : that.getCustomerByCustomerId() != null)
-            return false;
-        return getCustomerDemographicByCustomerTypeId() != null ? getCustomerDemographicByCustomerTypeId().equals(that.getCustomerDemographicByCustomerTypeId()) : that.getCustomerDemographicByCustomerTypeId() == null;
+        if (!getCustomer().equals(that.getCustomer())) return false;
+        return getCustomerDemographic().equals(that.getCustomerDemographic());
     }
 
     @Override
     public int hashCode() {
-        int result = getCustomerId() != null ? getCustomerId().hashCode() : 0;
-        result = 31 * result + (customerTypeId != null ? customerTypeId.hashCode() : 0);
-        result = 31 * result + (getCustomerByCustomerId() != null ? getCustomerByCustomerId().hashCode() : 0);
-        result = 31 * result + (getCustomerDemographicByCustomerTypeId() != null ? getCustomerDemographicByCustomerTypeId().hashCode() : 0);
+        int result = getCustomer().hashCode();
+        result = 31 * result + getCustomerDemographic().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CustomerCustomerDemographics{");
-        sb.append("customerId=").append(customerId);
-        sb.append(", customerTypeId=").append(customerTypeId);
-        sb.append(", customerByCustomerId=").append(customerByCustomerId);
-        sb.append(", customerDemographicByCustomerTypeId=").append(customerDemographicByCustomerTypeId);
+        sb.append("customer=").append(customer);
+        sb.append(", customerDemographic=").append(customerDemographic);
         sb.append('}');
         return sb.toString();
     }

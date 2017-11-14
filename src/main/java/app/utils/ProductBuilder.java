@@ -1,11 +1,13 @@
 package app.utils;
 
+import app.entities.Category;
 import app.entities.Product;
+import app.entities.Supplier;
 
 public final class ProductBuilder {
     private String productName;
-    private Short supplierId;
-    private Short categoryId;
+    private Supplier supplier;
+    private Category category;
     private String quantityPerUnit;
     private Float unitPrice;
     private Short unitsInStock;
@@ -16,22 +18,19 @@ public final class ProductBuilder {
     public ProductBuilder() {
     }
 
-    public static ProductBuilder aProduct() {
-        return new ProductBuilder();
-    }
 
     public ProductBuilder withProductName(String productName) {
         this.productName = productName;
         return this;
     }
 
-    public ProductBuilder withSupplierId(Short supplierId) {
-        this.supplierId = supplierId;
+    public ProductBuilder withSupplier(Supplier supplier) {
+        this.supplier = supplier;
         return this;
     }
 
-    public ProductBuilder withCategoryId(Short categoryId) {
-        this.categoryId = categoryId;
+    public ProductBuilder withCategory(Category category) {
+        this.category = category;
         return this;
     }
 
@@ -66,6 +65,6 @@ public final class ProductBuilder {
     }
 
     public Product build() {
-        return new Product(productName, supplierId, categoryId, quantityPerUnit, unitPrice, unitsInStock, unitsOnOrder, reorderLevel, discontinued);
+        return new Product(productName, supplier, category, quantityPerUnit, unitPrice, unitsInStock, unitsOnOrder, reorderLevel, discontinued);
     }
 }

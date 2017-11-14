@@ -10,35 +10,37 @@ public class EmployeeTerritory implements Serializable {
     protected EmployeeTerritory() {
     }
 
-    public EmployeeTerritory(Short employeeId, String territoryId) {
-        if (employeeId == null || territoryId == null) throw new IllegalArgumentException();
-        this.employeeId = employeeId;
-        this.territoryId = territoryId;
+    public EmployeeTerritory(Employee employee, Territory employeeTerritory) {
+        if (employee == null || employeeTerritory == null) throw new IllegalArgumentException();
+        this.employee = employee;
+        this.territory = employeeTerritory;
     }
 
     @Id
-    @Column(name = "employee_id", nullable = false)
-    protected Short employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @Id
-    @Column(name = "territory_id", nullable = false, length = 20)
-    protected String territoryId;
+    @ManyToOne
+    @JoinColumn(name = "territory_id")
+    private Territory territory;
 
 
-    public Short getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Short employeeId) {
-        if (employeeId != null) this.employeeId = employeeId;
+    public void setEmployee(Employee employeeId) {
+        if (employeeId != null) this.employee = employeeId;
     }
 
-    public String getTerritoryId() {
-        return territoryId;
+    public Territory getTerritory() {
+        return territory;
     }
 
-    public void setTerritoryId(String territoryId) {
-        if (territoryId != null) this.territoryId = territoryId;
+    public void setTerritory(Territory territoryId) {
+        if (territoryId != null) this.territory = territoryId;
     }
 
     @Override
@@ -48,23 +50,23 @@ public class EmployeeTerritory implements Serializable {
 
         EmployeeTerritory that = (EmployeeTerritory) o;
 
-        if (getEmployeeId() != null ? !getEmployeeId().equals(that.getEmployeeId()) : that.getEmployeeId() != null)
+        if (getEmployee() != null ? !getEmployee().equals(that.getEmployee()) : that.getEmployee() != null)
             return false;
-        return getTerritoryId() != null ? getTerritoryId().equals(that.getTerritoryId()) : that.getTerritoryId() == null;
+        return getTerritory() != null ? getTerritory().equals(that.getTerritory()) : that.getTerritory() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getEmployeeId() != null ? getEmployeeId().hashCode() : 0;
-        result = 31 * result + (getTerritoryId() != null ? getTerritoryId().hashCode() : 0);
+        int result = getEmployee() != null ? getEmployee().hashCode() : 0;
+        result = 31 * result + (getTerritory() != null ? getTerritory().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("EmployeeTerritory{");
-        sb.append("employeeId=").append(employeeId);
-        sb.append(", territoryId='").append(territoryId).append('\'');
+        sb.append("employeeId=").append(employee);
+        sb.append(", territoryId='").append(territory).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -27,7 +27,7 @@ public class SpringController {
         model.addAttribute("customers", customers);
         model.addAttribute("nativeQueryTime", cm.getNativeSqlQueryTime());
         model.addAttribute("JPQLqueryTime", cm.getJPQLqueryTime());
-        return "selectAll";
+        return "selectAllCustomers";
     }
 
     @RequestMapping("/customers/selectCustomer/form")
