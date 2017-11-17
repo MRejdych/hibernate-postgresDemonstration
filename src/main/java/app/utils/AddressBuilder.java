@@ -11,10 +11,6 @@ public final class AddressBuilder {
     public AddressBuilder() {
     }
 
-    public static AddressBuilder anAddress() {
-        return new AddressBuilder();
-    }
-
     public AddressBuilder withStreet(String street) {
         this.street = street;
         return this;

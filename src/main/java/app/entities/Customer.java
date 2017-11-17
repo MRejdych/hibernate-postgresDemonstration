@@ -4,8 +4,12 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static app.constants.CustomersDbFields.*;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "customers")
@@ -58,6 +62,18 @@ public class Customer implements Serializable {
     @Column(name = FAX, length = 24)
     private String fax;
 
+
+    @ManyToMany(fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @JoinTable(
+            name="customer_customer_demographics",
+            joinColumns = {@JoinColumn(name = "customer_id")},
+            inverseJoinColumns = {@JoinColumn(name = "customer_type_id")}
+    )
+    private List<CustomerDemographic> customerDemographics = new ArrayList<>();
+
+    public List<CustomerDemographic> getCustomerDemographics() {
+        return customerDemographics;
+    }
 
     public short getCustomerId() {
         return customerId;

@@ -3,6 +3,11 @@ package app.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
@@ -65,6 +70,9 @@ public class Order implements Serializable {
 
     @Column(name = "ship_region", length = 15)
     private String shipRegion;
+
+    @OneToMany(mappedBy = "order" , fetch = LAZY , cascade = ALL)
+    protected List<OrderDetails> orderDetails = new ArrayList<>();
 
 
     public Short getOrderId() {

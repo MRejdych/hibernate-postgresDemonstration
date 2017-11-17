@@ -1,4 +1,4 @@
-package app.queries;
+package app.dataAccessObjects;
 
 import app.utils.DatabaseUtils;
 import org.hibernate.stat.Statistics;
@@ -7,18 +7,16 @@ import org.springframework.ui.Model;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class EntitiesManipulator <T> {
-    protected long JPQLqueryTime;
-    protected long nativeSqlQueryTime;
+public abstract class EntitiesDAO<T> {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
     boolean initialized;
 
-    public EntitiesManipulator(DatabaseUtils dbutils) {
+    public EntitiesDAO(DatabaseUtils dbutils) {
         this.dbutils = dbutils;
         this.initialized = false;
     }
@@ -26,50 +24,52 @@ public abstract class EntitiesManipulator <T> {
 
     public abstract List<T> selectAll();
 
+    public abstract List<T> selectAllUsingNativeSql();
+
     public abstract T selectById(short id);
+
+    public abstract T selectByIdUsingNativeSql(short id);
 
     public abstract void add(Model model);
 
+    public abstract void addUsingNativeSql(Model model);
+
     public abstract void update(short id, Model model);
+
+    public abstract void updateUsingNativeSql(short id, Model model);
 
     public abstract void remove(short id);
 
-    public long getJPQLqueryTime() {
-        return JPQLqueryTime;
-    }
+    public abstract void removeUsingNativeSql(short id);
 
 
-    public long getNativeSqlQueryTime() {
-        return nativeSqlQueryTime;
-    }
-
-    protected long executeQuery(Runnable query) {
-        query.run();
-        return measureQueryExecutionTime();
-    }
-
-
-    protected long executeQuery(Callable<T> query, EntityKeeper ek) {
+    protected void executeQuery(Runnable query) {
         try {
-            ek.storeEntity(query.call());
+            prepareConnectionToDB();
+            query.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return measureQueryExecutionTime();
+        finally {
+            closeConnectionToDB();
+        }
     }
 
-
-    protected long executeQuery(Callable<List<T>> query, List<T> result) {
+    protected <V> V executeQuery(Supplier<V> query) {
         try {
-            result.addAll(query.call());
+            prepareConnectionToDB();
+            return query.get();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return measureQueryExecutionTime();
+        finally {
+            closeConnectionToDB();
+        }
     }
+
 
     protected void prepareConnectionToDB() {
-        cleanStateOfManipulator();
         dbutils.openConnection();
         em = dbutils.getEntityManager();
     }
@@ -80,13 +80,6 @@ public abstract class EntitiesManipulator <T> {
         initialized = true;
     }
 
-    private void cleanStateOfManipulator(){
-        if(initialized){
-            JPQLqueryTime = 0L;
-            nativeSqlQueryTime = 0L;
-            initialized = false;
-        }
-    }
 
     private long measureQueryExecutionTime(){
         Statistics stats = dbutils.getStatistics();
@@ -127,7 +120,7 @@ public abstract class EntitiesManipulator <T> {
         }
 
         @SuppressWarnings("unchecked")
-        protected <V> AttributesSettingHelper thenSetValueOf(Consumer<V> consumer){
+        protected <V> AttributesSettingHelper then(Consumer<V> consumer){
             if(value != null){
                 consumer.accept((V) value);
             }

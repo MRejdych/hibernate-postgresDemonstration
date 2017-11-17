@@ -3,10 +3,12 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "suppliers")
@@ -64,7 +66,7 @@ public class Supplier implements Serializable {
     private String homePage;
 
     @OneToMany(mappedBy = "supplier", fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
-    private  List<Product> products;
+    private  List<Product> products = new ArrayList<>();
 
     public Short getSupplierId() {
         return supplierId;
@@ -134,12 +136,14 @@ public class Supplier implements Serializable {
         this.homePage = homePage;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void addProduct(Product product){
+        products.add(product);
+
+        if(!product.getSupplier().equals(this)) product.setSupplier(this);
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 
     @Override

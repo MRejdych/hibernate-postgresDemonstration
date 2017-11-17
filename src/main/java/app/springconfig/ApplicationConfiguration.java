@@ -1,9 +1,7 @@
-package app;
+package app.springconfig;
 
-import app.queries.*;
-import app.utils.CustomerBuilder;
+import app.dataAccessObjects.*;
 import app.utils.DatabaseUtils;
-import app.utils.ProductBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -19,14 +17,14 @@ public class ApplicationConfiguration {
 
     @Bean
     @Scope("prototype")
-    public CustomersManipulator customersManipulator(){
-        return new CustomersManipulator(databaseUtils());
+    public CustomersDAO customersManipulator(){
+        return new CustomersDAO(databaseUtils());
     }
 
     @Bean
     @Scope("prototype")
-    public ProductsManipulator productsManipulator(){
-        return new ProductsManipulator(databaseUtils());
+    public ProductsDAO productsManipulator(){
+        return new ProductsDAO(databaseUtils());
     }
 
     @Bean

@@ -4,9 +4,6 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "shippers")

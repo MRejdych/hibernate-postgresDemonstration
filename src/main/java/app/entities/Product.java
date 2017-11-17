@@ -3,15 +3,18 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static app.constants.ProductsDbFields.*;
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
 
-    //protected Product() { }
+    protected Product() { }
 
     public Product(String productName, Supplier supplier, Category category, String quantityPerUnit, Float unitPrice,
                    Short unitsInStock, Short unitsOnOrder, Short reorderLevel, int discontinued) {
@@ -23,8 +26,8 @@ public class Product implements Serializable {
         this.unitsOnOrder = unitsOnOrder;
         this.reorderLevel = reorderLevel;
         this.discontinued = discontinued;
-        this.supplier = supplier;
-        this.category = category;
+        this.setSupplier(supplier);
+        this.setCategory(category);
     }
 
     @Id
@@ -63,6 +66,8 @@ public class Product implements Serializable {
     @JoinColumn(name = CATEGORY_ID, referencedColumnName = CATEGORY_ID)
     protected Category category;
 
+    @OneToMany(mappedBy = "product" , fetch = LAZY , cascade = ALL)
+    protected List<OrderDetails> orderDetails = new ArrayList<>();
 
     public Short getProductId() {
         return productId;
@@ -70,6 +75,10 @@ public class Product implements Serializable {
 
     public String getProductName() {
         return productName;
+    }
+
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
     }
 
     public void setProductName(String productName) {
@@ -128,16 +137,20 @@ public class Product implements Serializable {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplierBySupplierId) {
-        this.supplier = supplierBySupplierId;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+
+        if(!supplier.getProducts().contains(this)) supplier.addProduct(this);
     }
 
     public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category categoryByCategoryId) {
-        this.category = categoryByCategoryId;
+    public void setCategory(Category category) {
+        this.category = category;
+
+        if(!category.getProducts().contains(this)) category.addProduct(this);
     }
 
 

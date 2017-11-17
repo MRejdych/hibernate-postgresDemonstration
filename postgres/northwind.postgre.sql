@@ -5458,53 +5458,53 @@ ALTER TABLE ONLY territories
 
 
 ALTER TABLE ONLY orders
-  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers;
+  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY orders
-  ADD CONSTRAINT fk_orders_employees FOREIGN KEY (employee_id) REFERENCES employees;
+  ADD CONSTRAINT fk_orders_employees FOREIGN KEY (employee_id) REFERENCES employees ON DELETE SET NULL;
 
 
 ALTER TABLE ONLY orders
-  ADD CONSTRAINT fk_orders_shippers FOREIGN KEY (ship_via) REFERENCES shippers;
+  ADD CONSTRAINT fk_orders_shippers FOREIGN KEY (ship_via) REFERENCES shippers ON DELETE SET NULL;
 
 
 ALTER TABLE ONLY order_details
-  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products;
+  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY order_details
-  ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES orders;
+  ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES orders ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY products
-  ADD CONSTRAINT fk_products_categories FOREIGN KEY (category_id) REFERENCES categories;
+  ADD CONSTRAINT fk_products_categories FOREIGN KEY (category_id) REFERENCES categories ON DELETE SET NULL;
 
 
 ALTER TABLE ONLY products
-  ADD CONSTRAINT fk_products_suppliers FOREIGN KEY (supplier_id) REFERENCES suppliers;
+  ADD CONSTRAINT fk_products_suppliers FOREIGN KEY (supplier_id) REFERENCES suppliers ON DELETE SET NULL;
 
 
 ALTER TABLE ONLY territories
-  ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES regions;
+  ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES regions ON DELETE RESTRICT;
 
 
 ALTER TABLE ONLY employee_territories
-  ADD CONSTRAINT fk_employeeterritories_territories FOREIGN KEY (territory_id) REFERENCES territories;
+  ADD CONSTRAINT fk_employeeterritories_territories FOREIGN KEY (territory_id) REFERENCES territories ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY employee_territories
-  ADD CONSTRAINT fk_employeeterritories_employees FOREIGN KEY (employee_id) REFERENCES employees;
+  ADD CONSTRAINT fk_employeeterritories_employees FOREIGN KEY (employee_id) REFERENCES employees ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY customer_customer_demographics
-  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics;
+  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY customer_customer_demographics
-  ADD CONSTRAINT fk_customercustomerdemo_customers FOREIGN KEY (customer_id) REFERENCES customers;
+  ADD CONSTRAINT fk_customercustomerdemo_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY employees
-  ADD CONSTRAINT fk_employees_employees FOREIGN KEY (reports_to) REFERENCES employees;
+  ADD CONSTRAINT fk_employees_employees FOREIGN KEY (reports_to) REFERENCES employees ON DELETE SET NULL;
 

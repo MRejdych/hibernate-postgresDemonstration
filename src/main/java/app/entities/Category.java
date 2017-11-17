@@ -3,7 +3,8 @@ package app.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -35,7 +36,7 @@ public class Category implements Serializable {
 
 
     @OneToMany(mappedBy = "category", fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     public short getCategoryId() {
         return categoryId;
@@ -57,12 +58,14 @@ public class Category implements Serializable {
         this.description = description;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void addProduct(Product product){
+        products.add(product);
+
+        if(!product.getCategory().equals(this)) product.setCategory(this);
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 
     @Override

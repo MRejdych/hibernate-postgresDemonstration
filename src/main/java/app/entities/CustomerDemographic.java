@@ -2,8 +2,10 @@ package app.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -37,6 +39,21 @@ public class CustomerDemographic implements Serializable {
     public void setCustomerDesc(String customerDesc) {
         this.customerDesc = customerDesc;
     }
+
+
+    @ManyToMany(fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @JoinTable(
+            name="customer_customer_demographics",
+            joinColumns = {@JoinColumn(name = "customer_type_id")},
+            inverseJoinColumns = {@JoinColumn(name = "customer_id")}
+    )
+    private List<Customer> customers = new ArrayList<>();
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

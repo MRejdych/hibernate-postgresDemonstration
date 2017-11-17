@@ -15,10 +15,6 @@ public final class CustomerBuilder {
     public CustomerBuilder() {
     }
 
-    public static CustomerBuilder aCustomer() {
-        return new CustomerBuilder();
-    }
-
     public CustomerBuilder withCompanyName(String companyName) {
         this.companyName = companyName;
         return this;

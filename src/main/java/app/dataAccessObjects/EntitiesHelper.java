@@ -1,4 +1,4 @@
-package app.queries;
+package app.dataAccessObjects;
 
 import app.utils.DatabaseUtils;
 

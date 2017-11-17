@@ -8,10 +8,8 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>app.entities.Category</class>
         <class>app.entities.Customer</class>
-        <class>app.entities.CustomerCustomerDemographics</class>
         <class>app.entities.CustomerDemographic</class>
         <class>app.entities.Employee</class>
-        <class>app.entities.EmployeeTerritory</class>
         <class>app.entities.Order</class>
         <class>app.entities.OrderDetails</class>
         <class>app.entities.Product</class>
