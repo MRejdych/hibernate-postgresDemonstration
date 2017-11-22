@@ -11,53 +11,63 @@
         <button type="button">Powrót do strony głównej</button>
     </a>
 
-    <form method="POST" th:action="@{/customers/updateCustomer}" th:object="${customer}" role="form">
+    <form method="POST" th:action="@{/products/updateProduct}" th:object="${product}" role="form">
         <table>
             <tr>
-                <td>Nazwa firmy:</td>
-                <td><input type="text" th:field="*{companyName}"/></td>
+                <td>Nazwa produktu:</td>
+                <td><input type="text" th:field="*{productName}"/></td>
 
             </tr>
             <tr>
-                <td>Osoba kontaktowa:</td>
-                <td><input type="text" th:field="*{contactName}"/></td>
+                <td>Liczba sztuk na jednostkę:</td>
+                <td><input type="text" th:field="*{quantityPerUnit}"/></td>
             </tr>
             <tr>
-                <td>Stanowisko osoby kontaktowej:</td>
-                <td><input type="text" th:field="*{contactTitle}"/></td>
+                <td>Cena za jednostkę:</td>
+                <td><input type="text" th:field="*{unitPrice}"/></td>
             </tr>
             <tr>
-                <td>Ulica:</td>
-                <td><input type="text" th:field="*{address.address}"/></td>
+                <td>Liczba jednostek na magazynie:</td>
+                <td><input type="text" th:field="*{unitsInStock}"/></td>
             </tr>
             <tr>
-                <td>Miasto:</td>
-                <td><input type="text" th:field="*{address.city}"/></td>
+                <td>Liczba zamówionych jednostek:</td>
+                <td><input type="text" th:field="*{unitsOnOrder}"/></td>
             </tr>
             <tr>
-                <td>Kod pocztowy:</td>
-                <td><input type="text" th:field="*{address.postalCode}"/></td>
+                <td>Reorder level:</td>
+                <td><input type="text" th:field="*{reorderLevel}"/></td>
             </tr>
             <tr>
-                <td>Kraj:</td>
-                <td><input type="text" th:field="*{address.country}"/></td>
+                <td>Discontinued:</td>
+                <td><input type="text" th:field="*{discontinued}"/></td>
             </tr>
             <tr>
-                <td>Region:</td>
-                <td><input type="text" th:field="*{region}"/></td>
+                <td>Dostawca:</td>
+                <td>
+                    <select name = "supplierId" id="supplierId" th:value="${supplierId}">
+                        <option th:value="${product.supplier.supplierId}" th:text="${product.supplier.companyName}"></option>
+                        <option th:each="s : ${suppliers}"
+                                th:value="${s.supplierId}"
+                                th:text="${s.companyName}"></option>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <td>Numer telefonu:</td>
-                <td><input type="text" th:field="*{phone}"/></td>
-            </tr>
-            <tr>
-                <td>Fax:</td>
-                <td><input type="text" th:field="*{fax}"/></td>
+                <td>Kategoria:</td>
+                <td>
+                    <select name = "categoryId" id="categoryId" th:value="${categoryId}">
+                        <option th:value="${product.category.categoryId}" th:text="${product.category.categoryName}"></option>
+                        <option th:each="c : ${categories}"
+                                th:value="${c.categoryId}"
+                                th:text="${c.categoryName}"></option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
-                    <button type="submit">Zaktualizuj dane klienta</button>
+                    <input type="hidden" name="productId" id="productId" th:value="${productId}"/>
+                    <button type="submit">Zaktualizuj dane produktu</button>
                 </td>
             </tr>
         </table>

@@ -6,7 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -29,7 +30,8 @@ public class Order implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="order_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "order_id", nullable = false)
     private Short orderId;
 
@@ -74,6 +76,13 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "order" , fetch = LAZY , cascade = ALL)
     protected List<OrderDetails> orderDetails = new ArrayList<>();
 
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 
     public Short getOrderId() {
         return orderId;

@@ -14,76 +14,90 @@
         <table>
             <tr>
                 <td>
-                    <p th:inline="text">Id klienta: </p>
+                    <p th:inline="text">Id produktu: </p>
                 </td>
                 <td>
-                    <p th:inline="text">[[${customer.customerId}]]</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p th:inline="text">Nazwa firmy : </p>
-                </td>
-                <td>
-                    <p th:inline="text">[[${customer.companyName}]]</p>
+                    <p th:inline="text">[[${product.productId}]]</p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p th:inline="text">Nazwa osoby kontaktowej: </p>
+                    <p th:inline="text">Nazwa produktu : </p>
                 </td>
                 <td>
-                    <p th:inline="text">[[${customer.contactName}]]</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p th:inline="text">Stanowisko osoby kontaktowej: </p>
-                </td>
-                <td>
-                    <p th:inline="text">[[${customer.contactTitle}]]</p>
+                    <p th:inline="text">[[${product.productName}]]</p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p th:inline="text">Adres siedziby firmy: </p>
+                    <p th:inline="text">Liczba sztuk na jednostkę: </p>
                 </td>
                 <td>
-                    <p th:inline="text">[[${customer.address.address}]], [[${customer.address.postalCode}]]
-                        [[${customer.address.city}]],
-                        [[${customer.address.country}]]</p>
+                    <p th:inline="text">[[${product.quantityPerUnit}]]</p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p th:inline="text">Region: </p>
+                    <p th:inline="text">Cena za jednostkę: </p>
                 </td>
                 <td>
-                    <p th:inline="text">[[${customer.region}]]</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p th:inline="text">Telefon kontaktowy: </p>
-                </td>
-                <td>
-                    <p th:inline="text">[[${customer.phone}]]</p>
+                    <p th:inline="text">[[${product.unitPrice}]]</p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p th:inline="text">Fax: </p>
+                    <p th:inline="text">Liczba jednostek w magazynie: </p>
                 </td>
                 <td>
-                    <p th:inline="text">[[${customer.fax}]]</p>
+                    <p th:inline="text">[[${product.unitsInStock}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Liczba zamówionych jednostek: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${product.unitsOnOrder}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Reorder level?: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${product.reorderLevel}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Discontinued: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${product.discontinued}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Kategoria: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${product.category.categoryName}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Dostawca: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${product.supplier.companyName}]]</p>
                 </td>
             </tr>
         </table>
     </div>
 
-    <form method="POST" th:action="@{/customers/updateForm}">
-        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
-        <button type="submit" name="submit" value="value" class="link-button">Edytuj dane klienta</button>
+    <form method="POST" th:action="@{/products/updateForm}">
+        <input type="hidden" name="productId" id="productId" th:value="${product.productId}"/>
+        <button type="submit" name="submit" value="value" class="link-button">Edytuj dane produktu</button>
     </form>
 
 </div>

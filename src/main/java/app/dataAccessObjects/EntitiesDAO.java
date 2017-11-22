@@ -1,7 +1,8 @@
 package app.dataAccessObjects;
 
 import app.utils.DatabaseUtils;
-import org.hibernate.stat.Statistics;
+import app.utils.Statistics;
+import app.utils.StatisticsKeeper;
 import org.springframework.ui.Model;
 
 import javax.persistence.EntityManager;
@@ -14,36 +15,34 @@ import java.util.function.Supplier;
 public abstract class EntitiesDAO<T> {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
-    boolean initialized;
 
     public EntitiesDAO(DatabaseUtils dbutils) {
         this.dbutils = dbutils;
-        this.initialized = false;
     }
 
+    //C R U D
+    public abstract void create(T entity);
 
-    public abstract List<T> selectAll();
+    public abstract void createUsingNativeSql(Model model);
 
-    public abstract List<T> selectAllUsingNativeSql();
+    public abstract List<T> readAll();
 
-    public abstract T selectById(short id);
+    public abstract List<T> readAllUsingNativeSql();
 
-    public abstract T selectByIdUsingNativeSql(short id);
+    public abstract T readById(short id);
 
-    public abstract void add(Model model);
+    public abstract T readByIdUsingNativeSql(short id);
 
-    public abstract void addUsingNativeSql(Model model);
-
-    public abstract void update(short id, Model model);
+    public abstract void update(T updatedEntity, short id);
 
     public abstract void updateUsingNativeSql(short id, Model model);
 
-    public abstract void remove(short id);
+    public abstract void delete(short id);
 
-    public abstract void removeUsingNativeSql(short id);
+    public abstract void deleteUsingNativeSql(short id);
 
 
-    protected void executeQuery(Runnable query) {
+    protected void executeQueryAndSaveStatistics(Runnable query) {
         try {
             prepareConnectionToDB();
             query.run();
@@ -51,11 +50,12 @@ public abstract class EntitiesDAO<T> {
             e.printStackTrace();
         }
         finally {
+            appendStatistics();
             closeConnectionToDB();
         }
     }
 
-    protected <V> V executeQuery(Supplier<V> query) {
+    protected <V> V executeQueryAndSaveStatistics(Supplier<V> query) {
         try {
             prepareConnectionToDB();
             return query.get();
@@ -64,6 +64,7 @@ public abstract class EntitiesDAO<T> {
             return null;
         }
         finally {
+            appendStatistics();
             closeConnectionToDB();
         }
     }
@@ -77,33 +78,13 @@ public abstract class EntitiesDAO<T> {
     protected void closeConnectionToDB() {
         dbutils.closeConnection();
         em = null;
-        initialized = true;
     }
 
 
-    private long measureQueryExecutionTime(){
-        Statistics stats = dbutils.getStatistics();
-        long queryExecutionTime = stats.getQueryExecutionMaxTime();
-        System.out.println(stats + "\n\n");
-        dbutils.clearStatistics();
-        dbutils.clearCache();
-        System.out.println(stats + "\n\n");
-        return queryExecutionTime;
+    private void appendStatistics(){
+        org.hibernate.stat.Statistics stats = dbutils.getStatistics();
+        StatisticsKeeper.saveStatistics(new Statistics(stats));
     }
-
-
-    protected class EntityKeeper {
-        private T entity;
-
-        public void storeEntity(T it){
-            entity = it;
-        }
-
-        public T getEntity(){
-            return entity;
-        }
-    }
-
 
     protected class AttributesSettingHelper {
         private Object value;

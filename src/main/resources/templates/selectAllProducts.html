@@ -12,41 +12,39 @@
         <a th:href="@{/}">
             <button type="button">Powrót do strony głównej</button>
         </a>
-        <a th:href="@{/customers/addForm}">
-            <button type="button">Dodaj klienta</button>
+        <a th:href="@{/products/addForm}">
+            <button type="button">Dodaj product</button>
         </a>
     </div>
 
-    <table id="customers_table">
+    <table id="db_table">
         <thead>
         <tr>
-            <th>ID klienta:</th>
-            <th>Nazwa firmy:</th>
-            <th>Osoba kontaktowa:</th>
-            <th>Numer telefonu:</th>
-            <th>Fax</th>
+            <th>ID productu:</th>
+            <th>Nazwa productu:</th>
+            <th>Cena jednostkowa:</th>
+            <th>Ilość na stanie:</th>
             <th>Szczegóły</th>
             <th>Usuń</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="customer : ${customers}">
+        <th:block th:each="product : ${products}">
             <tr>
-                <td th:text="${customer.customerId}"></td>
-                <td th:text="${customer.companyName}"></td>
-                <td th:text="${customer.contactName}"></td>
-                <td th:text="${customer.phone}"></td>
-                <td th:text="${customer.fax}"></td>
+                <td th:text="${product.productId}"></td>
+                <td th:text="${product.productName}"></td>
+                <td th:text="${product.unitPrice}"></td>
+                <td th:text="${product.unitsInStock}"></td>
                 <td>
-                    <form method="POST" th:action="@{/customers/selectCustomer}">
-                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
+                    <form method="POST" th:action="@{/products/selectProduct}">
+                        <input type="hidden" name="productId" id="productId" th:value="${product.productId}"/>
                         <button type="submit" name="submit" value="value" class="link-button">Pokaż szczegóły</button>
                     </form>
                 </td>
                 <td>
-                    <form method="POST" th:action="@{/customers/deleteCustomer}">
-                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
-                        <button type="submit" name="submit" value="value" class="link-button">Usuń klienta</button>
+                    <form method="POST" th:action="@{/products/deleteProduct}">
+                        <input type="hidden" name="productId" id="productId" th:value="${product.productId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Usuń produkt</button>
                     </form>
                 </td>
             </tr>

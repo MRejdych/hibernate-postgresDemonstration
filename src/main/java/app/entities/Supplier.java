@@ -30,7 +30,8 @@ public class Supplier implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="supplier_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "supplier_id", nullable = false)
     private Short supplierId;
 

@@ -29,13 +29,13 @@ public class ApplicationConfiguration {
 
     @Bean
     @Scope("prototype")
-    public EntitiesHelper suppliersHelper(){
+    public SuppliersHelper suppliersHelper(){
         return new SuppliersHelper(databaseUtils());
     }
 
     @Bean
     @Scope("prototype")
-    public EntitiesHelper categoriesHelper(){
+    public CategoriesHelper categoriesHelper(){
         return new CategoriesHelper(databaseUtils());
     }
 

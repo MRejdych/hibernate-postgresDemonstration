@@ -18,6 +18,7 @@ public abstract class EntitiesHelper <T> {
 
     public abstract List<T> selectAll();
 
+    public abstract T selectById(Short id);
 
     protected void prepareConnectionToDB() {
         cleanStateOfHelper();

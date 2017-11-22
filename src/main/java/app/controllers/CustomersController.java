@@ -3,92 +3,81 @@ package app.controllers;
 import app.dataAccessObjects.CustomersDAO;
 import app.entities.Customer;
 import app.springconfig.ApplicationConfiguration;
+import app.utils.CustomerBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-import static app.constants.CustomersDbFields.CUSTOMER_ID;
-
 @Controller
 public class CustomersController {
-    ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+    private ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
 
-    @GetMapping("/customers")
-    public String showCustomersPage() {
-        return "customers";
-    }
-
-    @GetMapping("/customers/selectAll")
+    @GetMapping("/customers/showAll")
     public String showCustomersSelectAllPage(Model model) {
         CustomersDAO dao = context.getBean(CustomersDAO.class);
-        List<Customer> customers = dao.selectAll();
+        List<Customer> customers = dao.readAll();
         model.addAttribute("customers", customers);
-        model.addAttribute("nativeQueryTime", 0);
-        model.addAttribute("JPQLqueryTime", 0);
         return "selectAllCustomers";
     }
 
-    @GetMapping("/customers/selectCustomerForm")
-    public String selectCustomer(Model model) {
-
-        return "selectCustomerForm";
-    }
-
-    @PostMapping("/customers/selectCustomerResult")
-    public String selectCustomerResult(Model model) {
+    @PostMapping("/customers/selectCustomer")
+    public String selectCustomerResult(@RequestParam("customerId") Short customerId, Model model) {
         CustomersDAO dao = context.getBean(CustomersDAO.class);
-        short customerId = (short) model.asMap().get(CUSTOMER_ID);
-        model.addAttribute("customer", dao.selectById(customerId));
+        Customer customer = dao.readById(customerId);
+        model.addAttribute("customer", customer);
 
-        return "selectCustomerResult";
+        return "selectCustomer";
     }
 
 
-    @GetMapping("/customers/addCustomerForm")
+    @GetMapping("/customers/addForm")
     public String addCustomer(Model model) {
-
+        Customer customer = new CustomerBuilder().build();
+        model.addAttribute("customer", customer);
         return "addCustomerForm";
     }
 
-    @PostMapping("/customers/addCustomerResult")
-    public String addCustomerResult(Model model) {
-        CustomersDAO dao = context.getBean(CustomersDAO.class);
-        dao.add(model);
+    @PostMapping("/customers/addCustomer")
+    public String addCustomerResult(@ModelAttribute("customer") Customer customer, Model model) {
+        System.out.println(customer);
 
-        return "addCustomerResult";
+        CustomersDAO dao = context.getBean(CustomersDAO.class);
+        dao.create(customer);
+
+        return "redirect:showAll";
     }
 
-    @GetMapping("customers/updateCustomerForm")
-    public String updateCustomer(Model model){
+    @PostMapping("customers/updateForm")
+    public String updateCustomer(@RequestParam("customerId") Short customerId, Model model){
+        CustomersDAO dao = context.getBean(CustomersDAO.class);
+        Customer customer = dao.readById(customerId);
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("customer", customer);
+
         return "updateCustomerForm";
     }
 
-    @PostMapping("customers/updateCustomerResult")
-    public String updateCustomerResult(Model model){
+    @PostMapping("customers/updateCustomer")
+    public String updateCustomerResult(@ModelAttribute("customer") Customer customer, @RequestParam("customerId") Short customerId){
         CustomersDAO dao = context.getBean(CustomersDAO.class);
-        short customerId = (short) model.asMap().get(CUSTOMER_ID);
-        dao.update(customerId, model);
+        dao.update(customer, customerId);
 
-        return "updateCustomerResult";
+        return "redirect:showAll";
     }
 
-    @GetMapping("customers/deleteCustomerForm")
-    public String deleteCustomerForm(Model model){
-        return "deleteCustomerForm";
-    }
-
-    @PostMapping("customers/deleteCustomerResult")
-    public String deleteCustomerResult(Model model){
+    @PostMapping("customers/deleteCustomer")
+    public String deleteCustomerResult(@RequestParam("customerId") Short customerId, Model model){
         CustomersDAO dao = context.getBean(CustomersDAO.class);
-        short customerId = (short) model.asMap().get(CUSTOMER_ID);
-        dao.remove(customerId);
+        dao.delete(customerId);
 
-        return "deleteCustomerResult";
+        return "redirect:showAll";
     }
 }

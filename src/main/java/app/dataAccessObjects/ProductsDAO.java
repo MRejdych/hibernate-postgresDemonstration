@@ -1,11 +1,8 @@
 package app.dataAccessObjects;
 
 import app.constants.ProductsDbFields;
-import app.entities.Category;
 import app.entities.Product;
-import app.entities.Supplier;
 import app.utils.DatabaseUtils;
-import app.utils.ProductBuilder;
 import org.springframework.ui.Model;
 
 import javax.persistence.Query;
@@ -23,67 +20,50 @@ public class ProductsDAO extends EntitiesDAO<Product> {
         super(dbutils);
     }
 
-    public List<Product> selectAll() {
-        return executeQuery(() -> {
+    @Override
+    public void create(Product product) {
+        executeQueryAndSaveStatistics(() -> {
+            em.persist(product);
+        });
+    }
 
-            TypedQuery<Product> generatedQuery = em.createQuery("SELECT pr FROM Product pr", Product.class);
+    public List<Product> readAll() {
+        return executeQueryAndSaveStatistics(() -> {
+
+            TypedQuery<Product> generatedQuery = em.createQuery("SELECT pr FROM Product pr ORDER BY pr.productId", Product.class);
 
             return generatedQuery.getResultList();
         });
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Product> selectAllUsingNativeSql() {
-        return executeQuery(() -> {
+    public Product readById(short productId) {
+        return executeQueryAndSaveStatistics(() -> em.find(Product.class, productId));
+    }
 
-            Query nativeQuery = em.createNativeQuery("Select * From products", Product.class);
+    @Override
+    public void update(Product updatedProduct, short productId) {
+        executeQueryAndSaveStatistics(() -> {
+            Product product = em.find(Product.class, productId);
 
-            return (List<Product>) nativeQuery.getResultList();
+            if (product != null)
+                product.copyStateOfAnotherProduct(updatedProduct);
+
         });
     }
 
     @Override
-    public Product selectById(short productId) {
-        return executeQuery(() -> em.find(Product.class, productId));
-    }
-
-    @Override
-    public Product selectByIdUsingNativeSql(short productId) {
-        return executeQuery(() -> {
-
-            Query nativeQuery = em.createNativeQuery("Select * From products Where product_id = ?1", Product.class);
-            nativeQuery.setParameter(1, productId);
-
-            return (Product) nativeQuery.getSingleResult();
-        });
-    }
-
-    @Override
-    public void add(Model model) {
-        executeQuery(() -> {
-            Map<String, Object> map = model.asMap();
-
-            Product product = new ProductBuilder()
-                    .withProductName((String) map.get(PRODUCT_NAME))
-                    .withCategory((Category) map.get(CATEGORY))
-                    .withSupplier((Supplier) map.get(SUPPLIER))
-                    .withQuantityPerUnit((String) map.get(QUANTITY_PER_UNIT))
-                    .withUnitPrice((Float) map.get(UNIT_PRICE))
-                    .withUnitsInStock((Short) map.get(UNITS_IN_STOCK))
-                    .withUnitsOnOrder((Short) map.get(UNITS_ON_ORDER))
-                    .withReorderLevel((Short) map.get(REORDER_LEVEL))
-                    .withDiscontinued((Integer) map.get(DISCONTINUED))
-                    .build();
-
-            em.persist(product);
+    public void delete(short productId) {
+        executeQueryAndSaveStatistics(() -> {
+            Product pr = em.find(Product.class, productId);
+            if (pr != null) em.remove(pr);
         });
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
-    public void addUsingNativeSql(Model model) {
-        executeQuery(() -> {
+    public void createUsingNativeSql(Model model) {
+        executeQueryAndSaveStatistics(() -> {
 
             Map<String, Object> attributesMap = model.asMap();
             Set<String> legalTableColumns = ProductsDbFields.asSet();
@@ -118,24 +98,25 @@ public class ProductsDAO extends EntitiesDAO<Product> {
         });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void update(short productId, Model model) {
-        executeQuery(() -> {
-            Product product = em.find(Product.class, productId);
+    public List<Product> readAllUsingNativeSql() {
+        return executeQueryAndSaveStatistics(() -> {
 
-            new AttributesSettingHelper(model.asMap())
+            Query nativeQuery = em.createNativeQuery("SELECT * FROM products ORDER BY product_id", Product.class);
 
-                    .ifMapContainsKey(PRODUCT_NAME).then(product::setProductName)
-                    .ifMapContainsKey(SUPPLIER).then(product::setSupplier)
-                    .ifMapContainsKey(CATEGORY).then(product::setCategory)
-                    .ifMapContainsKey(QUANTITY_PER_UNIT).then(product::setQuantityPerUnit)
-                    .ifMapContainsKey(UNIT_PRICE).then(product::setUnitPrice)
-                    .ifMapContainsKey(UNITS_IN_STOCK).then(product::setUnitsInStock)
-                    .ifMapContainsKey(UNITS_ON_ORDER).then(product::setUnitsOnOrder)
-                    .ifMapContainsKey(REORDER_LEVEL).then(product::setReorderLevel)
-                    .ifMapContainsKey(DISCONTINUED).then(product::setDiscontinued)
-                    .end();
+            return (List<Product>) nativeQuery.getResultList();
+        });
+    }
 
+    @Override
+    public Product readByIdUsingNativeSql(short productId) {
+        return executeQueryAndSaveStatistics(() -> {
+
+            Query nativeQuery = em.createNativeQuery("SELECT * FROM products WHERE product_id = ?1", Product.class);
+            nativeQuery.setParameter(1, productId);
+
+            return (Product) nativeQuery.getSingleResult();
         });
     }
 
@@ -143,7 +124,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
     @Override
     public void updateUsingNativeSql(short productId, Model model) {
 
-        executeQuery(() -> {
+        executeQueryAndSaveStatistics(() -> {
 
             Map<String, Object> attributesMap = model.asMap();
             Set<String> legalTableColumns = ProductsDbFields.asSet();
@@ -162,7 +143,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
                     .forEach(mapEntry -> {
                         String key = mapEntry.getKey();
                         String value = (String) mapEntry.getValue();
-                            if(!key.equals(PRODUCT_NAME))
+                        if (!key.equals(PRODUCT_NAME))
                             queryBuilder.append(", ").append(key).append(" = ").append(value);
                     });
 
@@ -179,22 +160,13 @@ public class ProductsDAO extends EntitiesDAO<Product> {
     }
 
     @Override
-    public void remove(short productId) {
-        executeQuery(() -> {
-            Product pr = em.find(Product.class, productId);
-            if(pr != null) em.remove(pr);
-        });
-    }
+    public void deleteUsingNativeSql(short productId) {
 
-    @Override
-    public void removeUsingNativeSql(short productId) {
-
-        executeQuery(() -> {
+        executeQueryAndSaveStatistics(() -> {
             Query nativeQuery = em.createNativeQuery("DELETE FROM products WHERE product_id = ?1", Product.class);
             nativeQuery.setParameter(1, productId);
 
             nativeQuery.executeUpdate();
         });
     }
-
 }

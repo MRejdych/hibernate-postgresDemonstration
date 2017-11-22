@@ -15,7 +15,8 @@ public class Region implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="region_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "region_id", nullable = false)
     private Short regionId;
 

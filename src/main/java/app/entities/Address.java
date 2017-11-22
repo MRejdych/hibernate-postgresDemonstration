@@ -8,16 +8,18 @@ import java.io.Serializable;
 @Embeddable
 public class Address implements Serializable {
 
-    protected Address() {
+    public Address() {
+        this.address = "";
+        this.city = "";
+        this.postalCode = "";
+        this.country = "";
     }
 
     public Address(String address, String city, String postalCode, String country) {
-        if (address != null && city != null && postalCode != null && country != null) {
             this.address = address;
             this.city = city;
             this.postalCode = postalCode;
             this.country = country;
-        } else throw new IllegalArgumentException("Parameters can not be null");
     }
 
     @Length(max = 40)
@@ -38,7 +40,7 @@ public class Address implements Serializable {
     }
 
     public void setAddress(String street) {
-        if (street != null && !street.isEmpty()) this.address = street;
+        this.address = street;
     }
 
     public String getCity() {
@@ -70,20 +72,22 @@ public class Address implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Address address = (Address) o;
+        Address address1 = (Address) o;
 
-        if (!getAddress().equals(address.getAddress())) return false;
-        if (!getCity().equals(address.getCity())) return false;
-        if (!getPostalCode().equals(address.getPostalCode())) return false;
-        return getCountry().equals(address.getCountry());
+        if (getAddress() != null ? !getAddress().equals(address1.getAddress()) : address1.getAddress() != null)
+            return false;
+        if (getCity() != null ? !getCity().equals(address1.getCity()) : address1.getCity() != null) return false;
+        if (getPostalCode() != null ? !getPostalCode().equals(address1.getPostalCode()) : address1.getPostalCode() != null)
+            return false;
+        return getCountry() != null ? getCountry().equals(address1.getCountry()) : address1.getCountry() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getAddress().hashCode();
-        result = 31 * result + getCity().hashCode();
-        result = 31 * result + getPostalCode().hashCode();
-        result = 31 * result + getCountry().hashCode();
+        int result = getAddress() != null ? getAddress().hashCode() : 0;
+        result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
+        result = 31 * result + (getPostalCode() != null ? getPostalCode().hashCode() : 0);
+        result = 31 * result + (getCountry() != null ? getCountry().hashCode() : 0);
         return result;
     }
 

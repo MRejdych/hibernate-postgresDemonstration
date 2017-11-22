@@ -25,35 +25,102 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
         super(dbutils);
     }
 
+
     @Override
-    public List<Customer> selectAll() {
-        return executeQuery(
+    public void create(Customer customer){
+        executeQueryAndSaveStatistics(() -> {
+            em.persist(customer);
+        });
+    }
+
+    @Override
+    public List<Customer> readAll() {
+        return executeQueryAndSaveStatistics(
                 () -> {
-                    TypedQuery<Customer> generatedQuery = em.createQuery("SELECT c FROM Customer c", Customer.class);
+                    TypedQuery<Customer> generatedQuery = em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", Customer.class);
                     return generatedQuery.getResultList();
                 });
     }
 
-    @SuppressWarnings("unchecked")
+
     @Override
-    public List<Customer> selectAllUsingNativeSql() {
-        return executeQuery(() -> {
+    public Customer readById(short customerId){
+        return executeQueryAndSaveStatistics(() ->  em.find(Customer.class, customerId));
+    }
 
-            Query nativeQuery = em.createNativeQuery("Select * From customers", Customer.class);
+    @Override
+    public void update(Customer updatedCustomer, short customerId){
 
-            return (List<Customer>) nativeQuery.getResultList();
+        executeQueryAndSaveStatistics(() -> {
+            Customer customer = em.find(Customer.class, customerId);
+            if(customer != null)
+                customer.copyStateOfAnotherCustomer(updatedCustomer);
         });
     }
 
 
     @Override
-    public Customer selectById(short customerId){
-        return executeQuery(() ->  em.find(Customer.class, customerId));
+    public void delete(short customerId){
+
+        executeQueryAndSaveStatistics(() -> {
+            Customer c = em.find(Customer.class, customerId);
+            if(c != null)  em.remove(c);
+            System.out.println(em.contains(c));
+        });
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Override
+    public void createUsingNativeSql(Model model) {
+        executeQueryAndSaveStatistics(() -> {
+
+            Map<String, Object> attributesMap = model.asMap();
+            Set<String> legalTableColumns = CustomersDbFields.asSet();
+
+            StringJoiner columnsJoiner = new StringJoiner(", ");
+            StringJoiner valuesJoiner = new StringJoiner(", ");
+
+            attributesMap.entrySet()
+                    .stream()
+                    .filter(e -> legalTableColumns.contains(e.getKey()))
+                    .forEach(mapEntry -> {
+                        columnsJoiner.add(mapEntry.getKey());
+                        valuesJoiner.add((String) mapEntry.getValue());
+                    });
+
+            String columns = columnsJoiner.toString();
+            String values = valuesJoiner.toString();
+
+            String query = new StringBuilder()
+                    .append("INSERT into customers(")
+                    .append(columns)
+                    .append(") VALUES (")
+                    .append(values)
+                    .append(");")
+                    .toString();
+
+
+            Query nativeQuery = em.createNativeQuery(query, Customer.class);
+
+            nativeQuery.executeUpdate();
+
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Customer> readAllUsingNativeSql() {
+        return executeQueryAndSaveStatistics(() -> {
+
+            Query nativeQuery = em.createNativeQuery("Select * From customers ORDER BY customer_id", Customer.class);
+
+            return (List<Customer>) nativeQuery.getResultList();
+        });
     }
 
     @Override
-    public Customer selectByIdUsingNativeSql(short customerId) {
-        return executeQuery(() -> {
+    public Customer readByIdUsingNativeSql(short customerId) {
+        return executeQueryAndSaveStatistics(() -> {
             Query nativeQuery = em.createNativeQuery("Select * From customers Where customer_id = ?1", Customer.class);
             nativeQuery.setParameter(1, customerId);
 
@@ -61,52 +128,13 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
         });
     }
 
-    @Override
-    public void remove(short customerId){
 
-        executeQuery(() -> {
-            Customer c = em.find(Customer.class, customerId);
-            if(c != null)  em.remove(c);
-        });
-    }
-
-    @Override
-    public void removeUsingNativeSql(short customerId) {
-
-        executeQuery(() -> {
-            Query nativeQuery = em.createNativeQuery("DELETE FROM customers WHERE customer_id = ?1", Customer.class);
-            nativeQuery.setParameter(1, customerId);
-
-            nativeQuery.executeUpdate();
-        });
-    }
-
-    @Override
-    public void update(short customerId, Model model){
-
-        executeQuery(() -> {
-            Customer customer = em.find(Customer.class, customerId);
-
-            new AttributesSettingHelper(model.asMap())
-                    .ifMapContainsKey(COMPANY_NAME).then(customer::setCompanyName)
-                    .ifMapContainsKey(CONTACT_NAME).then(customer::setContactName)
-                    .ifMapContainsKey(CONTACT_TITLE).then(customer::setContactTitle)
-                    .ifMapContainsKey(ADDRESS).then(customer.getAddress()::setAddress)
-                    .ifMapContainsKey(CITY).then(customer.getAddress()::setCity)
-                    .ifMapContainsKey(COUNTRY).then(customer.getAddress()::setCountry)
-                    .ifMapContainsKey(POSTAL_CODE).then(customer.getAddress()::setPostalCode)
-                    .ifMapContainsKey(PHONE).then(customer::setPhone)
-                    .ifMapContainsKey(FAX).then(customer::setFax)
-                    .ifMapContainsKey(REGION).then(customer::setRegion)
-                    .end();
-        });
-    }
 
     @SuppressWarnings("Duplicates")
     @Override
     public void updateUsingNativeSql(short customerId, Model model) {
 
-        executeQuery(() -> {
+        executeQueryAndSaveStatistics(() -> {
 
             Map<String, Object> attributesMap = model.asMap();
             Set<String> legalTableColumns = CustomersDbFields.asSet();
@@ -141,69 +169,15 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
 
     }
 
+
     @Override
-    public void add(Model model){
+    public void deleteUsingNativeSql(short customerId) {
 
-        executeQuery(() -> {
-            Map<String, Object> map = model.asMap();
-
-            Address addressOfCustomer = new AddressBuilder()
-                    .withStreet((String) map.getOrDefault(ADDRESS, null))
-                    .withCity((String) map.getOrDefault(CITY, null))
-                    .withPostalCode((String) map.getOrDefault(POSTAL_CODE, null))
-                    .withCountry((String) map.getOrDefault(COUNTRY, null))
-                    .build();
-
-
-            Customer customer = new CustomerBuilder()
-                    .withCompanyName((String) map.get(COMPANY_NAME))
-                    .withContactName((String) map.getOrDefault(CONTACT_NAME, null))
-                    .withContactTitle((String) map.getOrDefault(CONTACT_TITLE, null))
-                    .withAddress(addressOfCustomer)
-                    .withFax((String) map.getOrDefault(FAX, null))
-                    .withPhone((String) map.getOrDefault(PHONE, null))
-                    .withRegion((String) map.getOrDefault(REGION, null))
-                    .build();
-
-            em.persist(customer);
-        });
-    }
-
-    @SuppressWarnings("StringBufferReplaceableByString")
-    @Override
-    public void addUsingNativeSql(Model model) {
-        executeQuery(() -> {
-
-            Map<String, Object> attributesMap = model.asMap();
-            Set<String> legalTableColumns = CustomersDbFields.asSet();
-
-            StringJoiner columnsJoiner = new StringJoiner(", ");
-            StringJoiner valuesJoiner = new StringJoiner(", ");
-
-            attributesMap.entrySet()
-                    .stream()
-                    .filter(e -> legalTableColumns.contains(e.getKey()))
-                    .forEach(mapEntry -> {
-                        columnsJoiner.add(mapEntry.getKey());
-                        valuesJoiner.add((String) mapEntry.getValue());
-                    });
-
-            String columns = columnsJoiner.toString();
-            String values = valuesJoiner.toString();
-
-            String query = new StringBuilder()
-                    .append("INSERT into customers(")
-                    .append(columns)
-                    .append(") VALUES (")
-                    .append(values)
-                    .append(");")
-                    .toString();
-
-
-            Query nativeQuery = em.createNativeQuery(query, Customer.class);
+        executeQueryAndSaveStatistics(() -> {
+            Query nativeQuery = em.createNativeQuery("DELETE FROM customers WHERE customer_id = ?1", Customer.class);
+            nativeQuery.setParameter(1, customerId);
 
             nativeQuery.executeUpdate();
-
         });
     }
 }

@@ -29,7 +29,8 @@ public class Employee implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="employee_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "employee_id", nullable = false)
     private Short employeeId;
 

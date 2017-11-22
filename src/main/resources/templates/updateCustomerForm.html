@@ -7,67 +7,62 @@
 </head>
 <body>
 <div id="container">
-    <div id="bar">
+    <a th:href="@{/}">
+        <button type="button">Powrót do strony głównej</button>
+    </a>
 
+    <form method="POST" th:action="@{/customers/updateCustomer}" th:object="${customer}" role="form">
+        <table>
+            <tr>
+                <td>Nazwa firmy:</td>
+                <td><input type="text" th:field="*{companyName}"/></td>
 
-        <a style="display: inline;" href="/">
-            <div class="button" id="main_page_button">
-                <p>Powrót do strony głównej</p>
-            </div>
-        </a>
-
-        </div>
-            <form method="POST" th:action="@{/customers/addCustomer}" th:object="${customer}" role="form">
-                <table>
-                    <tr>
-                        <td>Company name:</td>
-                        <td><input type="text" th:field="*{companyName}"/></td>
-
-                    </tr>
-                    <tr>
-                        <td>Contact name: </td>
-                        <td><input type="text" th:field="*{contactName}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Contact title: </td>
-                        <td><input type="text" th:field="*{contactTitle}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Address: </td>
-                        <td><input type="text" th:field="*{address.address}"/></td>
-                    </tr>
-                    <tr>
-                        <td>City: </td>
-                        <td><input type="text" th:field="*{address.city}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Postal Code: </td>
-                        <td><input type="text" th:field="*{address.postalCode}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Country: </td>
-                        <td><input type="text" th:field="*{address.country}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Region: </td>
-                        <td><input type="text" th:field="*{region}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Phone: </td>
-                        <td><input type="text" th:field="*{phone}"/></td>
-                    </tr>
-                    <tr>
-                        <td>Fax: </td>
-                        <td><input type="text" th:field="*{fax}"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="submit">Add Customer</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        <div>
+            </tr>
+            <tr>
+                <td>Osoba kontaktowa:</td>
+                <td><input type="text" th:field="*{contactName}"/></td>
+            </tr>
+            <tr>
+                <td>Stanowisko osoby kontaktowej:</td>
+                <td><input type="text" th:field="*{contactTitle}"/></td>
+            </tr>
+            <tr>
+                <td>Ulica:</td>
+                <td><input type="text" th:field="*{address.address}"/></td>
+            </tr>
+            <tr>
+                <td>Miasto:</td>
+                <td><input type="text" th:field="*{address.city}"/></td>
+            </tr>
+            <tr>
+                <td>Kod pocztowy:</td>
+                <td><input type="text" th:field="*{address.postalCode}"/></td>
+            </tr>
+            <tr>
+                <td>Kraj:</td>
+                <td><input type="text" th:field="*{address.country}"/></td>
+            </tr>
+            <tr>
+                <td>Region:</td>
+                <td><input type="text" th:field="*{region}"/></td>
+            </tr>
+            <tr>
+                <td>Numer telefonu:</td>
+                <td><input type="text" th:field="*{phone}"/></td>
+            </tr>
+            <tr>
+                <td>Fax:</td>
+                <td><input type="text" th:field="*{fax}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
+                    <button type="submit">Zaktualizuj dane klienta</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div>
     </div>
 </div>
 </body>

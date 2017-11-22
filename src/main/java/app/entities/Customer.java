@@ -1,6 +1,7 @@
 package app.entities;
 
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,11 +16,12 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "customers")
 public class Customer implements Serializable {
 
-    protected Customer() {}
+    protected Customer() {
+    }
 
     public Customer(String companyName, String contactName, String contactTitle, Address address, String phone,
                     String region, String fax) {
-        if (companyName == null) throw new IllegalArgumentException();
+        // if (companyName == null) throw new IllegalArgumentException();
         this.companyName = companyName;
         this.contactName = contactName;
         this.contactTitle = contactTitle;
@@ -30,7 +32,8 @@ public class Customer implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+    @SequenceGenerator(name = "pk_sequence", sequenceName = "customer_id_seq", allocationSize = 1)
     @Column(name = CUSTOMER_ID, nullable = false)
     private short customerId;
 
@@ -63,13 +66,39 @@ public class Customer implements Serializable {
     private String fax;
 
 
-    @ManyToMany(fetch = LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @ManyToMany(fetch = LAZY, cascade = ALL)
     @JoinTable(
-            name="customer_customer_demographics",
+            name = "customer_customer_demographics",
             joinColumns = {@JoinColumn(name = "customer_id")},
             inverseJoinColumns = {@JoinColumn(name = "customer_type_id")}
     )
     private List<CustomerDemographic> customerDemographics = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", fetch = LAZY, cascade = ALL)
+    List<Order> orders = new ArrayList<>();
+
+    public void copyStateOfAnotherCustomer(Customer that) {
+        this.companyName = that.getCompanyName();
+        this.contactName = that.getContactName();
+        this.contactTitle = that.getContactTitle();
+        this.address = that.getAddress();
+        this.region = that.getRegion();
+        this.phone = that.getPhone();
+        this.fax = that.getFax();
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setCustomerDemographics(List<CustomerDemographic> customerDemographics) {
+        this.customerDemographics = customerDemographics;
+    }
+
 
     public List<CustomerDemographic> getCustomerDemographics() {
         return customerDemographics;

@@ -7,34 +7,26 @@
 </head>
 <body>
 <div id="container">
-    <div id="bar">
-        <div id="queries_time">
-            <p th:text="'Czas potrzebny do wykonania zapytania wygenerowanego przez Hibernate: ' + ${JPQLqueryTime} + ' ms.'"/>
-            <p th:text="'Czas potrzebny do wykonania natywnego zapytania SQL: ' + ${nativeQueryTime} + ' ms.'"/>
-        </div>
 
-        <a href="/">
-            <div class="button" id="main_page_button">
-                <p>Powrót do strony głównej</p>
-            </div>
+    <div id="top_menu">
+        <a th:href="@{/}">
+            <button type="button">Powrót do strony głównej</button>
         </a>
-
+        <a th:href="@{/customers/addForm}">
+            <button type="button">Dodaj klienta</button>
+        </a>
     </div>
 
-    <table id="customers_table">
+    <table id="db_table">
         <thead>
         <tr>
-            <th>ID:</th>
-            <th>Company Name:</th>
-            <th>Contact Name:</th>
-            <th>Contact Title:</th>
-            <th>Address:</th>
-            <th>City:</th>
-            <th>Postal code:</th>
-            <th>Country:</th>
-            <th>Region:</th>
-            <th>Phone:</th>
-            <th>Fax:</th>
+            <th>ID klienta:</th>
+            <th>Nazwa firmy:</th>
+            <th>Osoba kontaktowa:</th>
+            <th>Numer telefonu:</th>
+            <th>Fax</th>
+            <th>Szczegóły</th>
+            <th>Usuń</th>
         </tr>
         </thead>
         <tbody>
@@ -43,16 +35,21 @@
                 <td th:text="${customer.customerId}"></td>
                 <td th:text="${customer.companyName}"></td>
                 <td th:text="${customer.contactName}"></td>
-                <td th:text="${customer.contactTitle}"></td>
-                <td th:text="${customer.address.address}"></td>
-                <td th:text="${customer.address.city}"></td>
-                <td th:text="${customer.address.postalCode}"></td>
-                <td th:text="${customer.address.country}"></td>
-                <td th:text="${customer.region}"></td>
                 <td th:text="${customer.phone}"></td>
                 <td th:text="${customer.fax}"></td>
+                <td>
+                    <form method="POST" th:action="@{/customers/selectCustomer}">
+                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Pokaż szczegóły</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" th:action="@{/customers/deleteCustomer}">
+                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Usuń klienta</button>
+                    </form>
+                </td>
             </tr>
-            <tr></tr>
         </th:block>
         </tbody>
     </table>

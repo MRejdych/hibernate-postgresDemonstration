@@ -1,14 +1,21 @@
 package app.controllers;
 
-import app.dataAccessObjects.ProductsDAO;
+import app.dataAccessObjects.*;
+import app.entities.Category;
+import app.entities.Customer;
 import app.entities.Product;
+import app.entities.Supplier;
 import app.springconfig.ApplicationConfiguration;
+import app.utils.ProductBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -18,76 +25,109 @@ import static app.constants.ProductsDbFields.PRODUCT_ID;
 public class ProductsController {
     ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
-    @GetMapping("/products")
-    public String showProductsPage() {
-        return "products";
-    }
 
-    @GetMapping("/products/selectAll")
+    @GetMapping("/products/showAll")
     public String showProductsSelectAllPage(Model model) {
         ProductsDAO dao = context.getBean(ProductsDAO.class);
-        List<Product> products = dao.selectAll();
-        model.addAttribute("productss", products);
-        model.addAttribute("nativeQueryTime", 0);
-        model.addAttribute("JPQLqueryTime", 0);
+        List<Product> products = dao.readAll();
+        model.addAttribute("products", products);
         return "selectAllProducts";
     }
 
-    @GetMapping("/products/selectProductForm")
-    public String selectProduct(Model model) {
-
-        return "selectProductForm";
-    }
-
-    @PostMapping("/products/selectProductResult")
-    public String selectProductResult(Model model) {
+    @PostMapping("/products/selectProduct")
+    public String selectProduct(@RequestParam("productId") Short productId, Model model) {
         ProductsDAO dao = context.getBean(ProductsDAO.class);
-        short productId = (short) model.asMap().get(PRODUCT_ID);
-        model.addAttribute("customer", dao.selectById(productId));
+        Product product = dao.readById(productId);
+        model.addAttribute("product", product);
 
-        return "selectProductResult";
+        return "selectProduct";
     }
 
 
-    @GetMapping("/products/addProductForm")
+    @GetMapping("/products/addForm")
     public String addProduct(Model model) {
+        SuppliersHelper supplierDAO = context.getBean(SuppliersHelper.class);
+        CategoriesHelper categoriesDAO = context.getBean(CategoriesHelper.class);
+        List<Category> categories = categoriesDAO.selectAll();
+        List<Supplier> suppliers = supplierDAO.selectAll();
+        Product product = new ProductBuilder().build();
+
+        model.addAttribute("product", product);
+        model.addAttribute("suppliers", suppliers);
+        model.addAttribute("categories", categories);
 
         return "addProductForm";
     }
 
-    @PostMapping("/products/addProductResult")
-    public String addProductResult(Model model) {
-        ProductsDAO dao = context.getBean(ProductsDAO.class);
-        dao.add(model);
+    @PostMapping("/products/addProduct")
+    public String addProductResult(@ModelAttribute("product") Product product, @RequestParam("supplierId") Short supplierId,
+                                   @RequestParam("categoryId") Short categoryId, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult.toString());
+        }
 
-        return "addProductResult";
+        SuppliersHelper supplierDAO = context.getBean(SuppliersHelper.class);
+        CategoriesHelper categoriesDAO = context.getBean(CategoriesHelper.class);
+        ProductsDAO dao = context.getBean(ProductsDAO.class);
+
+        Supplier supplier = supplierDAO.selectById(supplierId);
+        Category category = categoriesDAO.selectById(categoryId);
+        product.setSupplier(supplier);
+        product.setCategory(category);
+
+        System.out.println(product);
+        dao.create(product);
+
+        return "redirect:showAll";
     }
 
-    @GetMapping("products/updateProductsForm")
-    public String updateProduct(Model model){
+    @PostMapping("products/updateForm")
+    public String updateProduct(@RequestParam("productId") Short productId, Model model){
+
+        ProductsDAO dao = context.getBean(ProductsDAO.class);
+        SuppliersHelper supplierDAO = context.getBean(SuppliersHelper.class);
+        CategoriesHelper categoriesDAO = context.getBean(CategoriesHelper.class);
+        List<Category> categories = categoriesDAO.selectAll();
+        List<Supplier> suppliers = supplierDAO.selectAll();
+        Product product = dao.readById(productId);
+
+        model.addAttribute("productId", productId);
+        model.addAttribute("product", product);
+        model.addAttribute("suppliers", suppliers);
+        model.addAttribute("categories", categories);
+
         return "updateProductForm";
+
     }
 
-    @PostMapping("products/updateProductResult")
-    public String updateProductResult(Model model){
+    @PostMapping("products/updateProduct")
+    public String updateProductResult(@ModelAttribute("product") Product product, @RequestParam("productId") Short productId,
+                                      @RequestParam("supplierId") Short supplierId, @RequestParam("categoryId") Short categoryId, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult.toString());
+        }
+
+        SuppliersHelper supplierDAO = context.getBean(SuppliersHelper.class);
+        CategoriesHelper categoriesDAO = context.getBean(CategoriesHelper.class);
         ProductsDAO dao = context.getBean(ProductsDAO.class);
-        short productId = (short) model.asMap().get(PRODUCT_ID);
-        dao.update(productId, model);
 
-        return "updateProductResult";
+        Supplier supplier = supplierDAO.selectById(supplierId);
+        Category category = categoriesDAO.selectById(categoryId);
+        product.setSupplier(supplier);
+        product.setCategory(category);
+
+        System.out.println(product);
+
+        dao.update(product ,productId);
+
+        return "redirect:showAll";
     }
 
-    @GetMapping("products/deleteProductForm")
-    public String deleteProductForm(Model model){
-        return "deleteProductForm";
-    }
-
-    @PostMapping("products/deleteProductResult")
-    public String deleteProductResult(Model model){
+    @PostMapping("products/deleteProduct")
+    public String deleteProductResult(@RequestParam("productId") Short productId, Model model){
         ProductsDAO dao = context.getBean(ProductsDAO.class);
-        short productId = (short) model.asMap().get(PRODUCT_ID);
-        dao.remove(productId);
+        dao.delete(productId);
 
-        return "deleteProductResult";
+        return "redirect:showAll";
     }
 }

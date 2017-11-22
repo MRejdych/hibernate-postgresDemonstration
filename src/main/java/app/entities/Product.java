@@ -18,7 +18,6 @@ public class Product implements Serializable {
 
     public Product(String productName, Supplier supplier, Category category, String quantityPerUnit, Float unitPrice,
                    Short unitsInStock, Short unitsOnOrder, Short reorderLevel, int discontinued) {
-        if (productName == null) throw new IllegalArgumentException();
         this.productName = productName;
         this.quantityPerUnit = quantityPerUnit;
         this.unitPrice = unitPrice;
@@ -31,7 +30,8 @@ public class Product implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="product_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = PRODUCT_ID, nullable = false)
     private Short productId;
 
@@ -58,16 +58,30 @@ public class Product implements Serializable {
     @Column(name = DISCONTINUED, nullable = false)
     private int discontinued;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @ManyToOne
     @JoinColumn(name = SUPPLIER_ID, referencedColumnName = SUPPLIER_ID)
     protected Supplier supplier;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @ManyToOne
     @JoinColumn(name = CATEGORY_ID, referencedColumnName = CATEGORY_ID)
     protected Category category;
 
-    @OneToMany(mappedBy = "product" , fetch = LAZY , cascade = ALL)
+    @OneToMany(mappedBy = "product" , fetch = LAZY, cascade = REMOVE)
     protected List<OrderDetails> orderDetails = new ArrayList<>();
+
+
+    public void copyStateOfAnotherProduct(Product that){
+        this.productName = that.productName;
+        this.quantityPerUnit = that.quantityPerUnit;
+        this.unitPrice = that.unitPrice;
+        this.unitsInStock = that.unitsInStock;
+        this.unitsOnOrder = that.unitsOnOrder;
+        this.reorderLevel = that.reorderLevel;
+        this.discontinued = that.discontinued;
+        this.supplier = that.supplier;
+        this.category = that.category;
+    }
+
 
     public Short getProductId() {
         return productId;
@@ -79,6 +93,10 @@ public class Product implements Serializable {
 
     public List<OrderDetails> getOrderDetails() {
         return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public void setProductName(String productName) {
@@ -138,9 +156,10 @@ public class Product implements Serializable {
     }
 
     public void setSupplier(Supplier supplier) {
+        System.out.println(supplier);
         this.supplier = supplier;
 
-        if(!supplier.getProducts().contains(this)) supplier.addProduct(this);
+        if(supplier != null && !supplier.getProducts().contains(this)) supplier.addProduct(this);
     }
 
     public Category getCategory() {
@@ -150,7 +169,7 @@ public class Product implements Serializable {
     public void setCategory(Category category) {
         this.category = category;
 
-        if(!category.getProducts().contains(this)) category.addProduct(this);
+        if(category != null && !category.getProducts().contains(this)) category.addProduct(this);
     }
 
 

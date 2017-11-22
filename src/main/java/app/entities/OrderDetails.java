@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Table(name = "order_details")
 public class OrderDetails implements Serializable {
 
+
     protected OrderDetails() {
     }
 

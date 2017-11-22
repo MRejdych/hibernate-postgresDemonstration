@@ -5405,6 +5405,8 @@ INSERT INTO territories VALUES ('98052', 'Redmond', 2);
 INSERT INTO territories VALUES ('98104', 'Seattle', 2);
 
 
+CREATE SEQUENCE category_id_seq MINVALUE 100;
+ALTER TABLE categories ALTER category_id SET DEFAULT NEXTVAL('category_id_seq');
 ALTER TABLE ONLY categories
   ADD CONSTRAINT pk_categories PRIMARY KEY (category_id);
 
@@ -5412,15 +5414,18 @@ ALTER TABLE ONLY categories
 ALTER TABLE ONLY customer_customer_demographics
   ADD CONSTRAINT pk_customercustomerdemo PRIMARY KEY (customer_id, customer_type_id);
 
-
+CREATE SEQUENCE customer_type_id_seq MINVALUE 100;
+ALTER TABLE customer_demographics ALTER customer_type_id SET DEFAULT NEXTVAL('customer_type_id_seq');
 ALTER TABLE ONLY customer_demographics
   ADD CONSTRAINT pk_customerdemographics PRIMARY KEY (customer_type_id);
 
-
+CREATE SEQUENCE customer_id_seq MINVALUE 92;
+ALTER TABLE customers ALTER customer_id SET DEFAULT NEXTVAL('customer_id_seq');
 ALTER TABLE ONLY customers
   ADD CONSTRAINT pk_customers PRIMARY KEY (customer_id);
 
-
+CREATE SEQUENCE employee_id_seq MINVALUE 100;
+ALTER TABLE employees ALTER employee_id SET DEFAULT NEXTVAL('employee_id_seq');
 ALTER TABLE ONLY employees
   ADD CONSTRAINT pk_employees PRIMARY KEY (employee_id);
 
@@ -5433,24 +5438,33 @@ ALTER TABLE ONLY order_details
   ADD CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id);
 
 
+CREATE SEQUENCE order_id_seq MINVALUE 100;
+ALTER TABLE orders ALTER order_id SET DEFAULT NEXTVAL('order_id_seq');
 ALTER TABLE ONLY orders
   ADD CONSTRAINT pk_orders PRIMARY KEY (order_id);
 
 
+CREATE SEQUENCE product_id_seq MINVALUE 78;
+ALTER TABLE products ALTER product_id SET DEFAULT NEXTVAL('product_id_seq');
 ALTER TABLE ONLY products
   ADD CONSTRAINT pk_products PRIMARY KEY (product_id);
 
 
+CREATE SEQUENCE region_id_seq MINVALUE 5;
+ALTER TABLE regions ALTER region_id SET DEFAULT NEXTVAL('region_id_seq');
 ALTER TABLE ONLY regions
   ADD CONSTRAINT pk_region PRIMARY KEY (region_id);
 
-
+CREATE SEQUENCE shipper_id_seq MINVALUE 100;
+ALTER TABLE shippers ALTER shipper_id SET DEFAULT NEXTVAL('shipper_id_seq');
 ALTER TABLE ONLY shippers
   ADD CONSTRAINT pk_shippers PRIMARY KEY (shipper_id);
 
-
+CREATE SEQUENCE supplier_id_seq MINVALUE 30;
+ALTER TABLE suppliers ALTER supplier_id SET DEFAULT NEXTVAL('supplier_id_seq');
 ALTER TABLE ONLY suppliers
   ADD CONSTRAINT pk_suppliers PRIMARY KEY (supplier_id);
+
 
 
 ALTER TABLE ONLY territories
@@ -5458,7 +5472,7 @@ ALTER TABLE ONLY territories
 
 
 ALTER TABLE ONLY orders
-  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE CASCADE;
+  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers;
 
 
 ALTER TABLE ONLY orders
@@ -5470,11 +5484,11 @@ ALTER TABLE ONLY orders
 
 
 ALTER TABLE ONLY order_details
-  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products ON DELETE CASCADE;
+  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products;
 
 
 ALTER TABLE ONLY order_details
-  ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES orders ON DELETE CASCADE;
+  ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES orders;
 
 
 ALTER TABLE ONLY products
@@ -5490,19 +5504,19 @@ ALTER TABLE ONLY territories
 
 
 ALTER TABLE ONLY employee_territories
-  ADD CONSTRAINT fk_employeeterritories_territories FOREIGN KEY (territory_id) REFERENCES territories ON DELETE CASCADE;
+  ADD CONSTRAINT fk_employeeterritories_territories FOREIGN KEY (territory_id) REFERENCES territories;
 
 
 ALTER TABLE ONLY employee_territories
-  ADD CONSTRAINT fk_employeeterritories_employees FOREIGN KEY (employee_id) REFERENCES employees ON DELETE CASCADE;
+  ADD CONSTRAINT fk_employeeterritories_employees FOREIGN KEY (employee_id) REFERENCES employees;
 
 
 ALTER TABLE ONLY customer_customer_demographics
-  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics ON DELETE CASCADE;
+  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics;
 
 
 ALTER TABLE ONLY customer_customer_demographics
-  ADD CONSTRAINT fk_customercustomerdemo_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE CASCADE;
+  ADD CONSTRAINT fk_customercustomerdemo_customers FOREIGN KEY (customer_id) REFERENCES customers;
 
 
 ALTER TABLE ONLY employees

@@ -20,7 +20,8 @@ public class CustomerDemographic implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="customer_type_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "customer_type_id", nullable = false)
     private short customerTypeId;
 

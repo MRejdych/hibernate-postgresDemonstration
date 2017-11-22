@@ -14,9 +14,9 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public final class DatabaseUtils {
-    private EntityManagerFactory emf;
+    private static final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("entityManager");
     private EntityManager em;
-    private EntityTransaction tr;
     private boolean connOpened;
 
 
@@ -24,31 +24,23 @@ public final class DatabaseUtils {
         connOpened = false;
     }
 
-    /*private static EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null) {
-            emf = Persistence.createEntityManagerFactory("entityManager");
-        }
-        return emf;
-    }*/
 
     public void openConnection() {
         if (!connOpened) {
-            emf = Persistence.createEntityManagerFactory("entityManager");
             em = emf.createEntityManager();
-            tr = em.getTransaction();
-            tr.begin();
+            em.getTransaction().begin();
             connOpened = true;
         }
     }
 
     public void closeConnection() {
         if (connOpened) {
-            tr.commit();
+            em.flush();
+            em.getTransaction().commit();
+            clearStatistics();
             em.close();
-            emf.close();
-            tr = null;
+            clearCache();
             em = null;
-            emf = null;
             connOpened = false;
         }
     }
@@ -56,7 +48,7 @@ public final class DatabaseUtils {
         getStatistics().clear();
     }
     public void clearCache(){
-        em.clear();
+        emf.getCache().evictAll();
     }
 
     public Statistics getStatistics(){

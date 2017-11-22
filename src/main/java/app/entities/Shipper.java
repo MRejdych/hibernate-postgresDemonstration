@@ -19,7 +19,8 @@ public class Shipper implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="pk_sequence",sequenceName="shipper_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     @Column(name = "shipper_id", nullable = false)
     private Short shipperId;
 
