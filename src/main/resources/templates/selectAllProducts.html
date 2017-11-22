@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+
+    <div id="top_menu">
+        <a th:href="@{/}">
+            <button type="button">Powrót do strony głównej</button>
+        </a>
+        <a th:href="@{/customers/addForm}">
+            <button type="button">Dodaj klienta</button>
+        </a>
+    </div>
+
+    <table id="customers_table">
+        <thead>
+        <tr>
+            <th>ID klienta:</th>
+            <th>Nazwa firmy:</th>
+            <th>Osoba kontaktowa:</th>
+            <th>Numer telefonu:</th>
+            <th>Fax</th>
+            <th>Szczegóły</th>
+            <th>Usuń</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="customer : ${customers}">
+            <tr>
+                <td th:text="${customer.customerId}"></td>
+                <td th:text="${customer.companyName}"></td>
+                <td th:text="${customer.contactName}"></td>
+                <td th:text="${customer.phone}"></td>
+                <td th:text="${customer.fax}"></td>
+                <td>
+                    <form method="POST" th:action="@{/customers/selectCustomer}">
+                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Pokaż szczegóły</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" th:action="@{/customers/deleteCustomer}">
+                        <input type="hidden" name="customerId" id="customerId" th:value="${customer.customerId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Usuń klienta</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

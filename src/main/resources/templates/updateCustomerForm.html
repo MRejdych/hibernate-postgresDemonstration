@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+    <div id="bar">
+
+
+        <a style="display: inline;" href="/">
+            <div class="button" id="main_page_button">
+                <p>Powrót do strony głównej</p>
+            </div>
+        </a>
+
+        </div>
+            <form method="POST" th:action="@{/customers/addCustomer}" th:object="${customer}" role="form">
+                <table>
+                    <tr>
+                        <td>Company name:</td>
+                        <td><input type="text" th:field="*{companyName}"/></td>
+
+                    </tr>
+                    <tr>
+                        <td>Contact name: </td>
+                        <td><input type="text" th:field="*{contactName}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Contact title: </td>
+                        <td><input type="text" th:field="*{contactTitle}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Address: </td>
+                        <td><input type="text" th:field="*{address.address}"/></td>
+                    </tr>
+                    <tr>
+                        <td>City: </td>
+                        <td><input type="text" th:field="*{address.city}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Postal Code: </td>
+                        <td><input type="text" th:field="*{address.postalCode}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Country: </td>
+                        <td><input type="text" th:field="*{address.country}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Region: </td>
+                        <td><input type="text" th:field="*{region}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Phone: </td>
+                        <td><input type="text" th:field="*{phone}"/></td>
+                    </tr>
+                    <tr>
+                        <td>Fax: </td>
+                        <td><input type="text" th:field="*{fax}"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit">Add Customer</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        <div>
+    </div>
+</div>
+</body>
+</html>

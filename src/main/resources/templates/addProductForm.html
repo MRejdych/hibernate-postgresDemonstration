@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+    <a th:href="@{/}">
+        <button type="button">Powrót do strony głównej</button>
+    </a>
+    <form method="POST" th:action="@{/customers/addCustomer}" th:object="${customer}" role="form">
+        <table>
+            <tr>
+                <td>Nazwa firmy:</td>
+                <td><input type="text" th:field="*{companyName}"/></td>
+
+            </tr>
+            <tr>
+                <td>Osoba kontaktowa:</td>
+                <td><input type="text" th:field="*{contactName}"/></td>
+            </tr>
+            <tr>
+                <td>Stanowisko osoby kontaktowej:</td>
+                <td><input type="text" th:field="*{contactTitle}"/></td>
+            </tr>
+            <tr>
+                <td>Ulica:</td>
+                <td><input type="text" th:field="*{address.address}"/></td>
+            </tr>
+            <tr>
+                <td>Miasto:</td>
+                <td><input type="text" th:field="*{address.city}"/></td>
+            </tr>
+            <tr>
+                <td>Kod pocztowy:</td>
+                <td><input type="text" th:field="*{address.postalCode}"/></td>
+            </tr>
+            <tr>
+                <td>Kraj:</td>
+                <td><input type="text" th:field="*{address.country}"/></td>
+            </tr>
+            <tr>
+                <td>Region:</td>
+                <td><input type="text" th:field="*{region}"/></td>
+            </tr>
+            <tr>
+                <td>Numer telefonu:</td>
+                <td><input type="text" th:field="*{phone}"/></td>
+            </tr>
+            <tr>
+                <td>Fax:</td>
+                <td><input type="text" th:field="*{fax}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="customerId" id="customerId" th:value="${customerId}"/>
+                    <button type="submit">Zapisz klienta</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div>
+    </div>
+</div>
+</body>
+</html>
