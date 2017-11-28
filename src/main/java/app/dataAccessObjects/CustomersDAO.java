@@ -1,21 +1,13 @@
 package app.dataAccessObjects;
 
-import app.constants.CustomersDbFields;
-import app.entities.Address;
 import app.entities.Customer;
-import app.utils.AddressBuilder;
-import app.utils.CustomerBuilder;
 import app.utils.DatabaseUtils;
-import org.springframework.ui.Model;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
 
-import static app.constants.CustomersDbFields.*;
+import static app.stats.StatisticType.*;
 
 
 public class CustomersDAO extends EntitiesDAO<Customer> {
@@ -30,7 +22,7 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
     public void create(Customer customer){
         executeQueryAndSaveStatistics(() -> {
             em.persist(customer);
-        });
+        }, CREATE);
     }
 
     @Override
@@ -39,13 +31,13 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
                 () -> {
                     TypedQuery<Customer> generatedQuery = em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", Customer.class);
                     return generatedQuery.getResultList();
-                });
+                }, READ);
     }
 
 
     @Override
     public Customer readById(short customerId){
-        return executeQueryAndSaveStatistics(() ->  em.find(Customer.class, customerId));
+        return executeQueryAndSaveStatistics(() ->  em.find(Customer.class, customerId), READ);
     }
 
     @Override
@@ -55,7 +47,7 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
             Customer customer = em.find(Customer.class, customerId);
             if(customer != null)
                 customer.copyStateOfAnotherCustomer(updatedCustomer);
-        });
+        }, UPDATE);
     }
 
 
@@ -66,45 +58,33 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
             Customer c = em.find(Customer.class, customerId);
             if(c != null)  em.remove(c);
             System.out.println(em.contains(c));
-        });
+        }, DELETE);
     }
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
-    public void createUsingNativeSql(Model model) {
+    public void createUsingNativeSql(Customer customer) {
         executeQueryAndSaveStatistics(() -> {
 
-            Map<String, Object> attributesMap = model.asMap();
-            Set<String> legalTableColumns = CustomersDbFields.asSet();
-
-            StringJoiner columnsJoiner = new StringJoiner(", ");
-            StringJoiner valuesJoiner = new StringJoiner(", ");
-
-            attributesMap.entrySet()
-                    .stream()
-                    .filter(e -> legalTableColumns.contains(e.getKey()))
-                    .forEach(mapEntry -> {
-                        columnsJoiner.add(mapEntry.getKey());
-                        valuesJoiner.add((String) mapEntry.getValue());
-                    });
-
-            String columns = columnsJoiner.toString();
-            String values = valuesJoiner.toString();
-
-            String query = new StringBuilder()
-                    .append("INSERT into customers(")
-                    .append(columns)
-                    .append(") VALUES (")
-                    .append(values)
-                    .append(");")
-                    .toString();
-
+            String query =
+                    "INSERT into customers(company_name, contact_name, contact_title, address, city, postal_code, country, region, phone, fax)" +
+                    "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10);";
 
             Query nativeQuery = em.createNativeQuery(query, Customer.class);
+            nativeQuery.setParameter(1, customer.getCompanyName())
+                    .setParameter(2, customer.getContactName())
+                    .setParameter(3, customer.getContactTitle())
+                    .setParameter(4, customer.getAddress().getAddress())
+                    .setParameter(5, customer.getAddress().getCity())
+                    .setParameter(6, customer.getAddress().getPostalCode())
+                    .setParameter(7, customer.getAddress().getCountry())
+                    .setParameter(8, customer.getRegion())
+                    .setParameter(9, customer.getPhone())
+                    .setParameter(10, customer.getFax());
+
 
             nativeQuery.executeUpdate();
 
-        });
+        }, NATIVE_CREATE);
     }
 
     @SuppressWarnings("unchecked")
@@ -115,7 +95,7 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
             Query nativeQuery = em.createNativeQuery("Select * From customers ORDER BY customer_id", Customer.class);
 
             return (List<Customer>) nativeQuery.getResultList();
-        });
+        }, NATIVE_READ);
     }
 
     @Override
@@ -125,47 +105,38 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
             nativeQuery.setParameter(1, customerId);
 
             return (Customer) nativeQuery.getSingleResult();
-        });
+        }, NATIVE_READ);
     }
 
 
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void updateUsingNativeSql(short customerId, Model model) {
+    public void updateUsingNativeSql(Customer updatedCustomer, short customerId) {
 
         executeQueryAndSaveStatistics(() -> {
+            String query =
+                    "UPDATE customers SET company_name = (?1), contact_name = (?2), contact_title = (?3), address = (?4), " +
+                            "city = (?5), postal_code = (?6), country = (?7), region = (?8), phone = (?9), fax = (?10) " +
+                            "WHERE customer_id = (?11);";
 
-            Map<String, Object> attributesMap = model.asMap();
-            Set<String> legalTableColumns = CustomersDbFields.asSet();
-
-            String queryPrefix = "UPDATE customers SET ";
-            String querySuffix = " WHERE customer_id = ?1;";
-
-            StringBuilder queryBuilder = new StringBuilder(queryPrefix);
-
-            queryBuilder.append(COMPANY_NAME + " = ").append(attributesMap.get(COMPANY_NAME));
-
-            attributesMap.entrySet()
-                    .stream()
-                    .filter(e -> legalTableColumns.contains(e.getKey()))
-                    .forEach(mapEntry -> {
-                        String key = mapEntry.getKey();
-                        String value = (String) mapEntry.getValue();
-                        if (!key.equals(COMPANY_NAME))
-                            queryBuilder.append(", ").append(key).append(" = ").append(value);
-                    });
-
-            queryBuilder.append(querySuffix);
-
-            String query = queryBuilder.toString();
+            System.out.println("test" + updatedCustomer);
 
             Query nativeQuery = em.createNativeQuery(query, Customer.class);
-            nativeQuery.setParameter(1, customerId);
+            nativeQuery.setParameter(1, updatedCustomer.getCompanyName())
+                    .setParameter(2, updatedCustomer.getContactName())
+                    .setParameter(3, updatedCustomer.getContactTitle())
+                    .setParameter(4, updatedCustomer.getAddress().getAddress())
+                    .setParameter(5, updatedCustomer.getAddress().getCity())
+                    .setParameter(6, updatedCustomer.getAddress().getPostalCode())
+                    .setParameter(7, updatedCustomer.getAddress().getCountry())
+                    .setParameter(8, updatedCustomer.getRegion())
+                    .setParameter(9, updatedCustomer.getPhone())
+                    .setParameter(10, updatedCustomer.getFax())
+                    .setParameter(11, customerId);
 
             nativeQuery.executeUpdate();
-
-        });
+        }, NATIVE_UPDATE);
 
     }
 
@@ -178,6 +149,6 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
             nativeQuery.setParameter(1, customerId);
 
             nativeQuery.executeUpdate();
-        });
+        }, NATIVE_DELETE);
     }
 }

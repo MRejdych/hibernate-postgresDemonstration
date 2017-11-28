@@ -1,18 +1,13 @@
 package app.dataAccessObjects;
 
-import app.constants.ProductsDbFields;
 import app.entities.Product;
 import app.utils.DatabaseUtils;
-import org.springframework.ui.Model;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
 
-import static app.constants.ProductsDbFields.*;
+import static app.stats.StatisticType.*;
 
 public class ProductsDAO extends EntitiesDAO<Product> {
 
@@ -24,7 +19,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
     public void create(Product product) {
         executeQueryAndSaveStatistics(() -> {
             em.persist(product);
-        });
+        }, CREATE);
     }
 
     public List<Product> readAll() {
@@ -33,12 +28,12 @@ public class ProductsDAO extends EntitiesDAO<Product> {
             TypedQuery<Product> generatedQuery = em.createQuery("SELECT pr FROM Product pr ORDER BY pr.productId", Product.class);
 
             return generatedQuery.getResultList();
-        });
+        }, READ);
     }
 
     @Override
     public Product readById(short productId) {
-        return executeQueryAndSaveStatistics(() -> em.find(Product.class, productId));
+        return executeQueryAndSaveStatistics(() -> em.find(Product.class, productId), READ);
     }
 
     @Override
@@ -49,7 +44,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
             if (product != null)
                 product.copyStateOfAnotherProduct(updatedProduct);
 
-        });
+        }, UPDATE);
     }
 
     @Override
@@ -57,45 +52,32 @@ public class ProductsDAO extends EntitiesDAO<Product> {
         executeQueryAndSaveStatistics(() -> {
             Product pr = em.find(Product.class, productId);
             if (pr != null) em.remove(pr);
-        });
+        }, DELETE);
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
-    public void createUsingNativeSql(Model model) {
+    public void createUsingNativeSql(Product product) {
         executeQueryAndSaveStatistics(() -> {
 
-            Map<String, Object> attributesMap = model.asMap();
-            Set<String> legalTableColumns = ProductsDbFields.asSet();
-
-            StringJoiner columnsJoiner = new StringJoiner(", ");
-            StringJoiner valuesJoiner = new StringJoiner(", ");
-
-            attributesMap.entrySet()
-                    .stream()
-                    .filter(e -> legalTableColumns.contains(e.getKey()))
-                    .forEach(mapEntry -> {
-                        columnsJoiner.add(mapEntry.getKey());
-                        valuesJoiner.add((String) mapEntry.getValue());
-                    });
-
-            String columns = columnsJoiner.toString();
-            String values = valuesJoiner.toString();
-
-            String query = new StringBuilder()
-                    .append("INSERT into products(")
-                    .append(columns)
-                    .append(") VALUES (")
-                    .append(values)
-                    .append(");")
-                    .toString();
-
+            String query =
+                    "INSERT into products(product_name, quantity_per_unit, unit_price, units_in_stock, units_on_order," +
+                            " reorder_level, discontinued, supplier_id, category_id)" +
+                            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
 
             Query nativeQuery = em.createNativeQuery(query, Product.class);
+            nativeQuery.setParameter(1, product.getProductName())
+                    .setParameter(2, product.getQuantityPerUnit())
+                    .setParameter(3, product.getUnitPrice())
+                    .setParameter(4, product.getUnitsInStock())
+                    .setParameter(5, product.getUnitsOnOrder())
+                    .setParameter(6, product.getReorderLevel())
+                    .setParameter(7, product.getDiscontinued())
+                    .setParameter(8, product.getSupplier().getSupplierId())
+                    .setParameter(9, product.getCategory().getCategoryId());
 
             nativeQuery.executeUpdate();
-
-        });
+        }, NATIVE_CREATE);
     }
 
     @SuppressWarnings("unchecked")
@@ -106,7 +88,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
             Query nativeQuery = em.createNativeQuery("SELECT * FROM products ORDER BY product_id", Product.class);
 
             return (List<Product>) nativeQuery.getResultList();
-        });
+        }, NATIVE_READ);
     }
 
     @Override
@@ -117,46 +99,33 @@ public class ProductsDAO extends EntitiesDAO<Product> {
             nativeQuery.setParameter(1, productId);
 
             return (Product) nativeQuery.getSingleResult();
-        });
+        }, NATIVE_READ);
     }
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void updateUsingNativeSql(short productId, Model model) {
+    public void updateUsingNativeSql(Product updatedProduct, short productId) {
 
         executeQueryAndSaveStatistics(() -> {
-
-            Map<String, Object> attributesMap = model.asMap();
-            Set<String> legalTableColumns = ProductsDbFields.asSet();
-
-            String queryPrefix = "UPDATE products SET ";
-            String querySuffix = " WHERE product_id = ?1;";
-
-            StringBuilder queryBuilder = new StringBuilder(queryPrefix);
-
-            queryBuilder.append(PRODUCT_NAME + " = ").append(attributesMap.get(PRODUCT_NAME));
-
-
-            attributesMap.entrySet()
-                    .stream()
-                    .filter(e -> legalTableColumns.contains(e.getKey()))
-                    .forEach(mapEntry -> {
-                        String key = mapEntry.getKey();
-                        String value = (String) mapEntry.getValue();
-                        if (!key.equals(PRODUCT_NAME))
-                            queryBuilder.append(", ").append(key).append(" = ").append(value);
-                    });
-
-            queryBuilder.append(querySuffix);
-
-            String query = queryBuilder.toString();
+            String query =
+                    "UPDATE products SET product_name = (?1), quantity_per_unit = (?2), unit_price = (?3), units_in_stock = (?4)," +
+                            " units_on_order = (?5), reorder_level = (?6), discontinued = (?7), supplier_id = (?8), category_id = (?9)" +
+                            " WHERE product_id = (?10);";
 
             Query nativeQuery = em.createNativeQuery(query, Product.class);
-            nativeQuery.setParameter(1, productId);
+            nativeQuery.setParameter(1, updatedProduct.getProductName())
+                    .setParameter(2, updatedProduct.getQuantityPerUnit())
+                    .setParameter(3, updatedProduct.getUnitPrice())
+                    .setParameter(4, updatedProduct.getUnitsInStock())
+                    .setParameter(5, updatedProduct.getUnitsOnOrder())
+                    .setParameter(6, updatedProduct.getReorderLevel())
+                    .setParameter(7, updatedProduct.getDiscontinued())
+                    .setParameter(8, updatedProduct.getSupplier().getSupplierId())
+                    .setParameter(9, updatedProduct.getCategory().getCategoryId())
+                    .setParameter(10, productId);
 
             nativeQuery.executeUpdate();
-
-        });
+        }, NATIVE_UPDATE);
     }
 
     @Override
@@ -167,6 +136,6 @@ public class ProductsDAO extends EntitiesDAO<Product> {
             nativeQuery.setParameter(1, productId);
 
             nativeQuery.executeUpdate();
-        });
+        }, NATIVE_DELETE);
     }
 }

@@ -1,14 +1,12 @@
 package app.dataAccessObjects;
 
+import app.stats.StatisticType;
+import app.stats.Statistics;
+import app.stats.StatisticsKeeper;
 import app.utils.DatabaseUtils;
-import app.utils.Statistics;
-import app.utils.StatisticsKeeper;
-import org.springframework.ui.Model;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
@@ -23,7 +21,7 @@ public abstract class EntitiesDAO<T> {
     //C R U D
     public abstract void create(T entity);
 
-    public abstract void createUsingNativeSql(Model model);
+    public abstract void createUsingNativeSql(T entity);
 
     public abstract List<T> readAll();
 
@@ -35,14 +33,14 @@ public abstract class EntitiesDAO<T> {
 
     public abstract void update(T updatedEntity, short id);
 
-    public abstract void updateUsingNativeSql(short id, Model model);
+    public abstract void updateUsingNativeSql(T updatedEntity, short id);
 
     public abstract void delete(short id);
 
     public abstract void deleteUsingNativeSql(short id);
 
 
-    protected void executeQueryAndSaveStatistics(Runnable query) {
+    protected void executeQueryAndSaveStatistics(Runnable query, StatisticType statisticType) {
         try {
             prepareConnectionToDB();
             query.run();
@@ -50,12 +48,12 @@ public abstract class EntitiesDAO<T> {
             e.printStackTrace();
         }
         finally {
-            appendStatistics();
+            appendStatistics(statisticType);
             closeConnectionToDB();
         }
     }
 
-    protected <V> V executeQueryAndSaveStatistics(Supplier<V> query) {
+    protected <V> V executeQueryAndSaveStatistics(Supplier<V> query, StatisticType statisticType) {
         try {
             prepareConnectionToDB();
             return query.get();
@@ -64,7 +62,7 @@ public abstract class EntitiesDAO<T> {
             return null;
         }
         finally {
-            appendStatistics();
+            appendStatistics(statisticType);
             closeConnectionToDB();
         }
     }
@@ -81,37 +79,8 @@ public abstract class EntitiesDAO<T> {
     }
 
 
-    private void appendStatistics(){
+    private void appendStatistics(StatisticType statisticType){
         org.hibernate.stat.Statistics stats = dbutils.getStatistics();
-        StatisticsKeeper.saveStatistics(new Statistics(stats));
-    }
-
-    protected class AttributesSettingHelper {
-        private Object value;
-        private Map<String, Object> attributesMap;
-
-        protected AttributesSettingHelper(Map<String, Object> map){
-            this.attributesMap = map;
-        }
-
-        protected AttributesSettingHelper ifMapContainsKey(String key){
-            value = null;
-            value = attributesMap.get(key);
-            return this;
-        }
-
-        @SuppressWarnings("unchecked")
-        protected <V> AttributesSettingHelper then(Consumer<V> consumer){
-            if(value != null){
-                consumer.accept((V) value);
-            }
-            value = null;
-            return this;
-        }
-
-        protected void end(){
-            attributesMap = null;
-            value = null;
-        }
+        StatisticsKeeper.saveStatistics(new Statistics(stats), statisticType);
     }
 }
