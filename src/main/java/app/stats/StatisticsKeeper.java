@@ -1,11 +1,14 @@
 package app.utils;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class StatisticsKeeper {
     private static List<Statistics> statisticsList = new LinkedList<>();
+    private static Map<StatisticType, List<Statistics>> statisticsMap = new HashMap<>();
+
+    static {
+        EnumSet.allOf(StatisticType.class)
+    }
 
     private StatisticsKeeper(){}
 
