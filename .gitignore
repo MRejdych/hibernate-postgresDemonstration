@@ -6,5 +6,6 @@ out/
 *.zip
 *.tar.gz
 *.rar
+*.iml
 .idea/
 .gradle/

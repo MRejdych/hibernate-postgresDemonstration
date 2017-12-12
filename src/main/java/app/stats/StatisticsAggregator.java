@@ -1,7 +1,10 @@
 package app.stats;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static app.stats.StatisticType.*;
 
@@ -27,8 +30,7 @@ public class StatisticsAggregator {
 
 
 
-    public StatisticsAggregator(){
-        Map<StatisticType, List<Statistics>> statisticsMap = StatisticsKeeper.getStatisticsMap();
+    public StatisticsAggregator(Map<StatisticType, List<Statistics>> statisticsMap){
         totalCreateQueriesExecuted = totalQueriesExecuted(statisticsMap.get(CREATE));
         totalReadQueriesExecuted = totalQueriesExecuted(statisticsMap.get(READ));
         totalUpdateQueriesExecuted = totalQueriesExecuted(statisticsMap.get(UPDATE));
@@ -52,12 +54,28 @@ public class StatisticsAggregator {
     }
 
     private long totalQueriesExecuted(List<Statistics> statistics){
-        return statistics.stream().map(it -> it.numberOfExecutedQueries).count();
+        Optional<Long> optionalResult = statistics.stream()
+                .map(Statistics::getNumberOfExecutedQueries)
+                .reduce((a, b) -> a + b);
+        return optionalResult.orElse(0L);
+
     }
 
     private long avgTime(List<Statistics> statistics, long totalQueriesExecuted){
-        long totalTime = statistics.stream().map(Statistics::getQueryToItsExecutionTimeMap)
-                .map(Map::values).count();
-        return totalTime / totalQueriesExecuted;
+        if(totalQueriesExecuted == 0L){
+            return 0L;
+        }
+        else {
+            Optional<Long> optionalResult = statistics.stream()
+                    .map(Statistics::getQueryToItsExecutionTimeMap)
+                    .map(Map::values)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList()).stream()
+                    .reduce((a, b) -> a + b);
+
+            long totalTime = optionalResult.orElse(0L);
+
+            return totalTime / totalQueriesExecuted;
+        }
     }
 }

@@ -20,7 +20,7 @@ public class StatisticsKeeper {
         return Collections.unmodifiableMap(statisticsMap);
     }
 
-    public void clearStatistics(){
+    public static void clearStatistics(){
         EnumSet.allOf(StatisticType.class).forEach(type -> statisticsMap.get(type).clear());
     }
 }

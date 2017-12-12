@@ -16,7 +16,6 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class StatisticsGenerator {
-    private ApplicationContext context;
     private DatabaseUtils dbutils;
 
     private CustomersDAO customersDAO;
@@ -30,11 +29,10 @@ public class StatisticsGenerator {
 
     private Random random;
 
-    public StatisticsGenerator(){
-        context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-        dbutils = context.getBean(DatabaseUtils.class);
-        customersDAO = context.getBean(CustomersDAO.class);
-        productsDAO = context.getBean(ProductsDAO.class);
+    public StatisticsGenerator(DatabaseUtils dbutils, CustomersDAO customersDAO, ProductsDAO productsDAO){
+        this.dbutils = dbutils;
+        this.customersDAO = customersDAO;
+        this.productsDAO = productsDAO;
         random = new Random();
         initilizeCustomerActions();
         initializeProductActions();
@@ -102,10 +100,11 @@ public class StatisticsGenerator {
                 .forEach(c -> customersDAO.delete(c.getCustomerId()));
 
 
-        products = productsDAO.readAll();
     }
 
     private void executeCrudOperationsOnEachProduct(){
+        products = productsDAO.readAll();
+
         products.stream()
                 .peek(p -> productsDAO.readById(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))
@@ -124,10 +123,11 @@ public class StatisticsGenerator {
                 .forEach(c -> customersDAO.deleteUsingNativeSql(c.getCustomerId()));
 
 
-        products = productsDAO.readAll();
     }
 
     private void executeNativeSqlCrudOperationsOnEachProduct(){
+        products = productsDAO.readAllUsingNativeSql();
+
         products.stream()
                 .peek(p -> productsDAO.readByIdUsingNativeSql(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))

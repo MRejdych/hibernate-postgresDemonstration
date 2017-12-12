@@ -13,15 +13,17 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public final class DatabaseUtils {
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("entityManager");
+public class DatabaseUtils {
+    private static EntityManagerFactory emf;
     private EntityManager em;
     private boolean connOpened;
 
 
     public DatabaseUtils() {
         connOpened = false;
+        if(emf == null){
+            emf = Persistence.createEntityManagerFactory("entityManager");
+        }
     }
 
 
