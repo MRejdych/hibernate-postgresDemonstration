@@ -1,4 +1,4 @@
-package app.dataAccessObjects;
+package app.dao;
 
 import app.entities.Product;
 import app.utils.DatabaseUtils;
@@ -13,6 +13,10 @@ public class ProductsDAO extends EntitiesDAO<Product> {
 
     public ProductsDAO(DatabaseUtils dbutils) {
         super(dbutils);
+    }
+
+    public ProductsDAO(DatabaseUtils dbutils, Boolean statisticsGenerationMode){
+        super(dbutils, statisticsGenerationMode);
     }
 
     @Override

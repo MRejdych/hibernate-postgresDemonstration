@@ -1,6 +1,6 @@
 package app.controllers;
 
-import app.dataAccessObjects.CustomersDAO;
+import app.dao.CustomersDAO;
 import app.entities.Customer;
 import app.springconfig.ApplicationConfiguration;
 import app.utils.CustomerBuilder;
@@ -47,7 +47,6 @@ public class CustomersController {
 
     @PostMapping("/customers/addCustomer")
     public String addCustomerResult(@ModelAttribute("customer") Customer customer, Model model) {
-        System.out.println(customer);
 
         CustomersDAO dao = context.getBean(CustomersDAO.class);
         dao.create(customer);

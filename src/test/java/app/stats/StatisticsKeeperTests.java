@@ -46,7 +46,7 @@ public class StatisticsKeeperTests {
     }
 
     @Test
-    public void saveStatisticsTest(){
+    public void testSaveStatistics(){
         Statistics stats1 = mock(Statistics.class);
         Statistics stats2 = mock(Statistics.class);
         Statistics stats3 = mock(Statistics.class);
@@ -66,7 +66,7 @@ public class StatisticsKeeperTests {
     }
 
     @Test
-    public void clearStatisticsTest(){
+    public void testClearStatistics(){
         Statistics stats1 = mock(Statistics.class);
         Statistics stats2 = mock(Statistics.class);
         Statistics stats3 = mock(Statistics.class);

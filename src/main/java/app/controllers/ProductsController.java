@@ -1,8 +1,7 @@
 package app.controllers;
 
-import app.dataAccessObjects.*;
+import app.dao.*;
 import app.entities.Category;
-import app.entities.Customer;
 import app.entities.Product;
 import app.entities.Supplier;
 import app.springconfig.ApplicationConfiguration;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
-import static app.constants.ProductsDbFields.PRODUCT_ID;
 
 @Controller
 public class ProductsController {
@@ -75,7 +72,6 @@ public class ProductsController {
         product.setSupplier(supplier);
         product.setCategory(category);
 
-        System.out.println(product);
         dao.create(product);
 
         return "redirect:showAll";
@@ -115,8 +111,6 @@ public class ProductsController {
         Category category = categoriesDAO.selectById(categoryId);
         product.setSupplier(supplier);
         product.setCategory(category);
-
-        System.out.println(product);
 
         dao.update(product ,productId);
 

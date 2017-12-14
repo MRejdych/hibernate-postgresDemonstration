@@ -1,24 +1,17 @@
 package app.stats;
 
-import java.util.*;
 
 public class Statistics {
     private final long timestamp;
     private final long numberOfExecutedQueries;
-    private final Map<String, Long> queryToItsExecutionTimeMap;
+    private final long executionTime;
 
-    public Statistics(org.hibernate.stat.Statistics statistics){
+    public Statistics(org.hibernate.stat.Statistics statistics, long duration){
         timestamp = statistics.getStartTime();
-        numberOfExecutedQueries = statistics.getQueryExecutionCount();
-
-        queryToItsExecutionTimeMap = new HashMap<>();
-        List<String> queries = Arrays.asList(statistics.getQueries());
-        setQueryStatistics(statistics, queries);
+        numberOfExecutedQueries = statistics.getPrepareStatementCount();
+        executionTime = duration;
     }
 
-    private void setQueryStatistics(org.hibernate.stat.Statistics statistics, List<String> queries){
-        queries.forEach(it -> queryToItsExecutionTimeMap.put(it, statistics.getQueryStatistics(it).getExecutionAvgTime()));
-    }
 
     public long getTimestamp() {
         return timestamp;
@@ -28,8 +21,17 @@ public class Statistics {
         return numberOfExecutedQueries;
     }
 
-    public Map<String, Long> getQueryToItsExecutionTimeMap() {
-        return Collections.unmodifiableMap(queryToItsExecutionTimeMap);
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Statistics{" +
+                "timestamp=" + timestamp +
+                ", numberOfExecutedQueries=" + numberOfExecutedQueries +
+                ", executionTime=" + executionTime +
+                '}';
     }
 }
 

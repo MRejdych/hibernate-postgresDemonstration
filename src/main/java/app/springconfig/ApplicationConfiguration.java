@@ -1,6 +1,9 @@
 package app.springconfig;
 
-import app.dataAccessObjects.*;
+import app.dao.*;
+import app.stats.StatisticsAggregator;
+import app.stats.StatisticsGenerator;
+import app.stats.StatisticsKeeper;
 import app.utils.DatabaseUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,4 +42,22 @@ public class ApplicationConfiguration {
         return new CategoriesHelper(databaseUtils());
     }
 
+    @Bean
+    public StatisticsGenerator statisticsGenerator(){
+        return new StatisticsGenerator(databaseUtils(), customersManipulatorGeneratorMode(), productsManipulatorGeneratorMode());
+    }
+
+    @Bean
+    @Scope("prototype")
+    public StatisticsAggregator statisticsAggregator(){
+        return new StatisticsAggregator(StatisticsKeeper.getStatisticsMap());
+    }
+
+    private CustomersDAO customersManipulatorGeneratorMode(){
+        return new CustomersDAO(databaseUtils(), true);
+    }
+
+    private ProductsDAO productsManipulatorGeneratorMode(){
+        return new ProductsDAO(databaseUtils(), true);
+    }
 }

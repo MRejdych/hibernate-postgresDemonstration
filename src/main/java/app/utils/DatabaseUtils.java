@@ -6,7 +6,6 @@ import org.hibernate.stat.Statistics;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -54,9 +53,7 @@ public class DatabaseUtils {
     }
 
     public Statistics getStatistics(){
-        if(em != null && em.isOpen()) {
-            return em.unwrap(Session.class).getSessionFactory().getStatistics();
-        } else return null;
+        return em.unwrap(Session.class).getSessionFactory().getStatistics();
     }
 
     public EntityManager getEntityManager() {
@@ -79,6 +76,7 @@ public class DatabaseUtils {
                     .executeUpdate();
         }
 
+        clearStatistics();
         if(!connWasOpened) closeConnection();
     }
 }

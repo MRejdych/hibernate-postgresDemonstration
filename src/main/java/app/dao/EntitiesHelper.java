@@ -1,4 +1,4 @@
-package app.dataAccessObjects;
+package app.dao;
 
 import app.utils.DatabaseUtils;
 
@@ -8,12 +8,10 @@ import java.util.List;
 public abstract class EntitiesHelper <T> {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
-    boolean initialized;
 
 
     public EntitiesHelper(DatabaseUtils dbutils) {
         this.dbutils = dbutils;
-        this.initialized = false;
     }
 
     public abstract List<T> selectAll();
@@ -21,7 +19,6 @@ public abstract class EntitiesHelper <T> {
     public abstract T selectById(Short id);
 
     protected void prepareConnectionToDB() {
-        cleanStateOfHelper();
         dbutils.openConnection();
         em = dbutils.getEntityManager();
     }
@@ -29,12 +26,5 @@ public abstract class EntitiesHelper <T> {
     protected void closeConnectionToDB() {
         dbutils.closeConnection();
         em = null;
-        initialized = true;
-    }
-
-    private void cleanStateOfHelper(){
-        if(initialized){
-            initialized = false;
-        }
     }
 }

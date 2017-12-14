@@ -1,7 +1,7 @@
 package app.stats;
 
-import app.dataAccessObjects.CustomersDAO;
-import app.dataAccessObjects.ProductsDAO;
+import app.dao.CustomersDAO;
+import app.dao.ProductsDAO;
 import app.entities.Customer;
 import app.entities.Product;
 import app.utils.DatabaseUtils;
@@ -73,35 +73,34 @@ public class StatisticsGeneratorTests {
     }
 
     @Test
-    public void generateStatisticsTest() throws IOException {
+    public void testStatisticsGenerating() throws IOException, InterruptedException {
         StatisticsGenerator generator = new StatisticsGenerator(dbutils, customersDAO, productsDAO);
         generator.generate();
 
         verify(dbutils, times(3)).resetDatabaseToInitialState();
         verify(customersDAO, times(1)).readAll();
         verify(customersDAO, times(1)).readAllUsingNativeSql();
+        verify(customersDAO, times(customerList.size())).create(any());
         verify(customersDAO, times(customerList.size())).readById(anyShort());
         verify(customersDAO, times(customerList.size())).update(any(), anyShort());
         verify(customersDAO, times(customerList.size())).delete(anyShort());
 
+        verify(customersDAO, times(customerList.size())).createUsingNativeSql(any());
         verify(customersDAO, times(customerList.size())).readByIdUsingNativeSql(anyShort());
         verify(customersDAO, times(customerList.size())).updateUsingNativeSql(any(), anyShort());
         verify(customersDAO, times(customerList.size())).deleteUsingNativeSql(anyShort());
 
         verify(productsDAO, times(1)).readAll();
         verify(productsDAO, times(1)).readAllUsingNativeSql();
+        verify(productsDAO, times(productsList.size())).create(any());
         verify(productsDAO, times(productsList.size())).readById(anyShort());
         verify(productsDAO, times(productsList.size())).update(any(), anyShort());
         verify(productsDAO, times(productsList.size())).delete(anyShort());
 
+        verify(productsDAO, times(productsList.size())).createUsingNativeSql(any());
         verify(productsDAO, times(productsList.size())).readByIdUsingNativeSql(anyShort());
         verify(productsDAO, times(productsList.size())).updateUsingNativeSql(any(), anyShort());
         verify(productsDAO, times(productsList.size())).deleteUsingNativeSql(anyShort());
-
-        verify(cust1, times(6)).getCustomerId();
-        verify(cust2, times(6)).getCustomerId();
-        verify(prod1, times(6)).getProductId();
-        verify(prod2, times(6)).getProductId();
     }
 
 

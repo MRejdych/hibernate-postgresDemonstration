@@ -1,4 +1,4 @@
-package app.dataAccessObjects;
+package app.dao;
 
 import app.entities.Supplier;
 import app.utils.DatabaseUtils;

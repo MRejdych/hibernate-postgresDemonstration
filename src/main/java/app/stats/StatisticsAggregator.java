@@ -67,15 +67,34 @@ public class StatisticsAggregator {
         }
         else {
             Optional<Long> optionalResult = statistics.stream()
-                    .map(Statistics::getQueryToItsExecutionTimeMap)
-                    .map(Map::values)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList()).stream()
+                    .map(Statistics::getExecutionTime)
                     .reduce((a, b) -> a + b);
 
             long totalTime = optionalResult.orElse(0L);
 
             return totalTime / totalQueriesExecuted;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "StatisticsAggregator{" +
+                "totalCreateQueriesExecuted=" + totalCreateQueriesExecuted +
+                ", totalReadQueriesExecuted=" + totalReadQueriesExecuted +
+                ", totalUpdateQueriesExecuted=" + totalUpdateQueriesExecuted +
+                ", totalDeleteQueriesExecuted=" + totalDeleteQueriesExecuted +
+                ", avgCreateQueriesTime=" + avgCreateQueriesTime +
+                ", avgReadQueriesTime=" + avgReadQueriesTime +
+                ", avgUpdateQueriesTime=" + avgUpdateQueriesTime +
+                ", avgDeleteQueriesTime=" + avgDeleteQueriesTime +
+                ", totalNativeCreateQueriesExecuted=" + totalNativeCreateQueriesExecuted +
+                ", totalNativeReadQueriesExecuted=" + totalNativeReadQueriesExecuted +
+                ", totalNativeUpdateQueriesExecuted=" + totalNativeUpdateQueriesExecuted +
+                ", totalNativeDeleteQueriesExecuted=" + totalNativeDeleteQueriesExecuted +
+                ", avgNativeCreateQueriesTime=" + avgNativeCreateQueriesTime +
+                ", avgNativeReadQueriesTime=" + avgNativeReadQueriesTime +
+                ", avgNativeUpdateQueriesTime=" + avgNativeUpdateQueriesTime +
+                ", avgNativeDeleteQueriesTime=" + avgNativeDeleteQueriesTime +
+                '}';
     }
 }

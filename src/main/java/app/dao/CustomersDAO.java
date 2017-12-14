@@ -1,4 +1,4 @@
-package app.dataAccessObjects;
+package app.dao;
 
 import app.entities.Customer;
 import app.utils.DatabaseUtils;
@@ -15,6 +15,10 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
 
     public CustomersDAO(DatabaseUtils dbutils) {
         super(dbutils);
+    }
+
+    public CustomersDAO(DatabaseUtils dbutils, Boolean statisticsGenerationMode) {
+        super(dbutils, statisticsGenerationMode);
     }
 
 
@@ -57,7 +61,6 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
         executeQueryAndSaveStatistics(() -> {
             Customer c = em.find(Customer.class, customerId);
             if(c != null)  em.remove(c);
-            System.out.println(em.contains(c));
         }, DELETE);
     }
 
@@ -120,7 +123,6 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
                             "city = (?5), postal_code = (?6), country = (?7), region = (?8), phone = (?9), fax = (?10) " +
                             "WHERE customer_id = (?11);";
 
-            System.out.println("test" + updatedCustomer);
 
             Query nativeQuery = em.createNativeQuery(query, Customer.class);
             nativeQuery.setParameter(1, updatedCustomer.getCompanyName())

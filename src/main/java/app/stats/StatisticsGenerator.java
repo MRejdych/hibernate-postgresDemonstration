@@ -1,13 +1,12 @@
 package app.stats;
 
-import app.dataAccessObjects.CustomersDAO;
-import app.dataAccessObjects.ProductsDAO;
+import app.dao.CustomersDAO;
+import app.dao.ProductsDAO;
 import app.entities.Customer;
 import app.entities.Product;
-import app.springconfig.ApplicationConfiguration;
+import app.utils.CustomerBuilder;
 import app.utils.DatabaseUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import app.utils.ProductBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class StatisticsGenerator {
         initializeProductActions();
     }
 
-    public void generate() throws IOException {
+    public void generate() throws IOException, InterruptedException {
         resetDatabaseToInitialState();
         executeCrudOperationsOnEachCustomer();
         executeCrudOperationsOnEachProduct();
@@ -97,8 +96,9 @@ public class StatisticsGenerator {
                 .peek(c -> customersDAO.readById(c.getCustomerId()))
                 .map(c -> customerActions.get(random()).apply(c))
                 .peek(c -> customersDAO.update(c, c.getCustomerId()))
-                .forEach(c -> customersDAO.delete(c.getCustomerId()));
-
+                .peek(c -> customersDAO.delete(c.getCustomerId()))
+                .map(this::copyCustomer)
+                .forEach(customersDAO::create);
 
     }
 
@@ -109,7 +109,9 @@ public class StatisticsGenerator {
                 .peek(p -> productsDAO.readById(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))
                 .peek(p -> productsDAO.update(p, p.getProductId()))
-                .forEach(p -> productsDAO.delete(p.getProductId()));
+                .peek(p -> productsDAO.delete(p.getProductId()))
+                .map(this::copyProduct)
+                .forEach(productsDAO::create);
 
     }
 
@@ -120,8 +122,9 @@ public class StatisticsGenerator {
                 .peek(c -> customersDAO.readByIdUsingNativeSql(c.getCustomerId()))
                 .map(c -> customerActions.get(random()).apply(c))
                 .peek(c -> customersDAO.updateUsingNativeSql(c, c.getCustomerId()))
-                .forEach(c -> customersDAO.deleteUsingNativeSql(c.getCustomerId()));
-
+                .peek(c -> customersDAO.deleteUsingNativeSql(c.getCustomerId()))
+                .map(this::copyCustomer)
+                .forEach(customersDAO::createUsingNativeSql);
 
     }
 
@@ -132,12 +135,27 @@ public class StatisticsGenerator {
                 .peek(p -> productsDAO.readByIdUsingNativeSql(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))
                 .peek(p -> productsDAO.updateUsingNativeSql(p, p.getProductId()))
-                .forEach(p -> productsDAO.deleteUsingNativeSql(p.getProductId()));
+                .peek(p -> productsDAO.deleteUsingNativeSql(p.getProductId()))
+                .map(this::copyProduct)
+                .forEach(productsDAO::createUsingNativeSql);
 
     }
 
-    private void resetDatabaseToInitialState() throws IOException {
+    private void resetDatabaseToInitialState() throws IOException, InterruptedException {
         dbutils.resetDatabaseToInitialState();
+        Thread.sleep(100);
+    }
+
+    private Customer copyCustomer(Customer that){
+        Customer cust = new CustomerBuilder().withCompanyName("temp").build();
+        cust.copyStateOfAnotherCustomer(that);
+        return cust;
+    }
+
+    private Product copyProduct(Product that){
+        Product prod = new ProductBuilder().withProductName("temp").withDiscontinued(1).build();
+        prod.copyStateOfAnotherProduct(that);
+        return prod;
     }
 
 }

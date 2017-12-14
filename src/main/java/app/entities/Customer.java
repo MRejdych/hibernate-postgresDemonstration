@@ -21,7 +21,6 @@ public class Customer implements Serializable {
 
     public Customer(String companyName, String contactName, String contactTitle, Address address, String phone,
                     String region, String fax) {
-        // if (companyName == null) throw new IllegalArgumentException();
         this.companyName = companyName;
         this.contactName = contactName;
         this.contactTitle = contactTitle;

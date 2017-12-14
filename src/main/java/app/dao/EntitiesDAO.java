@@ -1,9 +1,10 @@
-package app.dataAccessObjects;
+package app.dao;
 
 import app.stats.StatisticType;
 import app.stats.Statistics;
 import app.stats.StatisticsKeeper;
 import app.utils.DatabaseUtils;
+import app.utils.Timer;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -13,9 +14,19 @@ import java.util.function.Supplier;
 public abstract class EntitiesDAO<T> {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
+    private Timer timer;
+    private Boolean statisticsGenerationMode;
 
     public EntitiesDAO(DatabaseUtils dbutils) {
+        this(dbutils, false);
+    }
+
+    public EntitiesDAO(DatabaseUtils dbutils, Boolean statisticsGenerationMode) {
         this.dbutils = dbutils;
+        this.statisticsGenerationMode = statisticsGenerationMode;
+        if(statisticsGenerationMode){
+            timer = new Timer();
+        }
     }
 
     //C R U D
@@ -43,12 +54,14 @@ public abstract class EntitiesDAO<T> {
     protected void executeQueryAndSaveStatistics(Runnable query, StatisticType statisticType) {
         try {
             prepareConnectionToDB();
+            startTimer();
             query.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
         finally {
-            appendStatistics(statisticType);
+            long duration = stopTimer();
+            appendStatistics(statisticType, duration);
             closeConnectionToDB();
         }
     }
@@ -56,31 +69,48 @@ public abstract class EntitiesDAO<T> {
     protected <V> V executeQueryAndSaveStatistics(Supplier<V> query, StatisticType statisticType) {
         try {
             prepareConnectionToDB();
+            startTimer();
             return query.get();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
         finally {
-            appendStatistics(statisticType);
+            long duration = stopTimer();
+            appendStatistics(statisticType, duration);
             closeConnectionToDB();
         }
     }
 
 
-    protected void prepareConnectionToDB() {
+    private void prepareConnectionToDB() {
         dbutils.openConnection();
         em = dbutils.getEntityManager();
     }
 
-    protected void closeConnectionToDB() {
+    private void closeConnectionToDB() {
         dbutils.closeConnection();
         em = null;
     }
 
+    private void startTimer(){
+        if(statisticsGenerationMode){
+            timer.startTimer();
+        }
+    }
 
-    private void appendStatistics(StatisticType statisticType){
-        org.hibernate.stat.Statistics stats = dbutils.getStatistics();
-        StatisticsKeeper.saveStatistics(new Statistics(stats), statisticType);
+    private long stopTimer(){
+        if(statisticsGenerationMode){
+            return timer.stopTimerAndGetQueryTimeInMiliseconds();
+        } else{
+            return 0L;
+        }
+    }
+
+    private void appendStatistics(StatisticType statisticType, long duration){
+        if(statisticsGenerationMode) {
+            org.hibernate.stat.Statistics stats = dbutils.getStatistics();
+            StatisticsKeeper.saveStatistics(new Statistics(stats, duration), statisticType);
+        }
     }
 }

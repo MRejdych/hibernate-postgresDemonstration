@@ -12,11 +12,7 @@ import java.util.Map;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class StatisticsAggregatorTest {
-    private final String TEST_QUERY_1 = "TEST_QUERY_1";
-    private final String TEST_QUERY_2 = "TEST_QUERY_2";
-    private final long QUERY_1_AVG_EXEC_TIME = 2L;
-    private final long QUERY_2_AVG_EXEC_TIME = 4L;
+public class StatisticsAggregatorTests {
     private final long TOTAL_EXEC_READ_QUERIES = 8L;
     private final long READ_QUERIES_AVG_TIME = 3L;
 
@@ -48,26 +44,19 @@ public class StatisticsAggregatorTest {
     }
 
     @Test
-    public void aggregatingTest(){
-        String[] queries = new String[2];
-        queries[0] = TEST_QUERY_1;
-        queries[1] = TEST_QUERY_2;
-        Map<String, Long> queryToTimeMap = new HashMap<>();
-        queryToTimeMap.put(TEST_QUERY_1, QUERY_1_AVG_EXEC_TIME);
-        queryToTimeMap.put(TEST_QUERY_2, QUERY_2_AVG_EXEC_TIME);
-
+    public void testAggregatingStatistics(){
         Statistics stats1 = mock(Statistics.class);
         Statistics stats2 = mock(Statistics.class);
         Statistics stats3 = mock(Statistics.class);
         Statistics stats4 = mock(Statistics.class);
         when(stats1.getNumberOfExecutedQueries()).thenReturn(2L);
-        when(stats1.getQueryToItsExecutionTimeMap()).thenReturn(queryToTimeMap);
+        when(stats1.getExecutionTime()).thenReturn(4L);
         when(stats2.getNumberOfExecutedQueries()).thenReturn(2L);
-        when(stats2.getQueryToItsExecutionTimeMap()).thenReturn(queryToTimeMap);
+        when(stats2.getExecutionTime()).thenReturn(8L);
         when(stats3.getNumberOfExecutedQueries()).thenReturn(2L);
-        when(stats3.getQueryToItsExecutionTimeMap()).thenReturn(queryToTimeMap);
+        when(stats3.getExecutionTime()).thenReturn(1L);
         when(stats4.getNumberOfExecutedQueries()).thenReturn(2L);
-        when(stats4.getQueryToItsExecutionTimeMap()).thenReturn(queryToTimeMap);
+        when(stats4.getExecutionTime()).thenReturn(11L);
 
         readStatsList.add(stats1);
         readStatsList.add(stats2);

@@ -30,8 +30,8 @@ public class Product implements Serializable {
     }
 
     @Id
-    @SequenceGenerator(name="pk_sequence",sequenceName="product_id_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+    @SequenceGenerator(name="pk_sequence",sequenceName="product_id_seq", allocationSize = 1)
     @Column(name = PRODUCT_ID, nullable = false)
     private Short productId;
 
@@ -156,7 +156,6 @@ public class Product implements Serializable {
     }
 
     public void setSupplier(Supplier supplier) {
-        System.out.println(supplier);
         this.supplier = supplier;
 
         if(supplier != null && !supplier.getProducts().contains(this)) supplier.addProduct(this);
