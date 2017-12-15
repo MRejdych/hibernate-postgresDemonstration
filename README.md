@@ -1,5 +1,7 @@
 ## Aplikacja ma na celu prezentację współpracy frameworka Hibernate oraz bazy danych PostgreSQL.
 
+Maszyna wirtualna:  https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8
+
 W celu uruchomienia aplikacji należy uruchomić skrypt createDemoDatabase.sh w katalogu postgres, który utworzy kontener 
 z wykorzystaniem Docker'a.  
 Następnie w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
@@ -7,7 +9,7 @@ Następnie w katalogu głównym projektu należy wywołać komendę ./gradlew ru
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
 stroną startową umożliwiającą interakcje z aplikacją. 
 
-## Przykłady wykorzystanie frameworka Hibernate:
+## Opis frameworka Hibernate i przykłady wykorzystania.
 
 ### Konfiguracja frameworka Hibernate z użyciem pliku persistence.xml w celu wykorzystania api JPA
 
