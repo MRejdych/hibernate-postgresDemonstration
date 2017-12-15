@@ -10,7 +10,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
-// create @Repository
 @SpringBootApplication
 public class AppEntry {
     public static void main(final String[] args) {
