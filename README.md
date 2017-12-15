@@ -2,7 +2,7 @@
 
 W celu uruchomienia aplikacji należy uruchomić skrypt createDemoDatabase.sh w katalogu postgres, który utworzy kontener 
 z wykorzystaniem Docker'a.  
-Następnie w katalogu głównym należy wywołać komendę ./gradlew run.  
+Następnie w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
   
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
 stroną startową umożliwiającą interakcje z aplikacją. 
@@ -97,18 +97,18 @@ class Customer implements Serializable {
 ```
 
 Adnotacja @Entity służy do poinformowania Hibernate, 
-że przeznaczeniem klasy jest prezentowanie danych znajdujących się w bazie danych.  
+że przeznaczeniem klasy jest odzwierciedlanie danych znajdujących się w bazie danych.  
 
 Adnotacja @Table służy do przemapowania nazwy klasy na nazwę tabeli w bazie danych. 
 W przypadku braku parametru "name" framework wykorzystuje nazwę klasy jako nazwę tabeli.  
 
 Istotną rzeczą wymaganą do poprawnego stworzenia klasy Entity jest zagwarantowanie 
-istnienia domyślnego,bezargumentowego konstruktora oraz pola oznaczonego adnotacją @Id.  
+istnienia domyślnego, bezargumentowego konstruktora oraz pola oznaczonego adnotacją @Id.  
 
 Zastosowanie adnotacji @Column jest podobne do adnotacji @Table, 
 z tą różnicą, że służy do mapowania pola klasy na kolumne tabeli. 
 
-Zaprezentowana powyżej klasa zostanie przemapowana do tabeli reprezentowaej 
+Zaprezentowana powyżej klasa zostanie przemapowana do tabeli reprezentowanej 
 przez poniższy kod:
 
 ```sql
