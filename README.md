@@ -1,10 +1,42 @@
+# hibernate-postgresDemonstration
+
 ## Aplikacja ma na celu prezentację współpracy frameworka Hibernate oraz bazy danych PostgreSQL.
 
-[Link do pobrania maszyny wirtualnej.](https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8)
+- [Uruchomienie maszyny wirtualnej.](#uruchomienie-maszyny-wirtualnej.)
+- [Konfiguracja frameworka Hibernate z użyciem pliku persistence.xml w celu wykorzystania api JPA.](#Konfiguracja-frameworka-Hibernate-z-użyciem-pliku-persistence.xml-w-celu-wykorzystania-api-JPA)
+- [Konfiguracja frameworka Hibernate z użyciem pliku hibernate.cfg.xml w celu wykorzystania api Hibernate.](#Konfiguracja-frameworka-Hibernate-z-użyciem-pliku-hibernate.cfg.xml-w-celu-wykorzystania-api-Hibernate)
+- [Tworzenie klasy Entity.](#Tworzenie-klasy-reprezentującej-rekord-w-tabeli-bazy-danych.)
+- [Mapowanie relacji typu wiele do jednego.](#Mapowanie-relacji-typu-wiele-do-jednego)
+- [Dwustronna relacja wiele do jednego.](#Dwustronna-relacja-wiele-do-jednego)
+- [Relacja jeden do jednego.](#Relacja-jeden-do-jednego)
+- [Relacja wiele do wielu.](#Relacja-wiele-do-wielu)
 
-W celu uruchomienia aplikacji należy uruchomić skrypt createDemoDatabase.sh w katalogu postgres, który utworzy kontener 
-z wykorzystaniem Docker'a.  
-Następnie w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
+### Uruchomienie maszyny wirtualnej.
+
+[Link do pobrania maszyny wirtualnej.](https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8)  
+
+Login użytkownika maszyny wirtualnej: user  
+Hasło: user  
+
+Użytkownik postgreSQL: postgres  
+Hasło: postgres  
+
+Żródła projektu znajdują się na pulpicie w katalogu hibernate-postgresDemontration.  
+
+![sources](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/src.png)  
+
+Na maszynie zainstalowano lekkie i poręczne IDE Visual Studio Code. To IDE nie jest najlepszym wyborem 
+do pisania kodu w Javie, natomiast jest bardzo dobrze nadaje się do przeglądania istniejącego kodu.  
+
+![ide](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/vscode.png)  
+
+W celu uruchomienia kontenera z przygotowaną bazą danych PostgreSql należy uruchomić skrypt 
+createDemoDatabase.sh w katalogu postgres, który utworzy kontener z wykorzystaniem Docker'a.  
+Jeżeli polecenie sudo docker ps pokaże aktywny kontener "postgres" ten krok można pominąć.  
+
+![docker](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/dockerps.png)  
+
+Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
   
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
 stroną startową umożliwiającą interakcje z aplikacją. 
@@ -69,7 +101,7 @@ stroną startową umożliwiającą interakcje z aplikacją.
 
 ```
 
-### Tworzenie klasy, której obiekt reprezentuje rekord w tabeli bazy danych:
+### Tworzenie klasy reprezentującej rekord w tabeli bazy danych.
 
 ```java
 @Entity
