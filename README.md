@@ -2,14 +2,14 @@
 
 ## Aplikacja ma na celu prezentację współpracy frameworka Hibernate oraz bazy danych PostgreSQL.
 
-- [Uruchomienie maszyny wirtualnej.](#uruchomienie-maszyny-wirtualnej.)
-- [Konfiguracja frameworka Hibernate z użyciem pliku persistence.xml w celu wykorzystania api JPA.](#Konfiguracja-frameworka-Hibernate-z-użyciem-pliku-persistence.xml-w-celu-wykorzystania-api-JPA)
-- [Konfiguracja frameworka Hibernate z użyciem pliku hibernate.cfg.xml w celu wykorzystania api Hibernate.](#Konfiguracja-frameworka-Hibernate-z-użyciem-pliku-hibernate.cfg.xml-w-celu-wykorzystania-api-Hibernate)
-- [Tworzenie klasy Entity.](#Tworzenie-klasy-reprezentującej-rekord-w-tabeli-bazy-danych.)
-- [Mapowanie relacji typu wiele do jednego.](#Mapowanie-relacji-typu-wiele-do-jednego)
-- [Dwustronna relacja wiele do jednego.](#Dwustronna-relacja-wiele-do-jednego)
-- [Relacja jeden do jednego.](#Relacja-jeden-do-jednego)
-- [Relacja wiele do wielu.](#Relacja-wiele-do-wielu)
+- [Uruchomienie maszyny wirtualnej.](#uruchomienie-maszyny-wirtualnej)
+- [Konfiguracja frameworka Hibernate z użyciem pliku persistence.xml w celu wykorzystania api JPA.](#konfiguracja-frameworka-hibernate-z-użyciem-pliku-persistence-xml-w-celu-wykorzystania-api-jpa)
+- [Konfiguracja frameworka Hibernate z użyciem pliku hibernate.cfg.xml w celu wykorzystania api Hibernate.](#konfiguracja-frameworka-hibernate-z-użyciem-pliku-hibernate-cfg-xml-w-celu-wykorzystania-api-hibernate)
+- [Tworzenie klasy Entity.](#tworzenie-klasy-reprezentującej-rekord-w-tabeli-bazy-danych)
+- [Mapowanie relacji typu wiele do jednego.](#mapowanie-relacji-typu-wiele-do-jednego)
+- [Dwustronna relacja wiele do jednego.](#dwustronna-relacja-wiele-do-jednego)
+- [Relacja jeden do jednego.](#relacja-jeden-do-jednego)
+- [Relacja wiele do wielu.](#relacja-wiele-do-wielu)
 
 ### Uruchomienie maszyny wirtualnej.
 
@@ -26,7 +26,7 @@ Hasło: postgres
 ![sources](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/src.png)  
 
 Na maszynie zainstalowano lekkie i poręczne IDE Visual Studio Code. To IDE nie jest najlepszym wyborem 
-do pisania kodu w Javie, natomiast jest bardzo dobrze nadaje się do przeglądania istniejącego kodu.  
+do pisania kodu w Javie, natomiast bardzo dobrze nadaje się do przeglądania istniejącego kodu.  
 
 ![ide](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/vscode.png)  
 
@@ -43,7 +43,7 @@ stroną startową umożliwiającą interakcje z aplikacją.
 
 ## Opis frameworka Hibernate i przykłady wykorzystania.
 
-### Konfiguracja frameworka Hibernate z użyciem pliku persistence.xml w celu wykorzystania api JPA
+### Konfiguracja frameworka Hibernate z użyciem pliku persistence xml w celu wykorzystania api JPA
 
 ```xml
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
@@ -75,7 +75,7 @@ stroną startową umożliwiającą interakcje z aplikacją.
 
 ```
 
-### Konfiguracja frameworka Hibernate z użyciem pliku hibernate.cfg.xml w celu wykorzystania api Hibernate
+### Konfiguracja frameworka Hibernate z użyciem pliku hibernate cfg xml w celu wykorzystania api Hibernate
 
 ```xml
 <hibernate-configuration>
