@@ -1,6 +1,6 @@
 ## Aplikacja ma na celu prezentację współpracy frameworka Hibernate oraz bazy danych PostgreSQL.
 
-Maszyna wirtualna:  https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8
+[Link do pobrania maszyny wirtualnej.](https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8)
 
 W celu uruchomienia aplikacji należy uruchomić skrypt createDemoDatabase.sh w katalogu postgres, który utworzy kontener 
 z wykorzystaniem Docker'a.  
