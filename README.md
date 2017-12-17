@@ -14,10 +14,7 @@
 - [Pobieranie obiektu Entity poprzez api JPA.](#wczytywanie-obiektu-z-bazy-danych-poprzez-api-jpa)
 - [Aktualizowanie obiektu Entity poprzez api JPA.](#aktualizowanie-obiektu-entity-poprzez-api-jpa)
 - [Usuwanie obiektu Entity poprzez api JPA.](#usuwanie-obiektu-entity-poprzez-api-jpa)
-- [Dodawanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#zapis-obiektu-do-bazy-danych-poprzez-api-jpa-z-użyciem-języka-jpql)
-- [Pobieranie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#wczytywanie-obiektu-z-bazy-danych-poprzez-api-jpa-z-użyciem-języka-jpql)
-- [Aktualizowanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#aktualizowanie-obiektu-entity-poprzez-api-jpa-z-użyciem-języka-jpql)
-- [Usuwanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#usuwanie-obiektu-entity-poprzez-api-jpa-z-użyciem-języka-jpql)
+- [Wykonywanie operacji na bazie danych z użyciem języka JPQL.](#wykonywanie-operacji-na-bazie-danych-z-użyciem-języka-jpql)
 - [Wykonywanie operacji na bazie danych z użyciem natywnego języka SQL.](#wykonywanie-operacji-na-bazie-danych-z-użyciem-natywnego-języka-sql)
 - [Linki do dodatkowych tutoriali.](#linki-do-dodatkowych-tutoriali)
 
@@ -32,7 +29,7 @@ Hasło: user
 Użytkownik postgreSQL: postgres  
 Hasło: postgres  
 
-Żródła projektu znajdują się na pulpicie w katalogu hibernate-postgresDemontration.  
+Żródła projektu znajdują się na pulpicie w katalogu hibernate-postgresDemonstration.  
 
 ![sources](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/src.png)  
 
@@ -41,7 +38,7 @@ do pisania kodu w Javie, natomiast bardzo dobrze nadaje się do przeglądania i
 
 ![ide](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/vscode.png)  
 
-W celu uruchomienia kontenera z przygotowaną bazą danych PostgreSql należy uruchomić skrypt 
+W celu uruchomienia kontenera z przygotowaną bazą danych PostgreSQL należy uruchomić skrypt 
 createDemoDatabase.sh w katalogu postgres, który utworzy kontener z wykorzystaniem Docker'a.  
 Jeżeli polecenie sudo docker ps pokaże aktywny kontener "postgres" ten krok można pominąć.  
 
@@ -450,10 +447,51 @@ em.close();
 ```
 
 ### Zapis obiektu do bazy danych poprzez api JPA z użyciem języka JPQL.
-### Wczytywanie obiektu z bazy danych poprzez api JPA z użyciem języka JPQL.
-### Aktualizowanie obiektu Entity poprzez api JPA z użyciem języka JPQL.
-### Usuwanie obiektu Entity poprzez api JPA z użyciem języka JPQL.
+
+[Dokumentacja języka JPQL](https://docs.oracle.com/html/E13946_01/ejb3_langref.html)  
+[Dokumentacja interfejsu TypedQuery<X>](https://docs.oracle.com/javaee/7/api/javax/persistence/TypedQuery.html)  
+
+W celu wykonania zapytania w języku JPQL należy uzyskać obiekt typu TypedQuery wywołując metodę obiektu 
+EntityManager "createQuery(String query)" podając jako argument pożądane zapytanie.  
+Następnie należy wywołać na uzyskanym obiekcie jedną z metod interfejsu TypedQuery w zależności 
+od rodzaju zapytania.  
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+TypedQuery<Customer> jpqlQuery = em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", Customer.class);
+List<Customer> customersList = jpqlQuery.getResultList();
+
+em.getTransaction().commit();
+em.close();
+```
+
 ### Wykonywanie operacji na bazie danych z użyciem natywnego języka SQL.
+
+[Dokumentacja PostgreSQL](https://www.postgresql.org/docs/9.5/static/index.html)  
+[Dokumentacja interfejsu Query](https://docs.oracle.com/javaee/7/api/javax/persistence/Query.html)  
+
+W celu wykonania natywnego zapytania SQL należy uzyskać obiekt typu Query wywołując metodę obiektu 
+EntityManager "createNativeQuery(String query)" podając jako argument pożądane zapytanie.  
+Następnie należy wywołać na uzyskanym obiekcie jedną z metod interfejsu Query w zależności 
+od rodzaju zapytania.  
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+Query sqlQuery = em.createNativeQuery("Select * From customers ORDER BY customer_id", Customer.class);
+
+List<Customer> customersList = (List<Customer>) sqlQuery.getResultList();
+
+em.getTransaction().commit();
+em.close();
+```
 
 ### Linki do dodatkowych tutoriali.
 [Docker](http://training.play-with-docker.com/)  
