@@ -462,7 +462,8 @@ EntityManager em = dbutils.getEntityManager();
 
 em.getTransaction().begin();
 
-TypedQuery<Customer> jpqlQuery = em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", Customer.class);
+TypedQuery<Customer> jpqlQuery = 
+                    em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", Customer.class);
 List<Customer> customersList = jpqlQuery.getResultList();
 
 em.getTransaction().commit();
