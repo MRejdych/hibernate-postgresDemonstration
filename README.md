@@ -446,7 +446,7 @@ em.getTransaction().commit();
 em.close();
 ```
 
-### Zapis obiektu do bazy danych poprzez api JPA z użyciem języka JPQL.
+### Wykonywanie operacji na bazie danych z użyciem języka JPQL.
 
 [Dokumentacja języka JPQL](https://docs.oracle.com/html/E13946_01/ejb3_langref.html)  
 [Dokumentacja interfejsu TypedQuery<X>](https://docs.oracle.com/javaee/7/api/javax/persistence/TypedQuery.html)  
