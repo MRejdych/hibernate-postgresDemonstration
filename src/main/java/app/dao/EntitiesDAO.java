@@ -93,21 +93,21 @@ public abstract class EntitiesDAO<T> {
         em = null;
     }
 
-    private void startTimer(){
-        if(statisticsGenerationMode){
+    private void startTimer() {
+        if(statisticsGenerationMode) {
             timer.startTimer();
         }
     }
 
-    private long stopTimer(){
-        if(statisticsGenerationMode){
+    private long stopTimer() {
+        if(statisticsGenerationMode) {
             return timer.stopTimerAndGetQueryTimeInMiliseconds();
-        } else{
+        } else {
             return 0L;
         }
     }
 
-    private void appendStatistics(StatisticType statisticType, long duration){
+    private void appendStatistics(StatisticType statisticType, long duration) {
         if(statisticsGenerationMode) {
             org.hibernate.stat.Statistics stats = dbutils.getStatistics();
             StatisticsKeeper.saveStatistics(new Statistics(stats, duration), statisticType);

@@ -45,8 +45,12 @@ zaktualizowania bazy danych ten krok można pominąć.
 
 ![docker](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/dockerps.png)  
 
-Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę <b>./gradlew run.</b>  
-  
+Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę <b>./gradlew run</b>  
+W przypadku wystąpienia problemów z odmową dostępu do plików powyższą komendę należy zastąpić komendą <b>sudo ./gradlew run</b>    
+
+![gradlewrun](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/gradlewrun.png)  
+
+
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
 stroną startową umożliwiającą interakcje z aplikacją.  
 
