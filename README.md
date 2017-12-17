@@ -10,10 +10,21 @@
 - [Dwustronna relacja wiele do jednego.](#dwustronna-relacja-wiele-do-jednego)
 - [Relacja jeden do jednego.](#relacja-jeden-do-jednego)
 - [Relacja wiele do wielu.](#relacja-wiele-do-wielu)
+- [Dodawanie obiektu Entity poprzez api JPA.](#zapis-obiektu-do-bazy-danych-poprzez-api-jpa)
+- [Pobieranie obiektu Entity poprzez api JPA.](#wczytywanie-obiektu-z-bazy-danych-poprzez-api-jpa)
+- [Aktualizowanie obiektu Entity poprzez api JPA.](#aktualizowanie-obiektu-entity-poprzez-api-jpa)
+- [Usuwanie obiektu Entity poprzez api JPA.](#usuwanie-obiektu-entity-poprzez-api-jpa)
+- [Dodawanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#zapis-obiektu-do-bazy-danych-poprzez-api-jpa-z-użyciem-języka-jpql)
+- [Pobieranie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#wczytywanie-obiektu-z-bazy-danych-poprzez-api-jpa-z-użyciem-języka-jpql)
+- [Aktualizowanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#aktualizowanie-obiektu-entity-poprzez-api-jpa-z-użyciem-języka-jpql)
+- [Usuwanie obiektu Entity poprzez api JPA z użyciem języka JPQL.](#usuwanie-obiektu-entity-poprzez-api-jpa-z-użyciem-języka-jpql)
+- [Wykonywanie operacji na bazie danych z użyciem natywnego języka SQL.](#wykonywanie-operacji-na-bazie-danych-z-użyciem-natywnego-języka-sql)
+- [Linki do dodatkowych tutoriali.](#linki-do-dodatkowych-tutoriali)
+
 
 ### Uruchomienie maszyny wirtualnej.
 
-[Link do pobrania maszyny wirtualnej.](https://drive.google.com/open?id=0B34zDl4oehXuTjY1V0RRQ3lRbW8)  
+[Link do pobrania maszyny wirtualnej.](https://drive.google.com/file/d/1p-qOe4X9nEZTBtCIoQ8BsU3Ubrf5cu6C/view?usp=sharing)  
 
 Login użytkownika maszyny wirtualnej: user  
 Hasło: user  
@@ -42,7 +53,7 @@ Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona prze
 stroną startową umożliwiającą interakcje z aplikacją.  
 
 Zainstalowany klient bazy danych PostgreSQL służący do zarządzania i przeglądania danych to 
-aplikacja działająca w terminalu o naziwe PSQL.  
+aplikacja działająca w terminalu o nazwie PSQL.  
 
 W celu jej uruchomienia należy:  
 Wywołać komendę sudo docker -it postgres bash w celu "wejścia" do kontenera z bazą danych.  
@@ -55,6 +66,8 @@ Wywołać komendę \c demodb w celu przełączenia się na bazę danych "demodb
 ## Opis frameworka Hibernate i przykłady wykorzystania.
 
 ### Konfiguracja frameworka Hibernate z użyciem pliku persistence xml w celu wykorzystania api JPA
+
+[Dokumentacja pliku persistence.xml](https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm)
 
 ```xml
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
@@ -87,6 +100,8 @@ Wywołać komendę \c demodb w celu przełączenia się na bazę danych "demodb
 ```
 
 ### Konfiguracja frameworka Hibernate z użyciem pliku hibernate cfg xml w celu wykorzystania api Hibernate
+
+[Dokumentacja pliku hibernate.cfg.xml](https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/session-configuration.html)
 
 ```xml
 <hibernate-configuration>
@@ -250,4 +265,199 @@ Parametr joinColumns wskazuje kolumne z kluczem głównym tabeli, natomiast para
  wskazuje kolumne z kluczem obcym wskazującym na klucz główny przeciwległej tabeli.  
  
 Tabela łącznikowa nie musi być mapowana przez klasę z adnotacją @Entity ponieważ framework 
-Hibernate automatycznie utworzy lub wykorzysta tabele o nazwie przypisanej do parametru name.  
+Hibernate automatycznie utworzy lub wykorzysta tabele o nazwie przypisanej do parametru name.
+
+
+### Uzyskiwanie obiektu EntityManager służącego do wykonywania operacji na obiektach Entity.
+
+W celu utworzenia obiektu EntityManagerFactory należy wywołać następującą metodę:  
+emf = Persistence.createEntityManagerFactory("entityManager");  
+Jej argument to nazwa persistence-unit podane w pliku persistence.xml.  
+Podczas działania aplikacji powinien zostać utworzony tylko jeden obiekt EntityManagerFactory.  
+W celu uzyskania obiektu EntityManager należy wywołać metodę entityManagerFactory.getEntityManager().  
+
+[Dokumentacja interfejsu EntityManager](https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManager.html)  
+[Dokumentacja interfejsu EntityManagerFactory](https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManagerFactory.html)
+
+
+```java
+public class DatabaseUtils {
+    private static EntityManagerFactory emf;
+    private EntityManager em;
+
+    public DatabaseUtils() {
+        if(emf == null){
+            emf = Persistence.createEntityManagerFactory("entityManager");
+        }
+    }
+    
+    public EntityManager getEntityManager() {
+        if (emf != null){
+            return emf.createEntityManager();
+        }
+        else return null;
+    }
+    
+    public EntityManager getEntityManager(){
+        if(emf != null){
+            return emf.createEntityManager();
+        } else return null;
+    }
+}
+```
+
+### Rozpoczynanie transakcji.
+
+W celu rozpoczęcia transakcji należy wywołać metodę obiektu klasy EntityManager o nazwie getTransaction(),  
+następnie na uzyskanym obiekcie należy wywołać metodę begin().  
+
+```java
+public class DatabaseUtils {
+    private static EntityManagerFactory emf;
+    private EntityManager em;
+
+    public DatabaseUtils() {
+        if(emf == null){
+            emf = Persistence.createEntityManagerFactory("entityManager");
+        }
+    }
+    
+    public void openConnection() {
+        if (emf != null) {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+        } 
+    }
+}
+```
+
+
+### Zatwierdzanie transakcji oraz zamknięcie obiektu EntityManager.
+
+Po zakończeniu operacji należy wywołać metodę obiektu transakcji "commit()". Jeżeli planowane są 
+kolejne operacje na bazie danych należy rozpocząć następną transakcje, w przeciwnym wypadku należy 
+zamknąć obiekt typu EntityManager wywołując na nim metodę close().  
+
+
+```java
+public class DatabaseUtils {
+    private static EntityManagerFactory emf;
+    private EntityManager em;
+
+    public DatabaseUtils() {
+        if(emf == null){
+            emf = Persistence.createEntityManagerFactory("entityManager");
+        }
+    }
+    
+    public void openConnection() {
+            if (emf != null) {
+                em = emf.createEntityManager();
+                em.getTransaction().begin();
+            }
+        }
+        
+    public void closeConnection() {
+        if (connOpened) {
+            em.getTransaction().commit();
+            em.close();
+        }
+    }
+}
+```
+
+### Zapis obiektu do bazy danych poprzez api JPA.
+
+W celu zapisu obiektu Entity do bazy danych wystarczy wywołać metodę obiektu klasy EntityManager o 
+nazwie "persist(Object object)" podając jako jej argument obiekt, który chcemy zapisać.  
+Przed wywołaniem metody należy otworzyć transakcję, po zakończeniu wszystkich operacji należy ją 
+zatwierdzić i zamknąć obiekt EntityManager.  
+
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+Customer customer = new Customer("Company name", "Contact name");
+
+em.persist(customer);
+
+em.getTransaction().commit();
+em.close();
+```
+
+### Wczytywanie obiektu z bazy danych poprzez api JPA.
+
+W celu pobrania obiektu Entity o określonym id z bazy danych wystarczy wywołać metodę obiektu klasy EntityManager o 
+nazwie "find(Class<T> entityClass, Object entityId)" podając jako jej argumenty klasę obiektu oraz jego id.    
+Przed wywołaniem metody należy otworzyć transakcję, po zakończeniu wszystkich operacji należy ją 
+zatwierdzić i zamknąć obiekt EntityManager.  
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+Short customerId = 1;
+Customer customer = em.find(Customer.class, customerId);
+
+em.getTransaction().commit();
+em.close();
+```
+
+### Aktualizowanie obiektu Entity poprzez api JPA.
+
+W celu zapisania zaktualizowanego obiektu Entity do bazy danych wystarczy zmienić stan obiektu 
+Entity i  po zakończeniu wszystkich operacji zatwierdzić transakcję i zamknąć obiekt EntityManager.  
+Hibernate automatycznie wykryje zmiany i zapisze nowy stan obiektu w dogodnym dla siebie momencie.  
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+Short customerId = 1;
+Customer customer = em.find(Customer.class, customerId);
+customer.setCompanyName("Different company name");
+
+em.getTransaction().commit();
+em.close();
+```
+
+### Usuwanie obiektu Entity poprzez api JPA.
+
+W celu usunięcia obiektu Entity z bazy danych wystarczy wywołać metodę obiektu klasy EntityManager o 
+nazwie "remove(Object entity)" podając jako jej argument obiekt, który chcemy usunąć.    
+Przed wywołaniem metody należy otworzyć transakcję, po zakończeniu wszystkich operacji należy ją 
+zatwierdzić i zamknąć obiekt EntityManager.  
+
+```java
+DatabaseUtils dbutils = new DatabaseUtils();
+EntityManager em = dbutils.getEntityManager();
+
+em.getTransaction().begin();
+
+Short customerId = 1;
+Customer customer = em.find(Customer.class, customerId);
+em.remove(customer);
+
+em.getTransaction().commit();
+em.close();
+```
+
+### Zapis obiektu do bazy danych poprzez api JPA z użyciem języka JPQL.
+### Wczytywanie obiektu z bazy danych poprzez api JPA z użyciem języka JPQL.
+### Aktualizowanie obiektu Entity poprzez api JPA z użyciem języka JPQL.
+### Usuwanie obiektu Entity poprzez api JPA z użyciem języka JPQL.
+### Wykonywanie operacji na bazie danych z użyciem natywnego języka SQL.
+
+### Linki do dodatkowych tutoriali.
+[Docker](http://training.play-with-docker.com/)  
+[Spring MVC](https://spring.io/guides/gs/serving-web-content/)  
+[Spring Boot](https://spring.io/guides/gs/spring-boot/)  
+[Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html)  
+[Github flavored Markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
