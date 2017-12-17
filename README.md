@@ -39,7 +39,18 @@ Jeżeli polecenie sudo docker ps pokaże aktywny kontener "postgres" ten krok mo
 Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
   
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
-stroną startową umożliwiającą interakcje z aplikacją. 
+stroną startową umożliwiającą interakcje z aplikacją.  
+
+Zainstalowany klient bazy danych PostgreSQL służący do zarządzania i przeglądania danych to 
+aplikacja działająca w terminalu o naziwe PSQL.  
+
+W celu jej uruchomienia należy:  
+Wywołać komendę sudo docker -it postgres bash w celu "wejścia" do kontenera z bazą danych.  
+Wywołać komendę psql.  
+Wywołać komendę \c demodb w celu przełączenia się na bazę danych "demodb".  
+
+![[psql]](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/psql.png)
+ 
 
 ## Opis frameworka Hibernate i przykłady wykorzystania.
 
