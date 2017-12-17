@@ -40,11 +40,12 @@ do pisania kodu w Javie, natomiast bardzo dobrze nadaje się do przeglądania i
 
 W celu uruchomienia kontenera z przygotowaną bazą danych PostgreSQL należy uruchomić skrypt 
 createDemoDatabase.sh w katalogu postgres, który utworzy kontener z wykorzystaniem Docker'a.  
-Jeżeli polecenie sudo docker ps pokaże aktywny kontener "postgres" ten krok można pominąć.  
+Jeżeli polecenie sudo docker ps pokaże aktywny kontener "postgres" i nie ma konieczności 
+zaktualizowania bazy danych ten krok można pominąć.  
 
 ![docker](https://github.com/MRejdych/hibernate-postgresDemonstration/blob/master/img/dockerps.png)  
 
-Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę ./gradlew run.  
+Następnie w celu uruchomienia aplikacji w katalogu głównym projektu należy wywołać komendę <b>./gradlew run.</b>  
   
 Po poprawnym zainicjalizowaniu aplikacji automatycznie zostanie uruchomiona przeglądarka internetowa z otwartą 
 stroną startową umożliwiającą interakcje z aplikacją.  
@@ -206,9 +207,12 @@ Parametr fetch określa, czy kolekcja ma być pobrana w trybie natychmiastowym(E
 leniwym (LAZY, domyślna wartość).
   
 Parametr cascade określa, jakie operacje wykonane na obiekcie category mają być 
-wykonywane kaskadowo na zależnych obiektach customer  
+wykonywane kaskadowo na zależnych obiektach customer.  
+Dopuszczalne wartości parametrów to zbiór poniższych elementów wyliczeniowych klasy CascadeType.  
 ( ALL | ALL_DELETE_ORPHAN | DELETE | DELETE_ORPHAN | EVICT | LOCK | MERGE | NONE | 
-PERSIST | REFRESH | REPLICATE | UPDATE )
+PERSIST | REFRESH | REPLICATE | UPDATE )  
+
+[Link do dokumentacji klasy CascadeType](https://docs.jboss.org/hibernate/orm/4.3/javadocs/org/hibernate/metamodel/binding/CascadeType.html)
 
 
 ### Relacja jeden do jednego
