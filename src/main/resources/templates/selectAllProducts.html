@@ -24,6 +24,8 @@
             <th>Nazwa productu:</th>
             <th>Cena jednostkowa:</th>
             <th>Ilość na stanie:</th>
+            <th>Kategoria:</th>
+            <th>Dostawca:</th>
             <th>Szczegóły</th>
             <th>Usuń</th>
         </tr>
@@ -35,6 +37,8 @@
                 <td th:text="${product.productName}"></td>
                 <td th:text="${product.unitPrice}"></td>
                 <td th:text="${product.unitsInStock}"></td>
+                <td th:text="${product.category.categoryName}"></td>
+                <td th:text="${product.supplier.companyName}"></td>
                 <td>
                     <form method="POST" th:action="@{/products/selectProduct}">
                         <input type="hidden" name="productId" id="productId" th:value="${product.productId}"/>
