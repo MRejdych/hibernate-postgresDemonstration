@@ -5481,7 +5481,7 @@ ALTER TABLE ONLY territories
 
 
 ALTER TABLE ONLY orders
-  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE CASCADE;
+  ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers ON DELETE RESTRICT;
 
 
 ALTER TABLE ONLY orders
@@ -5493,7 +5493,7 @@ ALTER TABLE ONLY orders
 
 
 ALTER TABLE ONLY order_details
-  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products ON DELETE CASCADE;
+  ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES products ON DELETE RESTRICT;
 
 
 ALTER TABLE ONLY order_details
@@ -5521,7 +5521,7 @@ ALTER TABLE ONLY employee_territories
 
 
 ALTER TABLE ONLY customer_customer_demographics
-  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics;
+  ADD CONSTRAINT fk_customercustomerdemo_customerdemographics FOREIGN KEY (customer_type_id) REFERENCES customer_demographics ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY customer_customer_demographics
