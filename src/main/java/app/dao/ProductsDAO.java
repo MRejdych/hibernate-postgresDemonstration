@@ -60,7 +60,7 @@ public class ProductsDAO extends EntitiesDAO<Product> {
     public void delete(short productId) {
         executeQueryAndSaveStatistics(() -> {
 
-            TypedQuery<Product> generatedQuery = em.createQuery("DELETE FROM Product pr WHERE pr.productId = ?1", Product.class);
+            Query generatedQuery = em.createQuery("DELETE FROM Product pr WHERE pr.productId = ?1");
             generatedQuery.setParameter(1, productId);
 
             generatedQuery.executeUpdate();

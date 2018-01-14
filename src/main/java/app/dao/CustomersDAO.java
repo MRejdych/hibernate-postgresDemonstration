@@ -64,7 +64,7 @@ public class CustomersDAO extends EntitiesDAO<Customer> {
     @Override
     public void delete(short customerId){
         executeQueryAndSaveStatistics(() -> {
-            TypedQuery<Customer> generatedQuery = em.createQuery("DELETE FROM Customer c WHERE c.customerId = ?1", Customer.class);
+            Query generatedQuery = em.createQuery("DELETE FROM Customer c WHERE c.customerId = ?1");
             generatedQuery.setParameter(1, customerId);
             generatedQuery.executeUpdate();
         }, DELETE);
