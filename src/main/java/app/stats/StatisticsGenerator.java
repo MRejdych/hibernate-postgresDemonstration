@@ -109,7 +109,7 @@ public class StatisticsGenerator {
                 .peek(p -> productsDAO.readById(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))
                 .peek(p -> productsDAO.update(p, p.getProductId()))
-                .peek(p -> productsDAO.delete(p.getProductId()))
+                //.peek(p -> productsDAO.delete(p.getProductId()))
                 .map(this::copyProduct)
                 .forEach(productsDAO::create);
 
@@ -135,7 +135,7 @@ public class StatisticsGenerator {
                 .peek(p -> productsDAO.readByIdUsingNativeSql(p.getProductId()))
                 .map(p -> productActions.get(random()).apply(p))
                 .peek(p -> productsDAO.updateUsingNativeSql(p, p.getProductId()))
-                .peek(p -> productsDAO.deleteUsingNativeSql(p.getProductId()))
+                //.peek(p -> productsDAO.deleteUsingNativeSql(p.getProductId()))
                 .map(this::copyProduct)
                 .forEach(productsDAO::createUsingNativeSql);
 

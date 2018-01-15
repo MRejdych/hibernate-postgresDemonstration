@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class EntitiesDAO<T> {
+public abstract class EntitiesDAO<T> implements DAO<T>, NativeSqlDAO<T> {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
     private Timer timer;
@@ -28,27 +28,6 @@ public abstract class EntitiesDAO<T> {
             timer = new Timer();
         }
     }
-
-    //C R U D
-    public abstract void create(T entity);
-
-    public abstract void createUsingNativeSql(T entity);
-
-    public abstract List<T> readAll();
-
-    public abstract List<T> readAllUsingNativeSql();
-
-    public abstract T readById(short id);
-
-    public abstract T readByIdUsingNativeSql(short id);
-
-    public abstract void update(T updatedEntity, short id);
-
-    public abstract void updateUsingNativeSql(T updatedEntity, short id);
-
-    public abstract void delete(short id);
-
-    public abstract void deleteUsingNativeSql(short id);
 
 
     protected void executeQueryAndSaveStatistics(Runnable query, StatisticType statisticType) {

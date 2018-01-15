@@ -11,7 +11,7 @@
 
 
         <property name="generate_statistics">true</property>
-        <property name="hibernate.show_sql">false</property> <!-- Show SQL in console -->
+        <property name="hibernate.show_sql">true</property> <!-- Show SQL in console -->
         <property name="hibernate.format_sql">true</property> <!-- Show SQL formatted -->
         <property name="hibernate.use_sql_comments">true</property>
         <property name="connection.pool_size">5</property>
