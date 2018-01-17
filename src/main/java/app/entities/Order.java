@@ -1,5 +1,6 @@
 package app.entities;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -8,13 +9,14 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
 
-    protected Order() {
+    public Order() {
     }
 
     public Order(Customer customer, Employee employee, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate,
@@ -35,11 +37,11 @@ public class Order implements Serializable {
     @Column(name = "order_id", nullable = false)
     private Short orderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     private Employee employee;
 
@@ -52,7 +54,7 @@ public class Order implements Serializable {
     @Column(name = "shipped_date")
     private LocalDate shippedDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "ship_via", referencedColumnName = "shipper_id")
     private Shipper shipVia;
 
@@ -73,7 +75,7 @@ public class Order implements Serializable {
     @Column(name = "ship_region", length = 15)
     private String shipRegion;
 
-    @OneToMany(mappedBy = "order" , fetch = LAZY , cascade = ALL)
+    @OneToMany(mappedBy = "order" , fetch = EAGER , cascade = ALL)
     protected List<OrderDetails> orderDetails = new ArrayList<>();
 
     public List<OrderDetails> getOrderDetails() {

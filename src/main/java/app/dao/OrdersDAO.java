@@ -23,7 +23,7 @@ public class OrdersDAO {
         closeConnectionToDB();
     }
 
-    public List<Order> selectFromDatePeriod(LocalDate from, LocalDate to){
+    public List<Order> selectById(short orderId) {
         prepareConnectionToDB();
 
         TypedQuery<Order> generatedQuery = em.createQuery(
@@ -32,7 +32,34 @@ public class OrdersDAO {
                         "JOIN FETCH o.customer " +
                         "JOIN FETCH o.employee " +
                         "JOIN FETCH o.shipVia " +
-                        "JOIN FETCH o.orderDetails od " +
+                        "WHERE o.orderId = ?1 ",
+                Order.class);
+
+        generatedQuery.setParameter(1, orderId);
+
+
+
+        List<Order> orders = generatedQuery.getResultList();
+
+
+
+        closeConnectionToDB();
+        return orders;
+    }
+
+
+    public List<Order> selectFromDatePeriod(LocalDate from, LocalDate to) {
+        if (from == null) from = LocalDate.of(1000, 12, 1);
+        if (to == null) to = LocalDate.of(4000, 12, 1);
+        prepareConnectionToDB();
+        TypedQuery<Order> generatedQuery;
+
+        generatedQuery = em.createQuery(
+                "SELECT o " +
+                        "FROM Order o " +
+                        "JOIN FETCH o.customer " +
+                        "JOIN FETCH o.employee " +
+                        "JOIN FETCH o.shipVia " +
                         "WHERE o.orderDate >= ?1 AND o.orderDate <= ?2 " +
                         "ORDER BY o.orderId",
                 Order.class);
@@ -40,8 +67,8 @@ public class OrdersDAO {
         generatedQuery.setParameter(1, from);
         generatedQuery.setParameter(2, to);
 
-        List<Order> result = generatedQuery.getResultList();
 
+        List<Order> result = generatedQuery.getResultList();
         closeConnectionToDB();
         return result;
     }

@@ -40,3 +40,20 @@ a {
 #db_table td {
     height: 50px;
 }
+
+
+#orders_form {
+    width: 60%;
+    display: block;
+    max-height: 700px;
+    margin: 5% auto;
+    background-color: #bfbfbf;
+    color: black;
+    border: 3px solid dimgray;
+}
+
+#orders_form td {
+    margin: 10px;
+    text-align: center;
+}
+

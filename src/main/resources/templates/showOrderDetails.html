@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+    <a th:href="@{/}">
+        <button type="button">Powrót do strony głównej</button>
+    </a>
+    <div>
+        <th:block th:each="order : ${orders}">
+        <table>
+            <tr>
+                <td>
+                    <p th:inline="text">Id zamówienia: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.orderId}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Nazwa klienta: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.customer.companyName}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Nazwa przewoźnika:  </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.shipVia.companyName}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Pracownik obsługujący zamówienie: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.employee.firstName}]] [[${order.employee.lastName}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Data zamówienia: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.orderDate}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Data wysłania: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.shippedDate}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Wymagana data dostawy: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.requiredDate}]]</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p th:inline="text">Adres wysyłki: </p>
+                </td>
+                <td>
+                    <p th:inline="text">[[${order.address.address}]], [[${order.address.city}]],
+                        [[${order.address.postalCode}]], [[${order.address.country}]]</p>
+                </td>
+            </tr>
+
+        </table>
+
+        <table id="db_table">
+            <thead>
+            <tr>
+                <th>Id produktu:</th>
+                <th>Produkt:</th>
+                <th>Liczba sztuk na jednostkę: </th>
+                <th>Zamówiona ilość:</th>
+                <th>Jednostkowy koszt:</th>
+                <th>Rabat na cenę produktu:</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <th:block th:each="details : ${order.orderDetails}">
+                <tr>
+                    <td th:text="${details.product.productId}"></td>
+                    <td th:text="${details.product.productName}"></td>
+                    <td th:text="${details.product.quantityPerUnit}"></td>
+                    <td th:text="${details.quantity}"></td>
+                    <td th:text="${details.unitPrice}"></td>
+                    <td th:inline="text">[[${details.discount}]] %</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+
+    <div id="top_menu">
+        <a th:href="@{/}">
+            <button type="button">Powrót do strony głównej</button>
+        </a>
+        <a th:href="@{/orders/addForm}">
+            <button type="button">Złóż zamówienie</button>
+        </a>
+        <a th:href="@{/orders/addForm}">
+            <button type="button">Wygeneruj raport za podany przedział czasowy</button>
+        </a>
+    </div>
+    <form method="POST" th:action="@{/orders/show}" th:object="${pair}" role="form">
+        <table id="orders_form">
+            <tr>
+                <td>Zawęż listę wyświetlonych zamówień według daty (dd.mm.yyyy):</td>
+                <td>Od:</td>
+                <td><input type="text" th:field="*{left}"/></td>
+                <td>Do:</td>
+                <td><input type="text" th:field="*{right}"/></td>
+                <td>
+                    <input type="hidden" name="pair" id="pair" th:value="${pair}"/>
+                    <button type="submit">Zawęż listę zamówień</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="db_table">
+        <thead>
+        <tr>
+            <th>Id zamówienia:</th>
+            <th>Nazwa klienta:</th>
+            <th>Firma przewozowa:</th>
+            <th>Data zamówienia:</th>
+            <th>Pracownik obsługujący zamówienie:</th>
+            <th>Szczegóły</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="order : ${orders}">
+            <tr>
+                <td th:text="${order.orderId}"></td>
+                <td th:text="${order.customer.companyName}"></td>
+                <td th:text="${order.shipVia.companyName}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td th:inline="text">[[${order.employee.firstName}]] [[${order.employee.lastName}]]</td>
+                <td>
+                    <form method="POST" th:action="@{/orders/orderDetails}">
+                        <input type="hidden" name="orderId" id="orderId" th:value="${order.orderId}"/>
+                        <button type="submit" name="submit" value="value" class="link-button">Pokaż szczegóły</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

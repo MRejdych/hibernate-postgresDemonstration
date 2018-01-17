@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class OrderDetailsDAO {
+public class OrderDetailsDAO /*implements DAO<OrderDetails>*/ {
     protected DatabaseUtils dbutils;
     protected EntityManager em;
 
@@ -35,7 +35,40 @@ public class OrderDetailsDAO {
         closeConnectionToDB();
         return result;
     }
+/*
+    //@Override
+    public List<OrderDetails> readAll() {
+        prepareConnectionToDB();
+        TypedQuery<OrderDetails> generatedQuery = em.createQuery("SELECT c FROM Customer c ORDER BY c.customerId", OrderDetails.class);
+        List<OrderDetails> result = generatedQuery.getResultList();
+        closeConnectionToDB();
+        return result;
+    }
 
+
+
+
+    //@Override
+    public OrderDetails readById(short customerId) {
+        prepareConnectionToDB();
+        OrderDetails result = em.find(OrderDetails.class, customerId);
+        closeConnectionToDB();
+        return result;
+    }
+
+    //@Override
+    public void update(OrderDetails updatedOrderDetails, short order) {
+    }
+
+
+    //@Override
+    public void delete(short customerId) {
+        prepareConnectionToDB();
+        OrderDetails c = em.find(OrderDetails.class, customerId);
+        if (c != null) em.remove(c);
+        closeConnectionToDB();
+    }
+*/
     private void prepareConnectionToDB() {
         dbutils.openConnection();
         em = dbutils.getEntityManager();

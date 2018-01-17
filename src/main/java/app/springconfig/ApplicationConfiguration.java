@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class ApplicationConfiguration {
 
+
     @Bean
     @Scope("prototype")
     public DatabaseUtils databaseUtils(){
@@ -29,6 +30,10 @@ public class ApplicationConfiguration {
     public ProductsDAO productsManipulator(){
         return new ProductsDAO(databaseUtils());
     }
+
+    @Bean
+    @Scope("prototype")
+    public OrdersDAO ordersManipulator() { return new OrdersDAO(databaseUtils()); }
 
     @Bean
     @Scope("prototype")
@@ -60,4 +65,5 @@ public class ApplicationConfiguration {
     private ProductsDAO productsManipulatorGeneratorMode(){
         return new ProductsDAO(databaseUtils(), true);
     }
+
 }

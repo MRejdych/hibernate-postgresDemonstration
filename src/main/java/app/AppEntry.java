@@ -1,11 +1,16 @@
 package app;
 
 
-import app.dao.OrdersDAO;
+import app.dao.*;
 import app.entities.Order;
+import app.stats.StatisticsAggregator;
+import app.stats.StatisticsGenerator;
+import app.stats.StatisticsKeeper;
 import app.utils.DatabaseUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 
 import java.awt.*;
 import java.io.File;

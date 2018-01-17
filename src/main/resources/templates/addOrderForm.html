@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+    <a th:href="@{/}">
+        <button type="button">Powrót do strony głównej</button>
+    </a>
+
+    <form method="POST" th:action="@{/orders/addForm}" role="form">
+        <table>
+            <tr>
+                <td>Nazwa produktu:</td>
+                <td>
+                <select name = "productId" id="productId" th:value="${productId}">
+                    <option value=""> Wybierz produkt ></option>
+                    <option th:each="p : ${products}"
+                            th:value="${p.productId}"
+                            th:text="${p.productName}"></option>
+                </select>
+                </td>
+                <td>Ilość: </td>
+                <td><input type="text" id="amount" name="amount" th:value="${amount}"/></td>
+                <td>
+                    <button type="submit">Dodaj do listy</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <table id="db_table">
+        <thead>
+        <tr>
+            <th>Nazwa produktu:</th>
+            <th>Zamówiona ilość:</th>
+            <th>Cena jednostkowa:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="entry : ${orderedProducts.entrySet()}">
+            <tr>
+                <td th:text="${entry.key.productName}"></td>
+                <td th:text="${entry.value}"></td>
+                <td th:text="${entry.key.unitPrice}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+
+
+
+    <form method="POST" th:action="@{/orders/addOrder}" role="form">
+        <table>
+            <tr>
+                <td>Klient:</td>
+                <td>
+                <select name = "customerId" id="customerId" th:value="${customerId}">
+                    <option value=""> Wybierz klienta ></option>
+                    <option th:each="c : ${customers}"
+                            th:value="${c.customerId}"
+                            th:text="${c.companyName}"></option>
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">Dodaj zamówienie</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div>
+    </div>
+</div>
+</body>
+</html>
