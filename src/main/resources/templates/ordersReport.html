@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Java Hibernate and Postgres demonstration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="container">
+
+
+        <div id="top_menu">
+            <a th:href="@{/}">
+                <button type="button">Powrót do strony głównej</button>
+            </a>
+        </div>
+
+    <table id="db_table" style="width: 45%;">
+        <thead>
+        <tr>
+            <th th:inline="text" colspan = "5">Raport z okresu od [[${from}]] do [[${to}]]. Suma zarobionych pieniędzy: [[${moneyEarned}]] zł.</th>
+        </tr>
+        <tr>
+            <th colspan = "2">Id sprzedanego produktu:</th>
+            <th>Nazwa sprzedanego produktu:</th>
+            <th>Liczba sprzedanych sztuk:</th>
+            <th>Wartość sprzedanych produktów:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="entry : ${reportEntries}">
+            <tr>
+                <td colspan = "2" th:text="${entry.productId}"></td>
+                <td th:text="${entry.productName}"></td>
+                <td th:text="${entry.unitsSold}"></td>
+                <td th:inline="text">[[${entry.moneyEarned}]] zł.</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

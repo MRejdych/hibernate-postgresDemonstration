@@ -36,7 +36,6 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.springframework.boot:spring-boot-devtools")
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.11.Final'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
     compile group: 'p6spy', name: 'p6spy', version: '3.6.0'

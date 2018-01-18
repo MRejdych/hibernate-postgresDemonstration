@@ -11,17 +11,42 @@
         <button type="button">Powrót do strony głównej</button>
     </a>
 
-    <form method="POST" th:action="@{/orders/addForm}" role="form">
-        <table>
+    <form action="#" th:action="@{/orders/addForm}" method="post">
+            <th:block th:each="entry : ${orderedProducts.entrySet()}">
+                <input type="hidden" th:id="${entry.key}" th:name="${entry.key}" th:value="${entry.value}" />
+            </th:block>
+
+        <table id="db_table">
+            <thead>
+            <tr>
+                <th>Id zamówionego produktu: </th>
+                <th>Nazwa zamówionego produktu:</th>
+                <th>Zamówiona ilość produktów:</th>
+                <th>Cena jednostkowa produktu:</th>
+                <th>Liczba sztuk w jednym opakowaniu:</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="details : ${orderedProductsDetails}">
+                <tr>
+                    <td th:text="${details.productId}"></td>
+                    <td th:text="${details.productName}"></td>
+                    <td th:text="${details.amountOrdered}"></td>
+                    <td th:text="${details.unitPrice}"></td>
+                    <td th:text="${details.quantityPerUnit}"></td>
+                    <td></td>
+                </tr>
+            </th:block>
             <tr>
                 <td>Nazwa produktu:</td>
                 <td>
-                <select name = "productId" id="productId" th:value="${productId}">
-                    <option value=""> Wybierz produkt ></option>
-                    <option th:each="p : ${products}"
-                            th:value="${p.productId}"
-                            th:text="${p.productName}"></option>
-                </select>
+                    <select name = "productId" id="productId" th:value="${productId}">
+                        <option value=""> Wybierz produkt ></option>
+                        <option th:each="p : ${products}"
+                                th:value="${p.productId}"
+                                th:text="${p.productName}"></option>
+                    </select>
                 </td>
                 <td>Ilość: </td>
                 <td><input type="text" id="amount" name="amount" th:value="${amount}"/></td>
@@ -29,33 +54,19 @@
                     <button type="submit">Dodaj do listy</button>
                 </td>
             </tr>
+            </tbody>
         </table>
     </form>
-
-    <table id="db_table">
-        <thead>
-        <tr>
-            <th>Nazwa produktu:</th>
-            <th>Zamówiona ilość:</th>
-            <th>Cena jednostkowa:</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="entry : ${orderedProducts.entrySet()}">
-            <tr>
-                <td th:text="${entry.key.productName}"></td>
-                <td th:text="${entry.value}"></td>
-                <td th:text="${entry.key.unitPrice}"></td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
 
 
 
 
     <form method="POST" th:action="@{/orders/addOrder}" role="form">
-        <table>
+        <th:block th:each="entry : ${orderedProducts.entrySet()}">
+            <input type="hidden" th:id="${entry.key}" th:name="${entry.key}" th:value="${entry.value}" />
+        </th:block>
+
+        <table style="width: 30%; margin-left: 50%; margin-right: 20%;">
             <tr>
                 <td>Klient:</td>
                 <td>
@@ -66,8 +77,6 @@
                             th:text="${c.companyName}"></option>
                 </select>
                 </td>
-            </tr>
-            <tr>
                 <td>
                     <button type="submit">Dodaj zamówienie</button>
                 </td>

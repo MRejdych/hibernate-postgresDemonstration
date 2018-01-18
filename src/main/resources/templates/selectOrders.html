@@ -8,6 +8,10 @@
 <body>
 <div id="container">
 
+    <form action="#" th:action="@{/orders/showReport}" method="post">
+        <th:block th:each="order : ${orders}">
+            <input type="hidden" th:id="${order.orderId}" th:name="${order.orderId}" th:value="${order.orderId}" />
+        </th:block>
     <div id="top_menu">
         <a th:href="@{/}">
             <button type="button">Powrót do strony głównej</button>
@@ -15,10 +19,14 @@
         <a th:href="@{/orders/addForm}">
             <button type="button">Złóż zamówienie</button>
         </a>
-        <a th:href="@{/orders/addForm}">
-            <button type="button">Wygeneruj raport za podany przedział czasowy</button>
+        <a>
+            <input type="hidden" name="from" id="from" th:value="${from}"/>
+            <input type="hidden" name="to" id="to" th:value="${to}"/>
+            <button type="submit">Wygeneruj raport za podany przedział czasowy</button>
         </a>
     </div>
+    </form>
+
     <form method="POST" th:action="@{/orders/show}" th:object="${pair}" role="form">
         <table id="orders_form">
             <tr>

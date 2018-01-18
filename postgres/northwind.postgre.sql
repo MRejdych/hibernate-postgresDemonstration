@@ -5442,7 +5442,7 @@ ALTER TABLE ONLY order_details
   ADD CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id);
 
 
-CREATE SEQUENCE order_id_seq MINVALUE 100;
+CREATE SEQUENCE order_id_seq MINVALUE 11100;
 ALTER TABLE orders ALTER order_id SET DEFAULT NEXTVAL('order_id_seq');
 ALTER TABLE ONLY orders
   ADD CONSTRAINT pk_orders PRIMARY KEY (order_id);

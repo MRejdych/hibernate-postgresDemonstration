@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Dates {
 
     public static LocalDate parseDate(String date){
-        if(date == null || date == ""){
+        if(date == null || date.equals("")){
             return null;
         }
 

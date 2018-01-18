@@ -32,8 +32,8 @@ public class Order implements Serializable {
     }
 
     @Id
-    @SequenceGenerator(name="pk_sequence",sequenceName="order_id_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+    @SequenceGenerator(name="pk_sequence", sequenceName="order_id_seq", allocationSize = 1)
     @Column(name = "order_id", nullable = false)
     private Short orderId;
 
