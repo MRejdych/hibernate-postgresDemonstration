@@ -3,7 +3,7 @@
 <head>
     <title>Java Hibernate and Postgres demonstration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link  href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
 </head>
 <body>
 <div id="container">
@@ -17,74 +17,41 @@
     <table id="db_table" style="width: 40%;">
         <thead>
         <tr>
-            <th>Typ statystyki:</th>
-            <th>Wartość:</th>
+            <th>Rodzaj operacji:</th>
+            <th>Ilość wykonanych zapytań JPQL:</th>
+            <th>Średni czas zapytania JPQL:</th>
+            <th>Ilość wykonanych zapytań SQL:</th>
+            <th>Średni czas zapytania SQL:</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td><p>Suma wykonanych zapytań służących do zapisu danych z użyciem hibernate</p></td>
+            <td><p>Zapis danych: </p></td>
             <td><p th:inline="text">[[${createCount}]]</p></td>
-        </tr>
-        <tr>
-            <td>Średni czas zapytania w mikrosekundach</td>
-            <td><p th:inline="text">[[${createAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do zapisu danych z użyciem natywnego SQL</p></td>
+            <td><p th:inline="text">[[${createAvgTime}]] μs</p></td>
             <td><p th:inline="text">[[${nativeCreateCount}]]</p></td>
+            <td><p th:inline="text">[[${nativeCreateAvgTime}]] μs</p></td>
         </tr>
         <tr>
-            <td>Średni czas zapytania w mikrosekundach</td>
-            <td><p th:inline="text">[[${nativeCreateAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do odczytu danych z użyciem hibernate</p></td>
+            <td><p>Odczyt danych: </p></td>
             <td><p th:inline="text">[[${readCount}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${readAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do odczytu danych z użyciem natywnego SQL</p></td>
+            <td><p th:inline="text">[[${readAvgTime}]] μs</p></td>
             <td><p th:inline="text">[[${nativeReadCount}]]</p></td>
+            <td><p th:inline="text">[[${nativeReadAvgTime}]] μs</p></td>
         </tr>
         <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${nativeReadAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do aktualizowania danych z użyciem hibernate</p></td>
+            <td><p>Aktualizacja danych</p></td>
             <td><p th:inline="text">[[${updateCount}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${updateAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do aktualizowania danych z użyciem natywnego SQL</p></td>
+            <td><p th:inline="text">[[${updateAvgTime}]] μs</p></td>
             <td><p th:inline="text">[[${nativeUpdateCount}]]</p></td>
+            <td><p th:inline="text">[[${nativeUpdateAvgTime}]] μs</p></td>
         </tr>
         <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${nativeUpdateAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do usuwania danych z użyciem hibernate</p></td>
+            <td><p>Usuwanie danych: </p></td>
             <td><p th:inline="text">[[${deleteCount}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${deleteAvgTime}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Suma wykonanych zapytań służących do usuwania danych z użyciem natywnego SQL</p></td>
+            <td><p th:inline="text">[[${deleteAvgTime}]] μs</p></td>
             <td><p th:inline="text">[[${nativeDeleteCount}]]</p></td>
-        </tr>
-        <tr>
-            <td><p>Średni czas zapytania w mikrosekundach</p></td>
-            <td><p th:inline="text">[[${nativeDeleteAvgTime}]]</p></td>
+            <td><p th:inline="text">[[${nativeDeleteAvgTime}]] μs</p></td>
         </tr>
         </tbody>
     </table>

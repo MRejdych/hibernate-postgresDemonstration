@@ -3,7 +3,7 @@
 <head>
     <title>Java Hibernate and Postgres demonstration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link  href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
 </head>
 <body>
 <div id="container">
@@ -12,7 +12,7 @@
     </a>
 
     <form method="POST" th:action="@{/products/updateProduct}" th:object="${product}" role="form">
-        <table>
+        <table id="details_table">
             <tr>
                 <td>Nazwa produktu:</td>
                 <td><input type="text" th:field="*{productName}"/></td>
